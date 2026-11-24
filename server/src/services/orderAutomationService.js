@@ -37,9 +37,10 @@ const calculateDeterministicCodRisk = (order, customerDoc) => {
     factors.push('Moderate order value on COD (> ₹2,500)');
   }
 
-  // Factor 3: Address quality & landmark completeness
+  // Factor 3: Address quality & landmark completeness (missing door/house number or landmark)
   const street = order.customer?.address?.street || '';
-  if (!street || street.length < 12) {
+  const hasDoorOrHouseNumber = /\d/.test(street);
+  if (!street || street.length < 12 || !hasDoorOrHouseNumber) {
     score += 25;
     factors.push('Incomplete delivery address; house number or landmark missing');
   }
@@ -47,7 +48,7 @@ const calculateDeterministicCodRisk = (order, customerDoc) => {
   // Factor 4: Customer track record in DB
   if (customerDoc) {
     if (customerDoc.rtoHistoryCount > 0) {
-      score += 25; // Adjusted so base 15 + address 25 + RTO 25 = 65 High Risk
+      score += 25; // Base 15 + address 25 + RTO 25 = 65 High Risk
       factors.push('Previous failed delivery found in available order history');
     } else if (customerDoc.ordersCount >= 2) {
       score -= 20; // Loyal repeat customer discount
@@ -55,9 +56,14 @@ const calculateDeterministicCodRisk = (order, customerDoc) => {
     }
   }
 
-  // Factor 5: Phone number validity heuristic
+  // Factor 5: Phone number validity heuristic (supports +91 Indian mobile prefix)
   const phone = order.customer?.phone || '';
-  const cleanPhone = phone.replace(/\D/g, '');
+  let cleanPhone = phone.replace(/\D/g, '');
+  if (cleanPhone.startsWith('91') && cleanPhone.length === 12) {
+    cleanPhone = cleanPhone.slice(2);
+  } else if (cleanPhone.startsWith('0') && cleanPhone.length === 11) {
+    cleanPhone = cleanPhone.slice(1);
+  }
   if (cleanPhone.length !== 10) {
     score += 20;
     factors.push('Non-standard 10-digit mobile number format');
