@@ -191,11 +191,11 @@ const ProductShowcase = () => {
                 <div className="mobile-card-body">
                   <div className="mobile-card-metric">
                     <span className="metric-label">Stock Runway</span>
-                    <span className="metric-val text-cyan">1.67 Days</span>
+                    <span className="metric-val text-cyan"><AnimatedCounter value={1.67} decimals={2} suffix=" Days" /></span>
                   </div>
                   <div className="mobile-card-metric">
                     <span className="metric-label">Courier Recovery</span>
-                    <span className="metric-val text-green">91% Recovered</span>
+                    <span className="metric-val text-green"><AnimatedCounter value={91} suffix="% Recovered" /></span>
                   </div>
                 </div>
               </div>
