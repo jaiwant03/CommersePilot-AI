@@ -3752,7 +3752,7 @@ body {
   gap: 56px;
   align-items: center;
   justify-content: center;
-  margin-bottom: 56px;
+  margin-bottom: 0;
 }
 
 .storytelling-photo-col {
