@@ -3975,8 +3975,8 @@ body {
 .story-media-stack {
   position: relative;
   width: 100%;
-  max-width: 480px;
-  min-height: 480px;
+  max-width: 560px;
+  min-height: 460px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -3990,12 +3990,12 @@ body {
   z-index: 1;
 }
 
-/* Distinct Asymmetric Architectural Sculpted Silhouette (NOT square, NOT circle) */
+/* Distinct Asymmetric Architectural Sculpted Silhouette (Wide Horizon Silhouette) */
 .lifestyle-image-sculpted {
-  width: 380px;
-  height: 470px;
+  width: 480px;
+  height: 390px;
   max-width: 100%;
-  border-radius: 200px 36px 180px 36px;
+  border-radius: 160px 36px 140px 36px;
   overflow: hidden;
   box-shadow: 0 32px 70px -15px rgba(15, 23, 42, 0.22), 0 0 0 5px #FFFFFF, 0 0 0 6px rgba(99, 102, 241, 0.2);
   position: relative;
