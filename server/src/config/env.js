@@ -11,6 +11,8 @@ const config = {
   jwtSecret: process.env.JWT_SECRET || 'commercepilot_fallback_dev_jwt_secret_phase2_2026',
   clientUrl: process.env.CLIENT_URL || 'http://localhost:5173',
   groqApiKey: process.env.GROQ_API_KEY || '',
+  groqModel: process.env.GROQ_MODEL || 'qwen/qwen3.8-27b',
+  groqGuardModel: process.env.GROQ_GUARD_MODEL || 'meta-llama/llama-prompt-guard-2-86m',
   n8n: {
     orderWebhookUrl: process.env.N8N_ORDER_WEBHOOK_URL || '',
     inventoryWebhookUrl: process.env.N8N_INVENTORY_WEBHOOK_URL || '',
