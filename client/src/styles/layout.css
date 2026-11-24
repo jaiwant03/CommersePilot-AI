@@ -2824,37 +2824,61 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
+  width: 100%;
 }
 
 .visual-media-stack {
   position: relative;
   width: 100%;
-  max-width: 480px;
-  min-height: 380px;
+  max-width: 520px;
+  min-height: 440px;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
 .visual-organic-crop {
-  width: 320px;
-  height: 360px;
+  width: 440px;
+  height: 380px;
+  max-width: 100%;
   overflow: hidden;
-  box-shadow: 0 20px 45px -10px rgba(15, 23, 42, 0.16);
+  box-shadow: 0 20px 50px -10px rgba(15, 23, 42, 0.16), 0 0 0 1px rgba(226, 232, 240, 0.9);
   border: 4px solid #FFFFFF;
   position: relative;
+  border-radius: 28px;
+  background: #F8FAFC;
 }
 
 .crop-kurti {
-  border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%;
+  border-radius: 28px 44px 28px 28px;
 }
 
 .crop-warehouse {
-  border-radius: 140px 140px 24px 24px;
+  border-radius: 44px 28px 28px 28px;
 }
 
 .crop-delivery {
-  border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
+  border-radius: 28px 28px 44px 28px;
+}
+
+.crop-live-pill {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  background: rgba(15, 23, 42, 0.85);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 20px;
+  padding: 6px 14px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  color: #FFFFFF;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  z-index: 2;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 }
 
 .organic-img {
@@ -2862,156 +2886,285 @@ body {
   height: 100%;
   object-fit: cover;
   display: block;
+  transition: transform 0.4s ease;
 }
 
+.visual-organic-crop:hover .organic-img {
+  transform: scale(1.03);
+}
+
+/* Impressive Cyber-Navy Telemetry HUD Cards */
 .floating-telemetry-badge {
   position: absolute;
-  background: #FFFFFF;
-  border: 1.5px solid #E2E8F0;
-  border-radius: 18px;
+  background: linear-gradient(145deg, #0D1527 0%, #111B33 100%);
+  border: 1.5px solid rgba(56, 189, 248, 0.35);
+  border-radius: 22px;
   padding: 18px 22px;
-  box-shadow: 0 20px 45px -10px rgba(15, 23, 42, 0.18);
+  box-shadow: 
+    0 25px 60px -10px rgba(15, 23, 42, 0.6),
+    0 0 28px rgba(56, 189, 248, 0.16),
+    inset 0 1px 0 rgba(255, 255, 255, 0.15);
   z-index: 3;
-  width: 290px;
+  width: 320px;
+  color: #FFFFFF;
+  backdrop-filter: blur(16px);
+  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
 }
 
+.floating-telemetry-badge:hover {
+  transform: translateY(-3px);
+  border-color: rgba(56, 189, 248, 0.65);
+  box-shadow: 
+    0 30px 70px -10px rgba(15, 23, 42, 0.75),
+    0 0 35px rgba(56, 189, 248, 0.25);
+}
+
+/* Position cards offset at bottom corner so image is 80%+ completely visible */
 .badge-risk {
-  bottom: -20px;
-  right: -20px;
+  bottom: -25px;
+  right: -30px;
 }
 
 .badge-runway {
   bottom: -25px;
-  left: -20px;
+  left: -30px;
 }
 
 .badge-ndr {
-  bottom: -30px;
-  right: -20px;
-  width: 320px;
+  bottom: -25px;
+  right: -30px;
+  width: 330px;
 }
 
 .telemetry-badge-header {
   display: flex;
   align-items: center;
-  gap: 8px;
-  font-size: 12px;
-  font-weight: 700;
-  color: #475569;
-  margin-bottom: 10px;
+  gap: 10px;
+  margin-bottom: 12px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.telemetry-icon-box {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.telemetry-icon-box.text-amber {
+  background: rgba(245, 158, 11, 0.2);
+  color: #FBBF24;
+}
+
+.telemetry-icon-box.text-cyan {
+  background: rgba(56, 189, 248, 0.2);
+  color: #38BDF8;
+}
+
+.telemetry-icon-box.text-green {
+  background: rgba(34, 197, 94, 0.2);
+  color: #4ADE80;
+}
+
+.telemetry-title-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.telemetry-badge-title {
+  font-size: 13px;
+  font-weight: 750;
+  color: #FFFFFF;
+  line-height: 1.25;
+}
+
+.telemetry-sub-tag {
+  font-size: 10px;
+  font-weight: 600;
+  color: #94A3B8;
+  letter-spacing: 0.02em;
+}
+
+.telemetry-pulse-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  margin-left: auto;
+  flex-shrink: 0;
+}
+
+.dot-amber {
+  background: #F59E0B;
+  box-shadow: 0 0 10px #F59E0B;
+}
+
+.dot-red {
+  background: #EF4444;
+  box-shadow: 0 0 10px #EF4444;
+}
+
+.dot-green {
+  background: #10B981;
+  box-shadow: 0 0 10px #10B981;
 }
 
 .telemetry-score-row {
   display: flex;
-  align-items: baseline;
+  align-items: center;
   justify-content: space-between;
-  margin-bottom: 8px;
+  margin-bottom: 10px;
+}
+
+.score-val-col {
+  display: flex;
+  flex-direction: column;
 }
 
 .telemetry-big-score {
-  font-size: 28px;
+  font-size: 30px;
   font-weight: 900;
   letter-spacing: -0.02em;
+  line-height: 1;
+}
+
+.telemetry-score-sub {
+  font-size: 10px;
+  color: #94A3B8;
+  margin-top: 2px;
 }
 
 .telemetry-tier-tag {
   font-size: 11px;
   font-weight: 800;
-  padding: 3px 8px;
-  border-radius: 6px;
+  padding: 4px 10px;
+  border-radius: 8px;
 }
 
 .tier-high {
-  background: #FEF3C7;
-  color: #B45309;
+  background: rgba(245, 158, 11, 0.25);
+  border: 1px solid rgba(245, 158, 11, 0.5);
+  color: #FBBF24;
 }
 
 .telemetry-reasons-list {
   font-size: 11.5px;
-  color: #64748B;
+  color: #CBD5E1;
   display: flex;
   flex-direction: column;
-  gap: 4px;
-  margin-bottom: 8px;
+  gap: 5px;
+  margin-bottom: 10px;
   line-height: 1.4;
 }
 
 .telemetry-action-hint {
-  font-size: 11.5px;
-  color: #0F172A;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   padding-top: 8px;
-  border-top: 1px dashed #E2E8F0;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  font-size: 11px;
+  color: #94A3B8;
+}
+
+.hint-label {
+  font-weight: 600;
+}
+
+.hint-status {
+  font-weight: 750;
+  padding: 3px 8px;
+  border-radius: 6px;
+  font-size: 10.5px;
 }
 
 .telemetry-sku-title {
-  font-size: 13px;
-  font-weight: 700;
-  color: #0F172A;
-  margin-bottom: 8px;
+  font-size: 13.5px;
+  font-weight: 750;
+  color: #FFFFFF;
+  margin-bottom: 10px;
 }
 
 .runway-stat-pills {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 6px;
-  margin-bottom: 10px;
+  gap: 8px;
+  margin-bottom: 12px;
 }
 
 .runway-pill {
-  background: #F8FAFC;
-  border: 1px solid #E2E8F0;
-  border-radius: 8px;
-  padding: 6px 8px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  padding: 8px;
   text-align: center;
   display: flex;
   flex-direction: column;
 }
 
 .runway-pill.pill-alert {
-  background: #FEF2F2;
-  border-color: #FECACA;
+  background: rgba(239, 68, 68, 0.18);
+  border-color: rgba(239, 68, 68, 0.45);
 }
 
-.pill-muted {
+.runway-pill .pill-muted {
   font-size: 10px;
-  color: #64748B;
+  color: #94A3B8;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
 }
 
-.pill-bold {
-  font-size: 12px;
-  font-weight: 700;
-  color: #0F172A;
+.runway-pill .pill-bold {
+  font-size: 13px;
+  font-weight: 800;
+  color: #FFFFFF;
+  margin-top: 2px;
 }
 
-.runway-pill.pill-alert .pill-bold {
-  color: #DC2626;
+.text-red {
+  color: #F87171 !important;
 }
 
 .auto-drafted-po-box {
-  background: #EEF2FF;
-  border: 1px solid #C7D2FE;
-  border-radius: 10px;
-  padding: 10px;
+  background: rgba(79, 70, 229, 0.2);
+  border: 1px solid rgba(99, 102, 241, 0.45);
+  border-radius: 12px;
+  padding: 10px 12px;
 }
 
 .po-box-header {
   display: flex;
   align-items: center;
-  gap: 6px;
+  justify-content: space-between;
   font-size: 11.5px;
-  font-weight: 700;
-  color: #4F46E5;
+  font-weight: 750;
+  color: #A5B4FC;
   margin-bottom: 4px;
+}
+
+.po-ready-pill {
+  font-size: 9.5px;
+  font-weight: 700;
+  padding: 2px 7px;
+  border-radius: 4px;
+  background: rgba(34, 197, 94, 0.2);
+  color: #4ADE80;
+  border: 1px solid rgba(34, 197, 94, 0.35);
 }
 
 .po-box-details {
   font-size: 11.5px;
-  color: #334155;
+  color: #CBD5E1;
+  line-height: 1.4;
 }
 
 .whatsapp-chat-bubble {
-  background: #F0FDF4;
-  border: 1px solid #BBF7D0;
+  background: rgba(16, 185, 129, 0.12);
+  border: 1px solid rgba(52, 211, 153, 0.25);
   border-radius: 12px 12px 12px 2px;
   padding: 10px 12px;
   margin-bottom: 8px;
@@ -3019,23 +3172,24 @@ body {
 
 .whatsapp-bubble-text {
   font-size: 11.5px;
-  color: #166534;
+  color: #D1FAE5;
   line-height: 1.45;
   margin-bottom: 4px;
 }
 
 .whatsapp-bubble-time {
   font-size: 10px;
-  color: #15803D;
+  color: #6EE7B7;
   text-align: right;
 }
 
 .whatsapp-reply-bubble {
-  background: #DCFCE7;
+  background: rgba(16, 185, 129, 0.25);
+  border: 1px solid #34D399;
   border-radius: 12px 12px 2px 12px;
   padding: 8px 12px;
   font-size: 11.5px;
-  color: #14532D;
+  color: #FFFFFF;
   margin-left: 20px;
   margin-bottom: 10px;
   display: flex;
@@ -3044,20 +3198,15 @@ body {
   font-weight: 600;
 }
 
-.reply-check-double {
-  color: #2563EB;
-  font-size: 11px;
-}
-
 .ndr-status-recovered {
   display: flex;
   align-items: center;
   gap: 6px;
   font-size: 11.5px;
   font-weight: 700;
-  color: #16A34A;
+  color: #4ADE80;
   padding-top: 6px;
-  border-top: 1px dashed #E2E8F0;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 /* Copilot Interactive Terminal */
