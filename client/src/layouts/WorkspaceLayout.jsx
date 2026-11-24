@@ -153,7 +153,7 @@ const WorkspaceLayout = () => {
         </nav>
 
         <div className="sidebar-footer">
-          <Link to="/" target="_blank" rel="noopener noreferrer" className="store-preview-link">
+          <Link to="/" className="store-preview-link">
             <span className="store-preview-left">
               <ExternalLink size={14} />
               <span>Marketing Site</span>
