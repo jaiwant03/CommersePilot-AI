@@ -153,8 +153,8 @@ const ProductShowcase = () => {
 
             <div className="showcase-visual-container">
               <img 
-                src="/assets/images/cod-radar-visual.svg" 
-                alt="CommercePilot AI COD Risk Radar Visual Interface" 
+                src="/assets/images/order-verification-3d.jpg" 
+                alt="CommercePilot AI Order Verification 3D Interface showing Order TT10245, 65/100 High Risk" 
                 style={{ width: '100%', height: 'auto', borderRadius: '16px', border: '1.5px solid rgba(186, 230, 253, 0.8)', boxShadow: '0 16px 36px -4px rgba(14, 165, 233, 0.15)' }}
               />
             </div>
@@ -213,8 +213,8 @@ const ProductShowcase = () => {
 
             <div className="showcase-visual-container">
               <img 
-                src="/assets/images/inventory-radar-visual.svg" 
-                alt="CommercePilot AI Predictive Inventory Runway Interface" 
+                src="/assets/images/inventory-intelligence-3d.jpg" 
+                alt="CommercePilot AI Predictive Inventory Intelligence showing Black Kurti 25 units, 1.67 days runway" 
                 style={{ width: '100%', height: 'auto', borderRadius: '16px', border: '1.5px solid rgba(186, 230, 253, 0.8)', boxShadow: '0 16px 36px -4px rgba(14, 165, 233, 0.15)' }}
               />
             </div>
@@ -333,8 +333,8 @@ const ProductShowcase = () => {
 
             <div className="showcase-visual-container">
               <img 
-                src="/assets/images/ai-analytics-visual.svg" 
-                alt="CommercePilot AI Copilot Analytics Interface" 
+                src="/assets/images/platform-hub-3d.jpg" 
+                alt="CommercePilot AI Central 4-Pillar Autonomous Operations Hub" 
                 style={{ width: '100%', height: 'auto', borderRadius: '16px', border: '1.5px solid rgba(186, 230, 253, 0.8)', boxShadow: '0 16px 36px -4px rgba(14, 165, 233, 0.15)' }}
               />
             </div>
