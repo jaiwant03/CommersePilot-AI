@@ -21,6 +21,7 @@ const chatWithAssistant = async (req, res, next) => {
       dateRange: result.dateRange,
       groundedData: result.groundedData,
       usedGroq: result.usedGroq,
+      guardrails: result.guardrails,
       timestamp: result.timestamp
     });
   } catch (error) {

@@ -73,6 +73,7 @@ const AssistantPage = () => {
           dateRange: res.dateRange,
           groundedData: res.groundedData,
           usedGroq: res.usedGroq,
+          guardrails: res.guardrails,
           timestamp: res.timestamp || new Date().toISOString()
         }
       ]);
@@ -162,6 +163,57 @@ const AssistantPage = () => {
                     {m.text}
                   </div>
 
+                  {/* Groq AI & Guardrails Security Pills */}
+                  {!isUser && m.guardrails && (
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap', marginTop: '2px' }}>
+                      <span style={{
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        gap: '4px',
+                        padding: '2px 8px',
+                        borderRadius: '6px',
+                        fontSize: '11px',
+                        fontWeight: 600,
+                        background: m.guardrails.passed ? 'rgba(16, 185, 129, 0.1)' : 'rgba(239, 68, 68, 0.1)',
+                        color: m.guardrails.passed ? '#10B981' : '#EF4444',
+                        border: `1px solid ${m.guardrails.passed ? 'rgba(16, 185, 129, 0.25)' : 'rgba(239, 68, 68, 0.25)'}`
+                      }}>
+                        <ShieldCheck size={12} />
+                        <span>{m.guardrails.passed ? 'Groq Guardrail Protected' : 'Guardrail Flagged'}</span>
+                      </span>
+
+                      {m.usedGroq && (
+                        <span style={{
+                          display: 'inline-flex',
+                          alignItems: 'center',
+                          gap: '4px',
+                          padding: '2px 8px',
+                          borderRadius: '6px',
+                          fontSize: '11px',
+                          fontWeight: 600,
+                          background: 'rgba(99, 102, 241, 0.1)',
+                          color: '#818CF8',
+                          border: '1px solid rgba(99, 102, 241, 0.25)'
+                        }}>
+                          <Sparkles size={12} />
+                          <span>{m.guardrails.modelUsed || 'Groq AI'}</span>
+                        </span>
+                      )}
+
+                      {m.guardrails.checks?.promptGuard === 'PASSED' && (
+                        <span style={{
+                          fontSize: '10.5px',
+                          color: 'var(--color-text-muted)',
+                          display: 'inline-flex',
+                          alignItems: 'center',
+                          gap: '3px'
+                        }}>
+                          Threat Risk: {(m.guardrails.threatScore * 100).toFixed(2)}%
+                        </span>
+                      )}
+                    </div>
+                  )}
+
                   {/* Grounding & Telemetry Inspection for Assistant Replies */}
                   {!isUser && m.groundedData && (
                     <div style={{ marginTop: '2px' }}>
@@ -180,7 +232,7 @@ const AssistantPage = () => {
                         }}
                       >
                         <Database size={12} />
-                        <span>{inspectedDataIndex === idx ? 'Hide Grounded Database Context' : 'Inspect Grounded Database Context'}</span>
+                        <span>{inspectedDataIndex === idx ? 'Hide Grounded Database Context & Guardrails' : 'Inspect Grounded Database Context & Guardrails'}</span>
                         {inspectedDataIndex === idx ? <ChevronUp size={12} /> : <ChevronDown size={12} />}
                       </button>
 
@@ -194,10 +246,25 @@ const AssistantPage = () => {
                           fontSize: '11px',
                           color: '#94A3B8'
                         }}>
-                          <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '6px', fontWeight: 600, color: '#E2E8F0' }}>
+                          <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px', fontWeight: 600, color: '#E2E8F0', flexWrap: 'wrap', gap: '4px' }}>
                             <span>Query Category: {m.intent}</span>
                             <span>Date Scope: {m.dateRange || 'Current'}</span>
                           </div>
+
+                          {m.guardrails && (
+                            <div style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.06)', borderRadius: '6px', padding: '8px 10px', marginBottom: '10px' }}>
+                              <div style={{ fontWeight: 700, color: '#38BDF8', marginBottom: '4px' }}>🛡️ Guardrail Audit Telemetry</div>
+                              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '6px', fontSize: '10.5px' }}>
+                                <div>• Prompt Shield: <strong style={{ color: '#10B981' }}>{m.guardrails.checks?.promptGuard}</strong> (Risk: {(m.guardrails.threatScore * 100).toFixed(2)}%)</div>
+                                <div>• Scope Check: <strong style={{ color: '#10B981' }}>{m.guardrails.checks?.scopeEnforcement}</strong></div>
+                                <div>• PII Sanitizer: <strong style={{ color: '#38BDF8' }}>{m.guardrails.checks?.piiSanitization}</strong></div>
+                                <div>• Grounding Audit: <strong style={{ color: '#10B981' }}>{m.guardrails.checks?.groundingValidation}</strong></div>
+                                <div>• Guardrail Model: <span style={{ color: '#94A3B8' }}>{m.guardrails.guardrailModel}</span></div>
+                                <div>• Inference Engine: <span style={{ color: '#94A3B8' }}>{m.guardrails.modelUsed}</span></div>
+                              </div>
+                            </div>
+                          )}
+
                           <pre style={{ margin: 0, maxHeight: '200px', overflowY: 'auto', fontFamily: 'monospace', fontSize: '11px' }}>
                             {JSON.stringify(m.groundedData, null, 2)}
                           </pre>

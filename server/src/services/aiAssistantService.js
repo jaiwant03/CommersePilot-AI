@@ -1,4 +1,5 @@
 const { generateGroqCompletion } = require('./groq.service');
+const { evaluateInputGuardrails, evaluateOutputGuardrails } = require('./guardrails.service');
 const Order = require('../models/Order.model');
 const Product = require('../models/Product.model');
 const Delivery = require('../models/Delivery.model');
@@ -67,7 +68,45 @@ const aiAssistantService = {
       throw new Error('Authorized store record not found.');
     }
 
-    const intent = detectIntent(prompt);
+    // =========================================================================
+    // LAYER 1: INPUT GUARDRAILS (Prompt Injection, Threat & Scope Enforcement)
+    // =========================================================================
+    const inputGuard = await evaluateInputGuardrails(prompt);
+    if (!inputGuard.passed) {
+      return {
+        success: true,
+        intent: 'GUARDRAIL_INTERCEPTED',
+        reply: inputGuard.rejectionResponse,
+        groundedData: {
+          category: 'SECURITY_GUARDRAIL',
+          flags: inputGuard.flags,
+          threatScore: inputGuard.threatScore,
+          scopeApproved: inputGuard.scopeApproved
+        },
+        dateRange: 'Real-time Security Guardrail',
+        usedGroq: false,
+        guardrails: {
+          passed: false,
+          threatScore: inputGuard.threatScore,
+          flags: inputGuard.flags,
+          checks: {
+            promptGuard: inputGuard.flags.includes('PROMPT_GUARD_HIGH_THREAT') ? 'FLAGGED' : 'PASSED',
+            regexShield: inputGuard.flags.includes('REGEX_INJECTION_DETECTED') ? 'FLAGGED' : 'PASSED',
+            scopeEnforcement: inputGuard.flags.includes('OUT_OF_SCOPE') ? 'OUT_OF_SCOPE' : 'PASSED',
+            piiSanitization: inputGuard.flags.includes('PII_REDACTED') ? 'REDACTED' : 'CLEAN',
+            outputLeakCheck: 'SKIPPED',
+            groundingValidation: 'SKIPPED'
+          },
+          groundingScore: 1.0,
+          modelUsed: 'Groq Guardrail Filter',
+          guardrailModel: inputGuard.guardrailModel
+        },
+        timestamp: new Date().toISOString()
+      };
+    }
+
+    const effectivePrompt = inputGuard.sanitizedPrompt;
+    const intent = detectIntent(effectivePrompt);
     const currentDateStr = new Date().toISOString().split('T')[0];
     const thirtyDaysAgo = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000);
     const dateRangeStr = `Last 30 Days (${thirtyDaysAgo.toISOString().split('T')[0]} to ${currentDateStr})`;
@@ -512,7 +551,7 @@ Follow these strict integrity rules:
 6. Present your answers clearly in markdown with concise bullet points and bold highlights.
 7. Treat all insights as recommendations, not audited financial guarantees.`;
 
-    const userPrompt = `Seller Question: "${prompt}"
+    const userPrompt = `Seller Question: "${effectivePrompt}"
 
 Grounded Database Telemetry:
 ${JSON.stringify(groundedData, null, 2)}
@@ -521,13 +560,21 @@ Provide a concise, highly actionable, expert answer.`;
 
     let reply = '';
     let usedGroq = false;
+    let modelUsed = null;
 
     try {
-      reply = await generateGroqCompletion({
+      const completionResult = await generateGroqCompletion({
         prompt: userPrompt,
         systemPrompt,
-        model: 'llama-3.3-70b-versatile'
+        returnMetadata: true
       });
+
+      if (typeof completionResult === 'object' && completionResult.content) {
+        reply = completionResult.content;
+        modelUsed = completionResult.modelUsed;
+      } else if (typeof completionResult === 'string') {
+        reply = completionResult;
+      }
       usedGroq = Boolean(reply && reply.trim());
     } catch (err) {
       console.warn(`[AI Assistant] Groq unavailable (${err.message}). Using deterministic fallback.`);
@@ -538,13 +585,34 @@ Provide a concise, highly actionable, expert answer.`;
       reply = fallbackText;
     }
 
+    // =========================================================================
+    // LAYER 3: OUTPUT GUARDRAILS (Leak Prevention & Grounding Verification)
+    // =========================================================================
+    const outputGuard = evaluateOutputGuardrails(reply, groundedData);
+    const finalReply = outputGuard.verifiedOutput;
+
     return {
       success: true,
       intent,
-      reply,
+      reply: finalReply,
       groundedData,
       dateRange: dateRangeStr,
       usedGroq,
+      guardrails: {
+        passed: true,
+        threatScore: inputGuard.threatScore,
+        checks: {
+          promptGuard: 'PASSED',
+          regexShield: 'PASSED',
+          scopeEnforcement: 'PASSED',
+          piiSanitization: inputGuard.flags.includes('PII_REDACTED') ? 'REDACTED' : 'CLEAN',
+          outputLeakCheck: outputGuard.leaksFiltered ? 'LEAK_PREVENTED' : 'PASSED',
+          groundingValidation: outputGuard.groundingScore >= 0.7 ? 'VERIFIED' : 'PARTIAL'
+        },
+        groundingScore: outputGuard.groundingScore,
+        modelUsed: modelUsed || (usedGroq ? 'qwen/qwen3.8-27b' : 'Deterministic Engine'),
+        guardrailModel: inputGuard.guardrailModel
+      },
       timestamp: new Date().toISOString()
     };
   }
