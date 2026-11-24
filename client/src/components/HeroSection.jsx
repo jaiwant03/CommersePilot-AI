@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import AnimatedCounter from './AnimatedCounter';
 import { 
   Sparkles, 
   Check, 
@@ -169,7 +170,7 @@ const HeroSection = () => {
               </div>
               <div className="dark-sales-stat-row">
                 <div className="dark-sales-number-col">
-                  <span className="dark-sales-percentage">+125%</span>
+                  <span className="dark-sales-percentage"><AnimatedCounter value={125} prefix="+" suffix="%" /></span>
                   <span className="dark-sales-subtext">vs last month</span>
                 </div>
                 {/* Glowing Cyan/Blue Vertical Bar Chart */}
