@@ -144,11 +144,11 @@ const ProductShowcase = () => {
           <div className="prod-hero-visual-col">
             <div className="prod-collage-canvas">
               
-              {/* Main Feature Image: Pure Indian Silk Saree Product Flatlay (ZERO HUMANS) */}
+              {/* Main Feature Image: Elegant Indian Ethnic Model in Arch Mask */}
               <div className="collage-shape-arch">
                 <img 
-                  src="https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?auto=format&fit=crop&w=800&q=80" 
-                  alt="Indian Ethnic Silk Saree Product Flatlay" 
+                  src="https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=800&q=80" 
+                  alt="Indian Ethnic Fashion Kurti Collection" 
                   className="collage-img-arch"
                 />
                 <div className="collage-arch-overlay" />
@@ -260,61 +260,32 @@ const ProductShowcase = () => {
           </div>
 
           <div className="prod-feature-visual-block">
-            <div className="product-intelligence-stage">
-              {/* 100% Unobstructed Pure Product Photography (Zero Humans) */}
-              <div className="product-stage-photo-card">
+            <div className="visual-media-stack">
+              {/* Organic Shape Fashion Order Photography */}
+              <div className="visual-organic-crop crop-kurti">
                 <img 
-                  src="https://images.unsplash.com/photo-1549465220-1a8b9238cd48?auto=format&fit=crop&w=800&q=80" 
-                  alt="Packaged E-Commerce Fashion Parcel" 
-                  className="product-stage-img"
+                  src="https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?auto=format&fit=crop&w=700&q=80" 
+                  alt="Customer Fashion Kurti Order" 
+                  className="organic-img"
                 />
-                <div className="product-stage-chip">
-                  <span className="stage-live-dot" />
-                  <span>Order #TT10245 • COD ₹2,500</span>
-                </div>
               </div>
 
-              {/* Impressive Engineered COD Risk Telemetry Console */}
-              <div className="product-telemetry-console console-cod-risk">
-                <div className="console-header">
-                  <div className="console-brand-icon icon-amber">
-                    <ShieldCheck size={16} />
-                  </div>
-                  <div className="console-title-wrap">
-                    <span className="console-kicker">Pre-Dispatch Risk Screening</span>
-                    <h4 className="console-heading">Deterministic COD Risk Engine</h4>
-                  </div>
-                  <div className="console-score-pill pill-amber">
-                    <span className="score-num">65</span>
-                    <span className="score-denom">/100</span>
-                    <span className="score-label">HIGH RISK</span>
-                  </div>
+              {/* Floating Live Risk Radar Card */}
+              <div className="floating-telemetry-badge badge-risk">
+                <div className="telemetry-badge-header">
+                  <ShieldCheck size={16} className="text-amber" />
+                  <span className="telemetry-badge-title">COD Risk Radar Evaluation</span>
                 </div>
-
-                {/* Visual Risk Gauge Meter */}
-                <div className="risk-gauge-track">
-                  <div className="risk-gauge-fill" style={{ width: '65%' }} />
+                <div className="telemetry-score-row">
+                  <span className="telemetry-big-score text-amber">65/100</span>
+                  <span className="telemetry-tier-tag tier-high">HIGH RISK</span>
                 </div>
-
-                {/* Detected Risk Factors */}
-                <div className="console-factors-list">
-                  <div className="factor-pill factor-warn">
-                    <AlertTriangle size={12} />
-                    <span>Incomplete Address: Landmark / House No. Missing</span>
-                  </div>
-                  <div className="factor-pill factor-warn">
-                    <AlertTriangle size={12} />
-                    <span>Prior RTO Record Detected in Customer History</span>
-                  </div>
+                <div className="telemetry-reasons-list">
+                  <div className="reason-item">⚠ Incomplete address: Missing house/street landmark</div>
+                  <div className="reason-item">⚠ Previous failed delivery in order history</div>
                 </div>
-
-                {/* Automated Decision Status */}
-                <div className="console-decision-footer">
-                  <div className="decision-tag">
-                    <span className="tag-label">Automated Action:</span>
-                    <span className="tag-val text-amber">REQUEST_CONFIRMATION</span>
-                  </div>
-                  <span className="decision-note">1-Click Verification Sent</span>
+                <div className="telemetry-action-hint">
+                  Decision: <strong>REQUEST_CONFIRMATION</strong>
                 </div>
               </div>
             </div>
@@ -369,64 +340,44 @@ const ProductShowcase = () => {
           </div>
 
           <div className="prod-feature-visual-block">
-            <div className="product-intelligence-stage">
-              {/* 100% Unobstructed Pure Apparel Product Flatlay (Zero Humans) */}
-              <div className="product-stage-photo-card">
+            <div className="visual-media-stack">
+              {/* Apparel Warehouse Racks Photography with Asymmetric Mask */}
+              <div className="visual-organic-crop crop-warehouse">
                 <img 
-                  src="https://images.unsplash.com/photo-1523381210434-271e8be1f52b?auto=format&fit=crop&w=800&q=80" 
-                  alt="Folded Women's Black Kurti Apparel Collection" 
-                  className="product-stage-img"
+                  src="https://images.unsplash.com/photo-1558769132-cb1aea458c5e?auto=format&fit=crop&w=700&q=80" 
+                  alt="Indian Fashion Warehouse Garment Racks" 
+                  className="organic-img"
                 />
-                <div className="product-stage-chip">
-                  <span className="stage-live-dot" />
-                  <span>SKU: TT-KUR-BLK • Women's Black Kurti</span>
-                </div>
               </div>
 
-              {/* Impressive Predictive Runway & Auto-PO Console */}
-              <div className="product-telemetry-console console-inventory">
-                <div className="console-header">
-                  <div className="console-brand-icon icon-cyan">
-                    <Boxes size={16} />
+              {/* Floating Inventory Runway Card */}
+              <div className="floating-telemetry-badge badge-runway">
+                <div className="telemetry-badge-header">
+                  <Boxes size={16} className="text-cyan" />
+                  <span className="telemetry-badge-title">Predictive Runway Alert</span>
+                </div>
+                <div className="telemetry-sku-title">Women's Black Kurti (TT-KUR-BLK)</div>
+                <div className="runway-stat-pills">
+                  <div className="runway-pill">
+                    <span className="pill-muted">Stock</span>
+                    <span className="pill-bold">25 units</span>
                   </div>
-                  <div className="console-title-wrap">
-                    <span className="console-kicker">Stockout Prevention Engine</span>
-                    <h4 className="console-heading">Predictive Inventory Runway Radar</h4>
+                  <div className="runway-pill">
+                    <span className="pill-muted">Velocity</span>
+                    <span className="pill-bold">15/day</span>
                   </div>
-                  <div className="console-score-pill pill-red">
-                    <span className="pulse-dot-red" />
-                    <span className="score-label">CRITICAL RUNWAY</span>
+                  <div className="runway-pill pill-alert">
+                    <span className="pill-muted">Runway</span>
+                    <span className="pill-bold">1.67 Days</span>
                   </div>
                 </div>
-
-                {/* 3-Pod Live Inventory Metrics */}
-                <div className="telemetry-tri-grid">
-                  <div className="tri-pod">
-                    <span className="pod-label">Warehouse Stock</span>
-                    <span className="pod-val">25 units</span>
+                <div className="auto-drafted-po-box">
+                  <div className="po-box-header">
+                    <Sparkles size={12} className="text-indigo" />
+                    <span>Auto-Drafted PO #PO-1001</span>
                   </div>
-                  <div className="tri-pod">
-                    <span className="pod-label">Sales Velocity</span>
-                    <span className="pod-val">15.0 /day</span>
-                  </div>
-                  <div className="tri-pod pod-alert">
-                    <span className="pod-label">Estimated Runway</span>
-                    <span className="pod-val text-red">1.67 Days</span>
-                  </div>
-                </div>
-
-                {/* Auto-Drafted Supplier PO Section */}
-                <div className="console-po-card">
-                  <div className="po-header-row">
-                    <div className="po-title">
-                      <Sparkles size={13} className="text-indigo" />
-                      <span>Auto-Drafted Purchase Order #PO-1001</span>
-                    </div>
-                    <span className="po-status-badge">Pending 1-Click Sign-off</span>
-                  </div>
-                  <div className="po-meta-row">
-                    <span>Supplier: <strong>Coimbatore Fabric Mills</strong></span>
-                    <span>Reorder: <strong>650 Units (₹45,000)</strong></span>
+                  <div className="po-box-details">
+                    Supplier: Coimbatore Fabric Mills • 650 Units (₹45,000)
                   </div>
                 </div>
               </div>
@@ -478,53 +429,35 @@ const ProductShowcase = () => {
           </div>
 
           <div className="prod-feature-visual-block">
-            <div className="product-intelligence-stage">
-              {/* 100% Unobstructed Pure Courier Shipping Packages (Zero Humans) */}
-              <div className="product-stage-photo-card">
+            <div className="visual-media-stack">
+              {/* Courier Delivery Logistics Photography in Arch Crop */}
+              <div className="visual-organic-crop crop-delivery">
                 <img 
-                  src="https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&w=800&q=80" 
-                  alt="Courier Logistics Delivery Parcels and Packages" 
-                  className="product-stage-img"
+                  src="https://images.unsplash.com/photo-1526367790999-0150786686a2?auto=format&fit=crop&w=700&q=80" 
+                  alt="Courier Logistics Delivery Operations" 
+                  className="organic-img"
                 />
-                <div className="product-stage-chip">
-                  <span className="stage-live-dot" />
-                  <span>AWB: DEL-TT10245 • Delhivery Express</span>
-                </div>
               </div>
 
-              {/* Impressive WhatsApp NDR Recovery Console */}
-              <div className="product-telemetry-console console-delivery">
-                <div className="console-header">
-                  <div className="console-brand-icon icon-green">
-                    <Truck size={16} />
-                  </div>
-                  <div className="console-title-wrap">
-                    <span className="console-kicker">Autonomous Logistics Interception</span>
-                    <h4 className="console-heading">WhatsApp NDR Customer Recovery</h4>
-                  </div>
-                  <div className="console-score-pill pill-green">
-                    <span className="score-label">100% RECOVERED</span>
-                  </div>
+              {/* Floating WhatsApp / NDR Message Simulation Card */}
+              <div className="floating-telemetry-badge badge-ndr">
+                <div className="telemetry-badge-header">
+                  <Truck size={16} className="text-green" />
+                  <span className="telemetry-badge-title">WhatsApp Customer NDR Flow</span>
                 </div>
-
-                {/* WhatsApp Chat Simulation Deck */}
-                <div className="console-whatsapp-deck">
-                  <div className="whatsapp-msg-inbound">
-                    <p className="wa-text">
-                      "Hello! Your Trendy Threads order TT10245 could not be delivered because you were unavailable. Would you like us to arrange another delivery attempt? Reply YES to request redelivery."
-                    </p>
-                    <span className="wa-time">10:42 AM</span>
+                <div className="whatsapp-chat-bubble">
+                  <div className="whatsapp-bubble-text">
+                    "Hello! Your Trendy Threads order TT10245 could not be delivered because you were unavailable. Would you like us to arrange another delivery attempt? Reply YES to request redelivery."
                   </div>
-                  <div className="whatsapp-msg-reply">
-                    <span className="wa-reply-text">YES, please deliver tomorrow between 2-5 PM</span>
-                    <span className="wa-check-double">✓✓</span>
-                  </div>
+                  <div className="whatsapp-bubble-time">10:42 AM • Delivered</div>
                 </div>
-
-                {/* Recovery Status Banner */}
-                <div className="console-recovery-footer">
-                  <CheckCircle2 size={14} className="text-green" />
-                  <span>Carrier API Updated: <strong>OUT_FOR_DELIVERY (Attempt #2 Scheduled)</strong></span>
+                <div className="whatsapp-reply-bubble">
+                  <span>YES, please deliver tomorrow between 2-5 PM</span>
+                  <div className="reply-check-double">✓✓</div>
+                </div>
+                <div className="ndr-status-recovered">
+                  <CheckCircle2 size={13} />
+                  <span>Status: OUT_FOR_DELIVERY (Attempt #2 Scheduled)</span>
                 </div>
               </div>
             </div>
