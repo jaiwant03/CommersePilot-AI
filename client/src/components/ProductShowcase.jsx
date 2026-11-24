@@ -144,11 +144,11 @@ const ProductShowcase = () => {
           <div className="prod-hero-visual-col">
             <div className="prod-collage-canvas">
               
-              {/* Main Feature Image: Elegant Indian Ethnic Model in Arch Mask */}
+              {/* Main Feature Image: Pure Indian Silk Saree Product Flatlay (ZERO HUMANS) */}
               <div className="collage-shape-arch">
                 <img 
-                  src="https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=800&q=80" 
-                  alt="Indian Ethnic Fashion Kurti Collection" 
+                  src="https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?auto=format&fit=crop&w=800&q=80" 
+                  alt="Indian Ethnic Silk Saree Product Flatlay" 
                   className="collage-img-arch"
                 />
                 <div className="collage-arch-overlay" />
@@ -260,32 +260,61 @@ const ProductShowcase = () => {
           </div>
 
           <div className="prod-feature-visual-block">
-            <div className="visual-media-stack">
-              {/* Organic Shape Fashion Order Photography */}
-              <div className="visual-organic-crop crop-kurti">
+            <div className="product-intelligence-stage">
+              {/* 100% Unobstructed Pure Product Photography (Zero Humans) */}
+              <div className="product-stage-photo-card">
                 <img 
-                  src="https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?auto=format&fit=crop&w=700&q=80" 
-                  alt="Customer Fashion Kurti Order" 
-                  className="organic-img"
+                  src="https://images.unsplash.com/photo-1549465220-1a8b9238cd48?auto=format&fit=crop&w=800&q=80" 
+                  alt="Packaged E-Commerce Fashion Parcel" 
+                  className="product-stage-img"
                 />
+                <div className="product-stage-chip">
+                  <span className="stage-live-dot" />
+                  <span>Order #TT10245 • COD ₹2,500</span>
+                </div>
               </div>
 
-              {/* Floating Live Risk Radar Card */}
-              <div className="floating-telemetry-badge badge-risk">
-                <div className="telemetry-badge-header">
-                  <ShieldCheck size={16} className="text-amber" />
-                  <span className="telemetry-badge-title">COD Risk Radar Evaluation</span>
+              {/* Impressive Engineered COD Risk Telemetry Console */}
+              <div className="product-telemetry-console console-cod-risk">
+                <div className="console-header">
+                  <div className="console-brand-icon icon-amber">
+                    <ShieldCheck size={16} />
+                  </div>
+                  <div className="console-title-wrap">
+                    <span className="console-kicker">Pre-Dispatch Risk Screening</span>
+                    <h4 className="console-heading">Deterministic COD Risk Engine</h4>
+                  </div>
+                  <div className="console-score-pill pill-amber">
+                    <span className="score-num">65</span>
+                    <span className="score-denom">/100</span>
+                    <span className="score-label">HIGH RISK</span>
+                  </div>
                 </div>
-                <div className="telemetry-score-row">
-                  <span className="telemetry-big-score text-amber">65/100</span>
-                  <span className="telemetry-tier-tag tier-high">HIGH RISK</span>
+
+                {/* Visual Risk Gauge Meter */}
+                <div className="risk-gauge-track">
+                  <div className="risk-gauge-fill" style={{ width: '65%' }} />
                 </div>
-                <div className="telemetry-reasons-list">
-                  <div className="reason-item">⚠ Incomplete address: Missing house/street landmark</div>
-                  <div className="reason-item">⚠ Previous failed delivery in order history</div>
+
+                {/* Detected Risk Factors */}
+                <div className="console-factors-list">
+                  <div className="factor-pill factor-warn">
+                    <AlertTriangle size={12} />
+                    <span>Incomplete Address: Landmark / House No. Missing</span>
+                  </div>
+                  <div className="factor-pill factor-warn">
+                    <AlertTriangle size={12} />
+                    <span>Prior RTO Record Detected in Customer History</span>
+                  </div>
                 </div>
-                <div className="telemetry-action-hint">
-                  Decision: <strong>REQUEST_CONFIRMATION</strong>
+
+                {/* Automated Decision Status */}
+                <div className="console-decision-footer">
+                  <div className="decision-tag">
+                    <span className="tag-label">Automated Action:</span>
+                    <span className="tag-val text-amber">REQUEST_CONFIRMATION</span>
+                  </div>
+                  <span className="decision-note">1-Click Verification Sent</span>
                 </div>
               </div>
             </div>
