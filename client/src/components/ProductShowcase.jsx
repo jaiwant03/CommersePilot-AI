@@ -982,7 +982,7 @@ const ProductShowcase = () => {
             </div>
 
             <div className="flow-connector-line">
-              <div className="connector-pulse" />
+              <div className="connector-pulse pulse-1" />
             </div>
 
             {/* Step 2 */}
@@ -997,7 +997,7 @@ const ProductShowcase = () => {
             </div>
 
             <div className="flow-connector-line">
-              <div className="connector-pulse" />
+              <div className="connector-pulse pulse-2" />
             </div>
 
             {/* Step 3 */}
@@ -1012,7 +1012,7 @@ const ProductShowcase = () => {
             </div>
 
             <div className="flow-connector-line">
-              <div className="connector-pulse" />
+              <div className="connector-pulse pulse-3" />
             </div>
 
             {/* Step 4 */}
@@ -1027,7 +1027,7 @@ const ProductShowcase = () => {
             </div>
 
             <div className="flow-connector-line">
-              <div className="connector-pulse" />
+              <div className="connector-pulse pulse-4" />
             </div>
 
             {/* Step 5 */}
@@ -1042,7 +1042,7 @@ const ProductShowcase = () => {
             </div>
 
             <div className="flow-connector-line">
-              <div className="connector-pulse" />
+              <div className="connector-pulse pulse-5" />
             </div>
 
             {/* Step 6 */}
