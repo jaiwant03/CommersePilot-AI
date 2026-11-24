@@ -153,8 +153,8 @@ const ProductShowcase = () => {
 
             <div className="showcase-visual-container">
               <img 
-                src="/assets/images/order-verification-3d.jpg" 
-                alt="CommercePilot AI Order Verification 3D Interface showing Order TT10245, 65/100 High Risk" 
+                src="/assets/images/cod-radar-visual.svg" 
+                alt="CommercePilot AI COD Risk Radar Visual Interface" 
                 style={{ width: '100%', height: 'auto', borderRadius: '16px', border: '1.5px solid rgba(186, 230, 253, 0.8)', boxShadow: '0 16px 36px -4px rgba(14, 165, 233, 0.15)' }}
               />
             </div>
@@ -213,8 +213,8 @@ const ProductShowcase = () => {
 
             <div className="showcase-visual-container">
               <img 
-                src="/assets/images/inventory-intelligence-3d.jpg" 
-                alt="CommercePilot AI Predictive Inventory Intelligence showing Black Kurti 25 units, 1.67 days runway" 
+                src="/assets/images/inventory-radar-visual.svg" 
+                alt="CommercePilot AI Predictive Inventory Runway Interface" 
                 style={{ width: '100%', height: 'auto', borderRadius: '16px', border: '1.5px solid rgba(186, 230, 253, 0.8)', boxShadow: '0 16px 36px -4px rgba(14, 165, 233, 0.15)' }}
               />
             </div>
@@ -333,8 +333,8 @@ const ProductShowcase = () => {
 
             <div className="showcase-visual-container">
               <img 
-                src="/assets/images/platform-hub-3d.jpg" 
-                alt="CommercePilot AI Central 4-Pillar Autonomous Operations Hub" 
+                src="/assets/images/ai-analytics-visual.svg" 
+                alt="CommercePilot AI Copilot Analytics Interface" 
                 style={{ width: '100%', height: 'auto', borderRadius: '16px', border: '1.5px solid rgba(186, 230, 253, 0.8)', boxShadow: '0 16px 36px -4px rgba(14, 165, 233, 0.15)' }}
               />
             </div>
@@ -393,8 +393,8 @@ const ProductShowcase = () => {
 
             <div className="showcase-visual-container">
               <img 
-                src="/assets/images/ecommerce-cart-bags-3d.png" 
-                alt="CommercePilot AI Multi-Channel Synchronization showing 3D Shopping Cart and Bags" 
+                src="/assets/images/omnichannel-sync-visual.svg" 
+                alt="CommercePilot AI Multi-Channel Synchronization" 
                 style={{ width: '100%', height: 'auto', borderRadius: '16px', border: '1.5px solid rgba(186, 230, 253, 0.8)', boxShadow: '0 16px 36px -4px rgba(14, 165, 233, 0.15)' }}
               />
             </div>
@@ -403,52 +403,49 @@ const ProductShowcase = () => {
 
       </div>
 
-      {/* NEW SECTION: Real-World E-Commerce Automation Suite */}
+      {/* NEW SECTION: Omnichannel Brand & Media Protection Showcase (Matching Image 4) */}
       <div style={{ marginTop: '64px', paddingTop: '48px', borderTop: '1.5px solid rgba(186, 230, 253, 0.6)' }}>
         <div style={{ textAlign: 'center', marginBottom: '28px' }}>
           <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '5px 16px', background: 'rgba(14, 165, 233, 0.1)', border: '1px solid rgba(14, 165, 233, 0.3)', borderRadius: '9999px', fontSize: '12.5px', fontWeight: 600, color: '#0284C7', marginBottom: '12px' }}>
             <Sparkles size={13} />
-            <span>Real-World Operations Gallery</span>
+            <span>Multi-Touchpoint Brand Protection</span>
           </div>
           <h3 style={{ fontSize: 'clamp(1.8rem, 3vw, 2.5rem)', fontWeight: 800, color: '#0F172A', letterSpacing: '-0.025em', marginBottom: '12px' }}>
-            Engineered for Modern Indian E-Commerce Brands
+            Protect Every Customer Touchpoint in Real Time
           </h3>
           <p style={{ fontSize: '15px', color: '#64748B', maxWidth: '680px', margin: '0 auto', lineHeight: 1.6 }}>
-            Inspect the live autonomous pipelines protecting Trendy Threads: Smart COD risk scoring on Order #TT10245, 
-            predictive 1.67-day stockout runway for Black Kurtis, and autonomous PO dispatches.
+            CommercePilot AI continuously inspects ad traffic, web promotion spikes, and email fulfillment batches 
+            to block fraudulent orders and enforce automated safety stock buffers.
           </p>
         </div>
 
-        {/* 3 Luxury Visual Cards Grid (3D Product UI) */}
+        {/* 3 Luxury Visual Cards Grid (Instagram Post, Web Banner, Email Campaign) */}
         <div className="omnichannel-media-grid">
           
-          {/* Card 1: 3D Operations Suite (Order Verification + Inventory Runway) */}
-          <div className="omnichannel-media-card" style={{ background: '#FFFFFF', border: '1.5px solid rgba(186, 230, 253, 0.9)' }}>
+          {/* Card 1: Instagram Post */}
+          <div className="omnichannel-media-card">
             <img 
-              src="/assets/images/trendy-threads-operations-3d.jpg" 
-              alt="CommercePilot AI Order Verification & Inventory Intelligence 3D Suite"
+              src="/assets/images/instagram-d2c-post.svg" 
+              alt="CommercePilot AI Instagram D2C Ad Protection"
               className="omnichannel-media-img"
-              style={{ objectFit: 'cover', height: '100%' }}
             />
           </div>
 
-          {/* Card 2: Central Platform Hub */}
-          <div className="omnichannel-media-card" style={{ background: '#FFFFFF', border: '1.5px solid rgba(186, 230, 253, 0.9)' }}>
+          {/* Card 2: Web Banner */}
+          <div className="omnichannel-media-card">
             <img 
-              src="/assets/images/platform-hub-3d.jpg" 
-              alt="CommercePilot AI 4-Pillar Central Autonomous Architecture Hub"
+              src="/assets/images/web-banner-creative.svg" 
+              alt="CommercePilot AI Web Banner Flash Sale Protection"
               className="omnichannel-media-img"
-              style={{ objectFit: 'cover', height: '100%' }}
             />
           </div>
 
-          {/* Card 3: 3D Shopping Cart & Bags */}
-          <div className="omnichannel-media-card" style={{ background: '#FFFFFF', border: '1.5px solid rgba(186, 230, 253, 0.9)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          {/* Card 3: Email Campaign */}
+          <div className="omnichannel-media-card">
             <img 
-              src="/assets/images/ecommerce-cart-bags-3d.png" 
-              alt="CommercePilot AI Omnichannel Cart & Delivery Fulfillment"
+              src="/assets/images/email-campaign-creative.svg" 
+              alt="CommercePilot AI Email Campaign 1-Click Verification"
               className="omnichannel-media-img"
-              style={{ objectFit: 'contain', padding: '16px' }}
             />
           </div>
 
