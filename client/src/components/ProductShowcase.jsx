@@ -144,14 +144,18 @@ const ProductShowcase = () => {
           <div className="prod-hero-visual-col">
             <div className="prod-collage-canvas">
               
-              {/* Main Feature Image: Elegant Indian Ethnic Model in Arch Mask */}
+              {/* Main Feature Image: Designer Shoes & Sneakers Collection */}
               <div className="collage-shape-arch">
                 <img 
-                  src="https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=800&q=80" 
-                  alt="Indian Ethnic Fashion Kurti Collection" 
+                  src="https://images.unsplash.com/photo-1549298916-b41d501d3772?auto=format&fit=crop&w=800&q=80" 
+                  alt="Designer Footwear and Sneakers Collection" 
                   className="collage-img-arch"
                 />
                 <div className="collage-arch-overlay" />
+                <div className="crop-live-pill">
+                  <Sparkles size={11} />
+                  <span>Curated Footwear SKU</span>
+                </div>
               </div>
 
               {/* Floating 3D Gift Shopping Bags (Top-Right Angle) */}
@@ -261,23 +265,36 @@ const ProductShowcase = () => {
 
           <div className="prod-feature-visual-block">
             <div className="visual-media-stack">
-              {/* Organic Shape Fashion Order Photography */}
+              {/* Luxury Designer Dresses & Fashion Apparel Showcase */}
               <div className="visual-organic-crop crop-kurti">
                 <img 
-                  src="https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?auto=format&fit=crop&w=700&q=80" 
-                  alt="Customer Fashion Kurti Order" 
+                  src="https://images.unsplash.com/photo-1489987707025-afc232f7ea0f?auto=format&fit=crop&w=800&q=80" 
+                  alt="Designer Boutique Dresses and Fashion Apparel" 
                   className="organic-img"
                 />
+                <div className="crop-live-pill">
+                  <Sparkles size={11} />
+                  <span>Catalog SKU: TT-KUR-COT</span>
+                </div>
               </div>
 
               {/* Floating Live Risk Radar Card */}
               <div className="floating-telemetry-badge badge-risk">
                 <div className="telemetry-badge-header">
-                  <ShieldCheck size={16} className="text-amber" />
-                  <span className="telemetry-badge-title">COD Risk Radar Evaluation</span>
+                  <div className="telemetry-icon-box text-amber">
+                    <ShieldCheck size={16} />
+                  </div>
+                  <div className="telemetry-title-group">
+                    <span className="telemetry-badge-title">COD Risk Radar Evaluation</span>
+                    <span className="telemetry-sub-tag">Pre-Dispatch AI Gate</span>
+                  </div>
+                  <span className="telemetry-pulse-dot dot-amber" />
                 </div>
                 <div className="telemetry-score-row">
-                  <span className="telemetry-big-score text-amber">65/100</span>
+                  <div className="score-val-col">
+                    <span className="telemetry-big-score text-amber">65/100</span>
+                    <span className="telemetry-score-sub">Deterministic Risk Index</span>
+                  </div>
                   <span className="telemetry-tier-tag tier-high">HIGH RISK</span>
                 </div>
                 <div className="telemetry-reasons-list">
@@ -285,7 +302,8 @@ const ProductShowcase = () => {
                   <div className="reason-item">⚠ Previous failed delivery in order history</div>
                 </div>
                 <div className="telemetry-action-hint">
-                  Decision: <strong>REQUEST_CONFIRMATION</strong>
+                  <span className="hint-label">Automated Action:</span>
+                  <span className="hint-status status-amber">REQUEST_CONFIRMATION</span>
                 </div>
               </div>
             </div>
@@ -341,20 +359,30 @@ const ProductShowcase = () => {
 
           <div className="prod-feature-visual-block">
             <div className="visual-media-stack">
-              {/* Apparel Warehouse Racks Photography with Asymmetric Mask */}
+              {/* Luxury Footwear & Shoes Product Showcase */}
               <div className="visual-organic-crop crop-warehouse">
                 <img 
-                  src="https://images.unsplash.com/photo-1558769132-cb1aea458c5e?auto=format&fit=crop&w=700&q=80" 
-                  alt="Indian Fashion Warehouse Garment Racks" 
+                  src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=800&q=80" 
+                  alt="Premium Footwear and Athletic Shoes Product Inventory" 
                   className="organic-img"
                 />
+                <div className="crop-live-pill">
+                  <Boxes size={11} />
+                  <span>SKU TT-KUR-BLK • Live Stock</span>
+                </div>
               </div>
 
               {/* Floating Inventory Runway Card */}
               <div className="floating-telemetry-badge badge-runway">
                 <div className="telemetry-badge-header">
-                  <Boxes size={16} className="text-cyan" />
-                  <span className="telemetry-badge-title">Predictive Runway Alert</span>
+                  <div className="telemetry-icon-box text-cyan">
+                    <Boxes size={16} />
+                  </div>
+                  <div className="telemetry-title-group">
+                    <span className="telemetry-badge-title">Predictive Runway Alert</span>
+                    <span className="telemetry-sub-tag">Multi-Store Velocity Sync</span>
+                  </div>
+                  <span className="telemetry-pulse-dot dot-red" />
                 </div>
                 <div className="telemetry-sku-title">Women's Black Kurti (TT-KUR-BLK)</div>
                 <div className="runway-stat-pills">
@@ -364,17 +392,18 @@ const ProductShowcase = () => {
                   </div>
                   <div className="runway-pill">
                     <span className="pill-muted">Velocity</span>
-                    <span className="pill-bold">15/day</span>
+                    <span className="pill-bold text-cyan">15/day</span>
                   </div>
                   <div className="runway-pill pill-alert">
                     <span className="pill-muted">Runway</span>
-                    <span className="pill-bold">1.67 Days</span>
+                    <span className="pill-bold text-red">1.67 Days</span>
                   </div>
                 </div>
                 <div className="auto-drafted-po-box">
                   <div className="po-box-header">
                     <Sparkles size={12} className="text-indigo" />
                     <span>Auto-Drafted PO #PO-1001</span>
+                    <span className="po-ready-pill">Ready to Approve</span>
                   </div>
                   <div className="po-box-details">
                     Supplier: Coimbatore Fabric Mills • 650 Units (₹45,000)
@@ -430,26 +459,36 @@ const ProductShowcase = () => {
 
           <div className="prod-feature-visual-block">
             <div className="visual-media-stack">
-              {/* Courier Delivery Logistics Photography in Arch Crop */}
+              {/* E-Commerce Courier Shipping Parcels & Packaging */}
               <div className="visual-organic-crop crop-delivery">
                 <img 
-                  src="https://images.unsplash.com/photo-1526367790999-0150786686a2?auto=format&fit=crop&w=700&q=80" 
-                  alt="Courier Logistics Delivery Operations" 
+                  src="https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&w=800&q=80" 
+                  alt="E-Commerce Courier Shipping Parcels and Packaging" 
                   className="organic-img"
                 />
+                <div className="crop-live-pill">
+                  <Truck size={11} />
+                  <span>Delhivery AWB DEL-TT10245</span>
+                </div>
               </div>
 
               {/* Floating WhatsApp / NDR Message Simulation Card */}
               <div className="floating-telemetry-badge badge-ndr">
                 <div className="telemetry-badge-header">
-                  <Truck size={16} className="text-green" />
-                  <span className="telemetry-badge-title">WhatsApp Customer NDR Flow</span>
+                  <div className="telemetry-icon-box text-green">
+                    <Truck size={16} />
+                  </div>
+                  <div className="telemetry-title-group">
+                    <span className="telemetry-badge-title">WhatsApp NDR Recovery Engine</span>
+                    <span className="telemetry-sub-tag">Automated Buyer Outreach</span>
+                  </div>
+                  <span className="telemetry-pulse-dot dot-green" />
                 </div>
                 <div className="whatsapp-chat-bubble">
                   <div className="whatsapp-bubble-text">
                     "Hello! Your Trendy Threads order TT10245 could not be delivered because you were unavailable. Would you like us to arrange another delivery attempt? Reply YES to request redelivery."
                   </div>
-                  <div className="whatsapp-bubble-time">10:42 AM • Delivered</div>
+                  <div className="whatsapp-bubble-time">10:42 AM • Delivered ✓✓</div>
                 </div>
                 <div className="whatsapp-reply-bubble">
                   <span>YES, please deliver tomorrow between 2-5 PM</span>
@@ -679,15 +718,17 @@ const ProductShowcase = () => {
             <div className="storytelling-photo-col">
               <div className="lifestyle-image-frame">
                 <img 
-                  src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=800&q=80" 
-                  alt="Priya, Founder of Trendy Threads Coimbatore" 
+                  src="https://images.unsplash.com/photo-1479064555552-3ef4979f8908?auto=format&fit=crop&w=800&q=80" 
+                  alt="Trendy Threads Curated Catalog - Dresses, Shoes & Accessories" 
                   className="lifestyle-img"
                 />
                 <div className="lifestyle-caption-card">
-                  <div className="caption-avatar">P</div>
+                  <div className="caption-avatar">
+                    <ShoppingBag size={18} />
+                  </div>
                   <div>
-                    <div className="caption-name">Priya Sundaram</div>
-                    <div className="caption-role">Founder, Trendy Threads • Coimbatore, Tamil Nadu</div>
+                    <div className="caption-name">Trendy Threads Boutique</div>
+                    <div className="caption-role">Independent Online Fashion &amp; Footwear • Coimbatore, Tamil Nadu</div>
                   </div>
                 </div>
               </div>
