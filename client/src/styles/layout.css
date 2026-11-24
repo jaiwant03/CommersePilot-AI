@@ -683,6 +683,12 @@ body {
   display: flex;
   align-items: center;
   gap: 12px;
+  transform: rotate(-3deg);
+  transition: transform 0.25s ease;
+}
+
+.hero-floating-card-top-left:hover {
+  transform: rotate(-1deg) translateY(-2px);
 }
 
 .badge-trophy-icon {
@@ -732,6 +738,12 @@ body {
   color: #FFFFFF;
   z-index: 5;
   width: 175px;
+  transform: rotate(-3deg);
+  transition: transform 0.25s ease;
+}
+
+.hero-floating-dark-sales-card:hover {
+  transform: rotate(-1deg) translateY(-2px);
 }
 
 .dark-sales-top-row {
