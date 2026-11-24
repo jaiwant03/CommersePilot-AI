@@ -24,20 +24,20 @@ const seedTrendyThreads = async () => {
     // 1. Create or Find Merchant User
     const merchantEmail = 'meena@trendythreads.in';
     let user = await User.findOne({ email: merchantEmail });
-    const hashedPassword = await bcrypt.hash('TrendyThreads2026!', 10);
+    const plainPassword = 'TrendyThreads2026!';
 
     if (!user) {
       user = await User.create({
         fullName: 'Meena Kandasamy',
         email: merchantEmail,
-        password: hashedPassword,
+        password: plainPassword,
         phoneNumber: '+91 94432 10987',
         role: 'owner',
         isEmailVerified: true
       });
       console.log(`[Seed] Created merchant user: ${user.email}`);
     } else {
-      user.password = hashedPassword;
+      user.password = plainPassword;
       await user.save();
       console.log(`[Seed] Updated merchant user: ${user.email}`);
     }
