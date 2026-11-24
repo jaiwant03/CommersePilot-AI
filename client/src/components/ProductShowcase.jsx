@@ -155,10 +155,6 @@ const ProductShowcase = () => {
                   className="collage-img-arch"
                 />
                 <div className="collage-arch-overlay" />
-                <div className="crop-live-pill">
-                  <Sparkles size={11} />
-                  <span>Curated Footwear SKU</span>
-                </div>
               </div>
 
               {/* Floating 3D Gift Shopping Bags (Top-Right Angle) */}
@@ -275,10 +271,6 @@ const ProductShowcase = () => {
                   alt="Designer Boutique Dresses and Fashion Apparel" 
                   className="organic-img"
                 />
-                <div className="crop-live-pill">
-                  <Sparkles size={11} />
-                  <span>Catalog SKU: TT-KUR-COT</span>
-                </div>
               </div>
 
               {/* 3D Shopping Trolley Logo Floating Above Corner */}
@@ -390,10 +382,6 @@ const ProductShowcase = () => {
                   alt="Premium Footwear and Athletic Shoes Product Inventory" 
                   className="organic-img"
                 />
-                <div className="crop-live-pill">
-                  <Boxes size={11} />
-                  <span>SKU TT-KUR-BLK • Live Stock</span>
-                </div>
               </div>
 
               {/* 3D Shopping Trolley Logo Floating Above Corner */}
@@ -511,10 +499,6 @@ const ProductShowcase = () => {
                   alt="Clean E-Commerce Courier Shipping Parcels & Packaging" 
                   className="organic-img"
                 />
-                <div className="crop-live-pill">
-                  <Truck size={11} />
-                  <span>Delhivery AWB DEL-TT10245</span>
-                </div>
               </div>
 
               {/* 3D Shopping Trolley Logo Floating Above Corner */}
@@ -846,12 +830,6 @@ const ProductShowcase = () => {
                     className="sculpted-lifestyle-img"
                   />
                   <div className="lifestyle-lux-gradient" />
-                  
-                  {/* Top-Right Pill inside the frame */}
-                  <div className="crop-live-pill">
-                    <ShoppingBag size={11} />
-                    <span>Trendy Threads Storefront</span>
-                  </div>
                 </div>
 
                 {/* Top-Right Ambient Chip */}
