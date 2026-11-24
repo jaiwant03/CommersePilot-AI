@@ -2864,24 +2864,86 @@ body {
 .visual-media-stack {
   position: relative;
   width: 100%;
-  max-width: 540px;
+  max-width: 500px;
+  min-height: 460px;
   display: flex;
-  flex-direction: column;
   align-items: center;
-  gap: 16px;
+  justify-content: center;
+}
+
+/* Floating 3D Shopping Trolley on the top corner above the image */
+.floating-trolley-badge {
+  position: absolute;
+  top: -22px;
+  right: -8px;
+  width: 135px;
+  z-index: 5;
+  filter: drop-shadow(0 15px 25px rgba(99, 102, 241, 0.28));
+  animation: floatBags 6s ease-in-out infinite;
+  pointer-events: none;
+}
+
+.floating-trolley-badge .trolley-svg {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.prod-feature-story.reverse .floating-trolley-badge {
+  right: auto;
+  left: -8px;
+}
+
+/* Floating Accent Corner Chips */
+.corner-ai-chip {
+  position: absolute;
+  background: rgba(255, 255, 255, 0.96);
+  backdrop-filter: blur(10px);
+  border: 1.5px solid #E2E8F0;
+  border-radius: 30px;
+  padding: 6px 14px;
+  font-size: 11px;
+  font-weight: 600;
+  color: #1E293B;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.08);
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  z-index: 4;
+  white-space: nowrap;
+}
+
+.chip-corner-top-left {
+  top: 18px;
+  left: -20px;
+}
+
+.chip-corner-bottom-right {
+  bottom: 22px;
+  right: -15px;
+}
+
+.prod-feature-story.reverse .chip-corner-top-left {
+  left: auto;
+  right: -20px;
+}
+
+.prod-feature-story.reverse .chip-corner-bottom-right {
+  right: auto;
+  left: -15px;
 }
 
 /* Big, impressive product showcase containers with distinct tangent shapes */
 .visual-organic-crop {
-  width: 100%;
-  height: 390px;
+  width: 360px;
+  height: 440px;
   max-width: 100%;
   overflow: hidden;
-  box-shadow: 0 25px 60px -12px rgba(15, 23, 42, 0.18), 0 0 0 1px rgba(226, 232, 240, 0.95);
-  border: 4px solid #FFFFFF;
+  box-shadow: 0 25px 60px -12px rgba(15, 23, 42, 0.18), 0 0 0 4px #FFFFFF;
   position: relative;
   background: #F8FAFC;
-  transition: transform 0.35s ease, box-shadow 0.35s ease;
+  z-index: 1;
+  transition: transform 0.4s ease, box-shadow 0.4s ease;
 }
 
 .visual-organic-crop:hover {
@@ -2943,22 +3005,27 @@ body {
 /* Impressive Cyber-Navy Telemetry HUD Cards */
 /* Impressive Cyber-Navy Telemetry HUD Cards - Compact, Sleek Dimensions Docked Below Image */
 .floating-telemetry-badge {
-  position: relative;
-  width: 100%;
-  max-width: 440px;
+  position: absolute;
+  top: 70px;
+  right: -25px;
+  width: 260px;
   background: linear-gradient(145deg, #0D1527 0%, #111B33 100%);
   border: 1.5px solid rgba(56, 189, 248, 0.35);
   border-radius: 16px;
-  padding: 12px 16px;
+  padding: 12px 15px;
   box-shadow: 
-    0 16px 36px -8px rgba(15, 23, 42, 0.45),
-    0 0 20px rgba(56, 189, 248, 0.1),
+    0 20px 45px -10px rgba(15, 23, 42, 0.5),
+    0 0 20px rgba(56, 189, 248, 0.12),
     inset 0 1px 0 rgba(255, 255, 255, 0.15);
   z-index: 3;
   color: #FFFFFF;
   backdrop-filter: blur(16px);
-  margin-top: 2px;
   transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+}
+
+.prod-feature-story.reverse .floating-telemetry-badge {
+  right: auto;
+  left: -25px;
 }
 
 .floating-telemetry-badge:hover {

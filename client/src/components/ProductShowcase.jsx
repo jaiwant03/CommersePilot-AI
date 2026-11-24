@@ -278,14 +278,29 @@ const ProductShowcase = () => {
                 </div>
               </div>
 
-              {/* Floating Live Risk Radar Card */}
+              {/* 3D Shopping Trolley Logo Floating Above Corner */}
+              <div className="floating-trolley-badge">
+                <img 
+                  src="/assets/images/3d-shopping-cart.svg" 
+                  alt="E-Commerce Shopping Trolley with Bags" 
+                  className="trolley-svg"
+                />
+              </div>
+
+              {/* Top-Left Corner Chip */}
+              <div className="corner-ai-chip chip-corner-top-left">
+                <div className="ai-chip-pulsar pulse-indigo" />
+                <span>Deterministic COD Risk: Evaluated</span>
+              </div>
+
+              {/* Floating Live Risk Radar Card on Upper Corner */}
               <div className="floating-telemetry-badge badge-risk">
                 <div className="telemetry-badge-header">
                   <div className="telemetry-icon-box text-amber">
-                    <ShieldCheck size={16} />
+                    <ShieldCheck size={14} />
                   </div>
                   <div className="telemetry-title-group">
-                    <span className="telemetry-badge-title">COD Risk Radar Evaluation</span>
+                    <span className="telemetry-badge-title">COD Risk Radar</span>
                     <span className="telemetry-sub-tag">Pre-Dispatch AI Gate</span>
                   </div>
                   <span className="telemetry-pulse-dot dot-amber" />
@@ -293,18 +308,24 @@ const ProductShowcase = () => {
                 <div className="telemetry-score-row">
                   <div className="score-val-col">
                     <span className="telemetry-big-score text-amber">65/100</span>
-                    <span className="telemetry-score-sub">Deterministic Risk Index</span>
+                    <span className="telemetry-score-sub">Risk Index</span>
                   </div>
                   <span className="telemetry-tier-tag tier-high">HIGH RISK</span>
                 </div>
                 <div className="telemetry-reasons-list">
-                  <div className="reason-item">⚠ Incomplete address: Missing house/street landmark</div>
-                  <div className="reason-item">⚠ Previous failed delivery in order history</div>
+                  <div className="reason-item">⚠ Missing street landmark</div>
+                  <div className="reason-item">⚠ Prior delivery exception</div>
                 </div>
                 <div className="telemetry-action-hint">
-                  <span className="hint-label">Automated Action:</span>
-                  <span className="hint-status status-amber">REQUEST_CONFIRMATION</span>
+                  <span className="hint-label">Action:</span>
+                  <span className="hint-status status-amber">CONFIRMATION_REQ</span>
                 </div>
+              </div>
+
+              {/* Bottom-Right Corner Chip */}
+              <div className="corner-ai-chip chip-corner-bottom-right">
+                <div className="ai-chip-pulsar pulse-green" />
+                <span>Automated Dispatch: Active 24/7</span>
               </div>
             </div>
           </div>
@@ -372,43 +393,64 @@ const ProductShowcase = () => {
                 </div>
               </div>
 
-              {/* Floating Inventory Runway Card */}
+              {/* 3D Shopping Trolley Logo Floating Above Corner */}
+              <div className="floating-trolley-badge">
+                <img 
+                  src="/assets/images/3d-shopping-cart.svg" 
+                  alt="E-Commerce Shopping Trolley with Bags" 
+                  className="trolley-svg"
+                />
+              </div>
+
+              {/* Top-Right Corner Chip */}
+              <div className="corner-ai-chip chip-corner-top-left">
+                <div className="ai-chip-pulsar pulse-cyan" />
+                <span>Multi-Store Velocity Sync</span>
+              </div>
+
+              {/* Floating Inventory Runway Card on Corner */}
               <div className="floating-telemetry-badge badge-runway">
                 <div className="telemetry-badge-header">
                   <div className="telemetry-icon-box text-cyan">
-                    <Boxes size={16} />
+                    <Boxes size={14} />
                   </div>
                   <div className="telemetry-title-group">
-                    <span className="telemetry-badge-title">Predictive Runway Alert</span>
-                    <span className="telemetry-sub-tag">Multi-Store Velocity Sync</span>
+                    <span className="telemetry-badge-title">Predictive Runway</span>
+                    <span className="telemetry-sub-tag">Stockout Forecast</span>
                   </div>
                   <span className="telemetry-pulse-dot dot-red" />
                 </div>
-                <div className="telemetry-sku-title">Women's Black Kurti (TT-KUR-BLK)</div>
+                <div className="telemetry-sku-title">Black Kurti (TT-KUR-BLK)</div>
                 <div className="runway-stat-pills">
                   <div className="runway-pill">
                     <span className="pill-muted">Stock</span>
-                    <span className="pill-bold">25 units</span>
+                    <span className="pill-bold">25 u</span>
                   </div>
                   <div className="runway-pill">
                     <span className="pill-muted">Velocity</span>
-                    <span className="pill-bold text-cyan">15/day</span>
+                    <span className="pill-bold text-cyan">15/d</span>
                   </div>
                   <div className="runway-pill pill-alert">
                     <span className="pill-muted">Runway</span>
-                    <span className="pill-bold text-red">1.67 Days</span>
+                    <span className="pill-bold text-red">1.67 D</span>
                   </div>
                 </div>
                 <div className="auto-drafted-po-box">
                   <div className="po-box-header">
-                    <Sparkles size={12} className="text-indigo" />
-                    <span>Auto-Drafted PO #PO-1001</span>
-                    <span className="po-ready-pill">Ready to Approve</span>
+                    <Sparkles size={11} className="text-indigo" />
+                    <span>Auto-Draft PO #1001</span>
+                    <span className="po-ready-pill">Ready</span>
                   </div>
                   <div className="po-box-details">
-                    Supplier: Coimbatore Fabric Mills • 650 Units (₹45,000)
+                    Coimbatore Fabric Mills • 650 Units
                   </div>
                 </div>
+              </div>
+
+              {/* Bottom-Left Corner Chip */}
+              <div className="corner-ai-chip chip-corner-bottom-right">
+                <div className="ai-chip-pulsar pulse-indigo" />
+                <span>PO #PO-1001: Ready to Sign</span>
               </div>
             </div>
           </div>
@@ -472,32 +514,53 @@ const ProductShowcase = () => {
                 </div>
               </div>
 
-              {/* Floating WhatsApp / NDR Message Simulation Card */}
+              {/* 3D Shopping Trolley Logo Floating Above Corner */}
+              <div className="floating-trolley-badge">
+                <img 
+                  src="/assets/images/3d-shopping-cart.svg" 
+                  alt="E-Commerce Shopping Trolley with Bags" 
+                  className="trolley-svg"
+                />
+              </div>
+
+              {/* Top-Left Corner Chip */}
+              <div className="corner-ai-chip chip-corner-top-left">
+                <div className="ai-chip-pulsar pulse-green" />
+                <span>Sub-60s NDR Interception</span>
+              </div>
+
+              {/* Floating WhatsApp / NDR Message Simulation Card on Corner */}
               <div className="floating-telemetry-badge badge-ndr">
                 <div className="telemetry-badge-header">
                   <div className="telemetry-icon-box text-green">
-                    <Truck size={16} />
+                    <Truck size={14} />
                   </div>
                   <div className="telemetry-title-group">
-                    <span className="telemetry-badge-title">WhatsApp NDR Recovery Engine</span>
-                    <span className="telemetry-sub-tag">Automated Buyer Outreach</span>
+                    <span className="telemetry-badge-title">WhatsApp Recovery</span>
+                    <span className="telemetry-sub-tag">Buyer Outreach</span>
                   </div>
                   <span className="telemetry-pulse-dot dot-green" />
                 </div>
                 <div className="whatsapp-chat-bubble">
                   <div className="whatsapp-bubble-text">
-                    "Hello! Your Trendy Threads order TT10245 could not be delivered because you were unavailable. Would you like us to arrange another delivery attempt? Reply YES to request redelivery."
+                    "Order TT10245 delivery missed. Reply YES to reschedule."
                   </div>
                   <div className="whatsapp-bubble-time">10:42 AM • Delivered ✓✓</div>
                 </div>
                 <div className="whatsapp-reply-bubble">
-                  <span>YES, please deliver tomorrow between 2-5 PM</span>
+                  <span>YES, deliver tomorrow 2-5 PM</span>
                   <div className="reply-check-double">✓✓</div>
                 </div>
                 <div className="ndr-status-recovered">
-                  <CheckCircle2 size={13} />
-                  <span>Status: OUT_FOR_DELIVERY (Attempt #2 Scheduled)</span>
+                  <CheckCircle2 size={12} />
+                  <span>OUT_FOR_DELIVERY (Attempt #2 Booked)</span>
                 </div>
+              </div>
+
+              {/* Bottom-Right Corner Chip */}
+              <div className="corner-ai-chip chip-corner-bottom-right">
+                <div className="ai-chip-pulsar pulse-green" />
+                <span>Carrier Re-Attempt Scheduled</span>
               </div>
             </div>
           </div>
