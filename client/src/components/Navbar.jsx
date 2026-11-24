@@ -108,33 +108,19 @@ const Navbar = () => {
         <div className="nav-actions">
           {isAuthenticated ? (
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-              <Link to="/app/overview" className="btn btn-primary btn-sm">
+              <Link to="/app/overview" className="nav-btn-open-app">
                 <span>Open App</span>
                 <ArrowRight size={13} />
               </Link>
-              <div 
-                style={{ 
-                  display: 'flex', 
-                  alignItems: 'center', 
-                  gap: '6px', 
-                  fontSize: '12px', 
-                  background: 'var(--color-bg-secondary)', 
-                  border: '1px solid var(--border-subtle)',
-                  borderRadius: '20px', 
-                  padding: '4px 10px',
-                  color: 'var(--color-text-primary)',
-                  fontWeight: 500
-                }}
-              >
-                <UserCheck size={13} style={{ color: 'var(--color-success)' }} />
-                <span>{store?.name || user?.fullName?.split(' ')[0] || 'Merchant'}</span>
+              <div className="nav-user-pill">
+                <UserCheck size={13} style={{ color: '#16A34A' }} />
+                <span>{user?.fullName ? user.fullName.split(' ').map(n => n[0]).join('').slice(0, 2).toUpperCase() : 'JK'}</span>
               </div>
               <button 
                 type="button" 
                 onClick={logout} 
-                className="btn btn-outline btn-sm"
+                className="nav-logout-btn"
                 title="Log out"
-                style={{ padding: '6px 10px' }}
               >
                 <LogOut size={13} />
               </button>
@@ -142,10 +128,11 @@ const Navbar = () => {
           ) : (
             <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
               <Link to="/login" className="modelled-nav-btn-white">
-                Sign In
+                Login
               </Link>
-              <Link to="/signup" className="modelled-nav-btn-dark">
+              <Link to="/signup" className="nav-btn-open-app">
                 <span>Get Started</span>
+                <ArrowRight size={13} />
               </Link>
             </div>
           )}

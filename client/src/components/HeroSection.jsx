@@ -30,15 +30,6 @@ const HeroSection = () => {
         <div className="hero-ambient-glow-right" />
         <div className="hero-blueprint-grid" />
 
-        {/* 3D Ascending Purple Growth Arrow (Top Right) */}
-        <div className="hero-3d-arrow-container" aria-hidden="true">
-          <img 
-            src="/assets/images/3d-growth-arrow.svg" 
-            alt="3D Ecommerce Growth Trend" 
-            className="hero-3d-arrow-img"
-          />
-        </div>
-
         {/* Main Two-Column Hero Content Grid */}
         <div className="home-hero-grid">
           
@@ -141,6 +132,15 @@ const HeroSection = () => {
           {/* ========================================================= */}
           <div className="home-hero-right">
             
+            {/* 3D Ascending Purple Growth Arrow (Positioned directly behind phone) */}
+            <div className="hero-3d-arrow-container" aria-hidden="true">
+              <img 
+                src="/assets/images/3d-growth-arrow.svg" 
+                alt="3D Ecommerce Growth Trend" 
+                className="hero-3d-arrow-img"
+              />
+            </div>
+
             {/* Top Floating White Badge: #1 Best Website */}
             <div className="hero-floating-card-top-left">
               <div className="badge-trophy-icon">🏆</div>
@@ -227,6 +227,9 @@ const HeroSection = () => {
                   
                   {/* Message 1: AI Greeting */}
                   <div className="phone-msg-row ai-msg-row">
+                    <div className="phone-chat-avatar-squircle">
+                      <Sparkles size={11} />
+                    </div>
                     <div className="phone-msg-bubble ai-bubble">
                       Hi, Welcome to CommercePilot AI. How can I help?
                     </div>
@@ -240,6 +243,9 @@ const HeroSection = () => {
 
                   {/* Message 2: Customer Query */}
                   <div className="phone-msg-row user-msg-row">
+                    <div className="phone-chat-avatar-squircle user-squircle">
+                      <Sparkles size={11} />
+                    </div>
                     <div className="phone-msg-bubble user-bubble">
                       Hi! I need help with order verification &amp; stockout risk.
                     </div>
@@ -247,6 +253,9 @@ const HeroSection = () => {
 
                   {/* Message 3: AI Operational Intelligence & PO Action */}
                   <div className="phone-msg-row ai-msg-row full-width">
+                    <div className="phone-chat-avatar-squircle">
+                      <Sparkles size={11} />
+                    </div>
                     <div className="phone-msg-bubble ai-bubble po-recommendation">
                       Sure! I'd be happy to assist. 3 COD orders verified, and Chennai's large runway is 3.2 days. Would you like me to approve PO #2009?
                       
