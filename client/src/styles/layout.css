@@ -484,10 +484,10 @@ body {
 
 /* Hero Title */
 .home-hero-title {
-  font-size: clamp(2.8rem, 4.4vw, 4.3rem);
-  font-weight: 800;
-  line-height: 1.1;
-  letter-spacing: -0.035em;
+  font-size: clamp(2.1rem, 3.4vw, 3.2rem);
+  font-weight: 850;
+  line-height: 1.15;
+  letter-spacing: -0.03em;
   color: #0F172A;
   margin-bottom: 16px;
 }

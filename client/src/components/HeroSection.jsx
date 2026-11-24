@@ -38,16 +38,16 @@ const HeroSection = () => {
           {/* ========================================================= */}
           <div className="home-hero-left">
             
-            {/* Tag Pill: AI-Powered Commerce Assistant */}
+            {/* Tag Pill: AI-Powered Commerce Autopilot */}
             <div className="hero-tag-capsule">
               <Sparkles size={14} className="hero-tag-sparkle-icon" />
-              <span>AI-Powered Commerce Assistant</span>
+              <span>AI-Powered Commerce Autopilot</span>
             </div>
 
-            {/* Main Headline with Stylized Cyan Glowing Wave under "AI" */}
+            {/* Main Rhyming Headline with Stylized Cyan Glowing Wave under "AI" */}
             <h1 className="home-hero-title">
-              E-Commerce <br />
-              Revolutionized <br />
+              Sell Without Stress. <br />
+              Scale With Success <br />
               with <span className="title-ai-wrapper">
                 AI
                 <svg className="title-ai-wave" viewBox="0 0 130 26" fill="none" aria-hidden="true">
@@ -66,7 +66,7 @@ const HeroSection = () => {
 
             {/* Subtitle */}
             <p className="home-hero-subtitle">
-              Boost sales, enhance customer experience, and streamline operations with our cutting-edge AI technology.
+              Prevent risky returns before they ship, predict stockouts before they slip, and recover every lost order on intelligent autopilot.
             </p>
 
             {/* 2x2 Feature Checkmarks Grid */}
