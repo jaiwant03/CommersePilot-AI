@@ -996,7 +996,7 @@ const ProductShowcase = () => {
             {/* Step 1 */}
             <div className="flow-node">
               <div className="node-icon-box box-blue">
-                <ShoppingBag size={20} />
+                <ShoppingBag size={16} />
               </div>
               <div className="node-step-tag">Step 01</div>
               <div className="node-title">E-commerce Channels</div>
@@ -1011,7 +1011,7 @@ const ProductShowcase = () => {
             {/* Step 2 */}
             <div className="flow-node">
               <div className="node-icon-box box-navy">
-                <Database size={20} />
+                <Database size={16} />
               </div>
               <div className="node-step-tag">Step 02</div>
               <div className="node-title">Operations Core</div>
@@ -1025,8 +1025,8 @@ const ProductShowcase = () => {
 
             {/* Step 3 */}
             <div className="flow-node highlight-n8n">
-              <div className="node-icon-box box-orange">
-                <Zap size={20} />
+              <div className="node-icon-box box-electric-blue">
+                <Zap size={16} />
               </div>
               <div className="node-step-tag">Step 03</div>
               <div className="node-title">Autonomous Workflow Engine</div>
@@ -1041,7 +1041,7 @@ const ProductShowcase = () => {
             {/* Step 4 */}
             <div className="flow-node">
               <div className="node-icon-box box-purple">
-                <Cpu size={20} />
+                <Cpu size={16} />
               </div>
               <div className="node-step-tag">Step 04</div>
               <div className="node-title">Predictive Decision Engine</div>
@@ -1056,7 +1056,7 @@ const ProductShowcase = () => {
             {/* Step 5 */}
             <div className="flow-node">
               <div className="node-icon-box box-indigo">
-                <ShieldCheck size={20} />
+                <ShieldCheck size={16} />
               </div>
               <div className="node-step-tag">Step 05</div>
               <div className="node-title">Actionable Resolutions</div>
@@ -1071,7 +1071,7 @@ const ProductShowcase = () => {
             {/* Step 6 */}
             <div className="flow-node">
               <div className="node-icon-box box-green">
-                <Bell size={20} />
+                <Bell size={16} />
               </div>
               <div className="node-step-tag">Step 06</div>
               <div className="node-title">Automated Outreach</div>
