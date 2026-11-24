@@ -1,19 +1,17 @@
-import React, { useState } from 'react';
+import React from 'react';
 import AnimatedRupee from './AnimatedRupee';
 import { Link } from 'react-router-dom';
-import { Check, ArrowRight, Tag, Sparkles } from 'lucide-react';
+import { Check, ArrowRight, Tag } from 'lucide-react';
 
 const PricingSection = () => {
-  const [isAnnual, setIsAnnual] = useState(false);
-
   const plans = [
     {
       id: 'starter',
       name: 'Starter',
       badge: null,
       desc: 'Ideal for early-stage D2C brands and Instagram sellers looking to eliminate initial COD returns.',
-      monthlyPrice: '2,499',
-      annualPrice: '1,999',
+      price: '999',
+      billingLabel: 'Billed monthly • 14-day free trial',
       popular: false,
       features: [
         'Up to 500 orders / month',
@@ -29,8 +27,8 @@ const PricingSection = () => {
       name: 'Growth',
       badge: 'Most Popular',
       desc: 'Designed for scaling Shopify & WooCommerce merchants needing proactive automation and NDR recovery.',
-      monthlyPrice: '5,999',
-      annualPrice: '4,799',
+      price: '2,499',
+      billingLabel: 'Billed monthly • Cancel anytime',
       popular: true,
       features: [
         'Up to 2,500 orders / month',
@@ -48,8 +46,8 @@ const PricingSection = () => {
       name: 'Professional',
       badge: 'High Velocity',
       desc: 'Full-suite operational autonomy for high-volume fashion, cosmetics, and multi-brand merchants.',
-      monthlyPrice: '14,999',
-      annualPrice: '11,999',
+      price: '5,999',
+      billingLabel: 'Billed monthly • Dedicated SLA',
       popular: false,
       features: [
         'Up to 10,000 orders / month',
@@ -66,7 +64,7 @@ const PricingSection = () => {
 
   return (
     <div style={{ width: '100%', position: 'relative' }}>
-      <div className="section-header" style={{ marginBottom: '24px', textAlign: 'center' }}>
+      <div className="section-header" style={{ marginBottom: '36px', textAlign: 'center' }}>
         <div className="section-tag" style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '6px 18px', background: 'rgba(186, 230, 253, 0.4)', border: '1px solid rgba(14, 165, 233, 0.4)', borderRadius: '9999px', fontSize: '13px', fontWeight: 600, color: '#0284C7', marginBottom: '16px', boxShadow: '0 2px 8px rgba(14, 165, 233, 0.1)' }}>
           <Tag size={14} />
           <span>Transparent Investment</span>
@@ -80,62 +78,12 @@ const PricingSection = () => {
         </p>
       </div>
 
-      {/* Pricing Notice */}
-      <div className="pricing-notice" style={{ textAlign: 'center', marginBottom: '28px', color: '#64748B', fontSize: '12px' }}>
-        <span>* Proposed Launch Pricing — Early Merchant Beta Program</span>
-      </div>
-
-      {/* Billing Cycle Switcher */}
-      <div className="billing-toggle-wrapper" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '14px', marginBottom: '40px' }}>
-        <span
-          className={`billing-label ${!isAnnual ? 'active' : ''}`}
-          onClick={() => setIsAnnual(false)}
-          style={{ fontSize: '14px', fontWeight: 600, color: !isAnnual ? '#0F172A' : '#64748B', cursor: 'pointer' }}
-        >
-          Monthly Billing
-        </span>
-
-        <div
-          className={`toggle-switch ${isAnnual ? 'annual' : ''}`}
-          onClick={() => setIsAnnual(!isAnnual)}
-          role="switch"
-          aria-checked={isAnnual}
-          tabIndex={0}
-          style={{ cursor: 'pointer' }}
-          onKeyDown={(e) => {
-            if (e.key === 'Enter' || e.key === ' ') {
-              setIsAnnual(!isAnnual);
-            }
-          }}
-        >
-          <div className="toggle-slider"></div>
-        </div>
-
-        <span
-          className={`billing-label ${isAnnual ? 'active' : ''}`}
-          onClick={() => setIsAnnual(true)}
-          style={{ fontSize: '14px', fontWeight: 600, color: isAnnual ? '#0F172A' : '#64748B', cursor: 'pointer' }}
-        >
-          Annual Billing
-        </span>
-        <span className="save-badge" style={{ background: '#E0F2FE', color: '#0284C7', border: '1px solid #BAE6FD', padding: '3px 10px', borderRadius: '20px', fontSize: '11px', fontWeight: 700 }}>
-          Save 20%
-        </span>
-      </div>
-
       {/* Pricing Cards Grid */}
       <div className="pricing-grid">
         {plans.map((plan) => (
           <div
             key={plan.id}
             className={`pricing-card ${plan.popular ? 'popular' : ''}`}
-            style={{ 
-              background: 'rgba(255, 255, 255, 0.95)', 
-              border: plan.popular ? '2px solid #0284C7' : '1.5px solid rgba(186, 230, 253, 0.75)', 
-              borderRadius: '28px', 
-              padding: '32px',
-              boxShadow: plan.popular ? '0 24px 50px -10px rgba(2, 132, 199, 0.25)' : '0 10px 25px -5px rgba(14, 165, 233, 0.08)'
-            }}
           >
             {plan.badge && (
               <div className="popular-badge" style={{ background: '#0F172A', color: '#FFFFFF', padding: '4px 14px', borderRadius: '20px', fontSize: '11px', fontWeight: 700, letterSpacing: '0.04em' }}>
@@ -153,15 +101,15 @@ const PricingSection = () => {
             <div className="plan-pricing-area" style={{ display: 'flex', alignItems: 'baseline', gap: '4px', marginBottom: '4px' }}>
               <span className="plan-currency" style={{ fontSize: '22px', fontWeight: 700, color: '#0F172A' }}>₹</span>
               <span className="plan-price" style={{ fontSize: '40px', fontWeight: 900, color: '#0F172A', letterSpacing: '-0.03em' }}>
-                <AnimatedRupee value={isAnnual ? plan.annualPrice : plan.monthlyPrice} prefix="" />
+                <AnimatedRupee value={plan.price} prefix="" />
               </span>
-              <span className="plan-period" style={{ fontSize: '12.5px', color: '#64748B' }}>
-                {isAnnual ? '/ mo (annual)' : '/ month'}
+              <span className="plan-period" style={{ fontSize: '13px', color: '#64748B', fontWeight: 500 }}>
+                / month
               </span>
             </div>
 
             <div className="plan-price-label" style={{ fontSize: '11.5px', color: '#0284C7', fontWeight: 600, marginBottom: '24px' }}>
-              Proposed Beta Launch Tier
+              {plan.billingLabel}
             </div>
 
             {/* Pricing Buttons */}
@@ -169,10 +117,10 @@ const PricingSection = () => {
               <Link
                 to={`/signup?plan=${plan.id}`}
                 className={plan.popular ? 'modelled-btn-cta' : 'modelled-nav-btn-white'}
-                style={{ width: '100%', justifyContent: 'center', padding: '12px' }}
+                style={{ width: '100%', justifyContent: 'center', padding: '12px', whiteSpace: 'nowrap', display: 'flex', alignItems: 'center', gap: '6px' }}
               >
-                Choose {plan.name}
-                <ArrowRight size={14} style={{ marginLeft: '6px' }} />
+                <span>Choose {plan.name}</span>
+                <ArrowRight size={14} />
               </Link>
             </div>
 
