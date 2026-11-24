@@ -370,23 +370,21 @@ const seedTrendyThreads = async () => {
     const draftPO = await PurchaseOrder.create({
       store: store._id,
       poNumber: 'PO-1001',
-      supplier: {
-        name: 'Coimbatore Fabric Mills',
-        email: 'orders@coimbatorefabric.in',
-        contactPerson: 'Senthil Kumar'
-      },
+      supplierName: 'Coimbatore Fabric Mills',
+      supplierEmail: 'orders@coimbatorefabric.in',
       items: [
         {
           product: blackKurti._id,
           sku: blackKurti.sku,
           title: blackKurti.title,
-          quantity: 100,
+          currentStock: blackKurti.stockQuantity,
+          reorderQuantity: 100,
           unitCost: blackKurti.costPrice,
-          totalCost: blackKurti.costPrice * 100
+          estimatedCost: blackKurti.costPrice * 100
         }
       ],
       totalEstimatedCost: blackKurti.costPrice * 100,
-      status: 'DRAFT',
+      status: 'DRAFT_PENDING_APPROVAL',
       notes: 'Automated restock draft triggered by Predictive Inventory Runway (1.67 days remaining).'
     });
     console.log(`[Seed] Created Purchase Order ${draftPO.poNumber} for Women's Black Kurti (Total: ₹${draftPO.totalEstimatedCost})`);
