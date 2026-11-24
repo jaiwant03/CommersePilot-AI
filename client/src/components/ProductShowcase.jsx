@@ -289,8 +289,8 @@ const ProductShowcase = () => {
                 />
               </div>
 
-              {/* Top-Left Corner Chip */}
-              <div className="corner-ai-chip chip-corner-top-left">
+              {/* Top-Right Corner Chip */}
+              <div className="corner-ai-chip chip-corner-top-right">
                 <div className="ai-chip-pulsar pulse-indigo" />
                 <span>Deterministic COD Risk: Evaluated</span>
               </div>
