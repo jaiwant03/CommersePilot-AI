@@ -1,19 +1,14 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { 
-  Bot, 
   Sparkles, 
-  Clock, 
-  DollarSign, 
-  Star, 
-  PhoneCall, 
-  ShieldCheck, 
-  ArrowRight,
-  TrendingUp,
-  Share2,
-  ThumbsUp,
-  CheckCircle2,
-  Users
+  Check, 
+  Mail, 
+  ArrowRight, 
+  ThumbsUp, 
+  ThumbsDown, 
+  Send,
+  Bot
 } from 'lucide-react';
 
 const HeroSection = () => {
@@ -27,268 +22,293 @@ const HeroSection = () => {
   };
 
   return (
-    <section id="home" style={{ width: '100%', padding: '0' }}>
-      <div className="modelled-island-container">
-        <div className="modelled-hero-island">
+    <section id="home" className="home-hero-section">
+      <div className="home-hero-canvas">
+        
+        {/* Soft Background Curves & Horizon Lighting */}
+        <div className="hero-ambient-glow-center" />
+        <div className="hero-ambient-glow-right" />
+        <div className="hero-blueprint-grid" />
+
+        {/* 3D Ascending Purple Growth Arrow (Top Right) */}
+        <div className="hero-3d-arrow-container" aria-hidden="true">
+          <img 
+            src="/assets/images/3d-growth-arrow.svg" 
+            alt="3D Ecommerce Growth Trend" 
+            className="hero-3d-arrow-img"
+          />
+        </div>
+
+        {/* Main Two-Column Hero Content Grid */}
+        <div className="home-hero-grid">
           
-          {/* Top Half: Two-Column Modelled Hero */}
-          <div className="modelled-hero-grid">
+          {/* ========================================================= */}
+          {/* LEFT COLUMN: Brand Tag, Title, Subtitle, Bullets & CTA    */}
+          {/* ========================================================= */}
+          <div className="home-hero-left">
             
-            {/* Left Column: Heading, Subtitle & Modelled Input Pill */}
-            <div className="modelled-hero-left">
-              <h1 className="modelled-title">
-                E-Commerce <br />
-                Revolutionized <br />
-                with AI <span className="modelled-ai-icon-pill" aria-label="CommercePilot AI Engine"><Bot size={24} /></span> Powered
-              </h1>
+            {/* Tag Pill: AI-Powered Commerce Assistant */}
+            <div className="hero-tag-capsule">
+              <Sparkles size={14} className="hero-tag-sparkle-icon" />
+              <span>AI-Powered Commerce Assistant</span>
+            </div>
 
-              <p className="modelled-subtitle">
-                Boost sales, enhance customer experience, and streamline operations with our cutting-edge AI technology.
-              </p>
+            {/* Main Headline with Stylized Cyan Glowing Wave under "AI" */}
+            <h1 className="home-hero-title">
+              E-Commerce <br />
+              Revolutionized <br />
+              with <span className="title-ai-wrapper">
+                AI
+                <svg className="title-ai-wave" viewBox="0 0 130 26" fill="none" aria-hidden="true">
+                  <path d="M4 18 C30 22, 58 6, 84 13 C104 18, 118 4, 126 2 C124 7, 112 16, 94 18 C70 21, 48 25, 4 18 Z" fill="url(#waveGlowGrad)"/>
+                  <path d="M2 17 C28 21, 56 6, 82 12 C102 17, 116 3, 128 1" stroke="#38BDF8" strokeWidth="2.8" strokeLinecap="round"/>
+                  <defs>
+                    <linearGradient id="waveGlowGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                      <stop offset="0%" stopColor="#38BDF8" stopOpacity="0.85"/>
+                      <stop offset="50%" stopColor="#0284C7" stopOpacity="0.75"/>
+                      <stop offset="100%" stopColor="#38BDF8" stopOpacity="0"/>
+                    </linearGradient>
+                  </defs>
+                </svg>
+              </span>
+            </h1>
 
-              {/* Modelled Input Group Bar */}
-              <form onSubmit={handleFormSubmit} className="modelled-input-group">
-                <input
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  placeholder="Enter your email"
-                  className="modelled-input-field"
-                  aria-label="Your work email address"
-                />
-                <button type="submit" className="modelled-btn-cta">
-                  Get Started
-                </button>
-              </form>
+            {/* Subtitle */}
+            <p className="home-hero-subtitle">
+              Boost sales, enhance customer experience, and streamline operations with our cutting-edge AI technology.
+            </p>
 
-              {/* Micro-Trust Note */}
-              <div className="modelled-micro-trust">
-                <span>💳 30 day free trial, no credit card required.</span>
+            {/* 2x2 Feature Checkmarks Grid */}
+            <div className="hero-feature-bullets-grid">
+              <div className="hero-bullet-point">
+                <div className="bullet-check-circle">
+                  <Check size={11} strokeWidth={3.5} />
+                </div>
+                <span>Smart Order Verification</span>
+              </div>
+              <div className="hero-bullet-point">
+                <div className="bullet-check-circle">
+                  <Check size={11} strokeWidth={3.5} />
+                </div>
+                <span>Delivery Recovery</span>
+              </div>
+              <div className="hero-bullet-point">
+                <div className="bullet-check-circle">
+                  <Check size={11} strokeWidth={3.5} />
+                </div>
+                <span>Predictive Inventory</span>
+              </div>
+              <div className="hero-bullet-point">
+                <div className="bullet-check-circle">
+                  <Check size={11} strokeWidth={3.5} />
+                </div>
+                <span>Business Intelligence</span>
               </div>
             </div>
 
-            {/* Right Column: Smartphone Mockup & Tactile Connected Floating Badges */}
-            <div className="modelled-hero-right">
-              
-              {/* Connector SVG Lines Linking Badges to Phone */}
-              <svg className="modelled-connectors-svg" viewBox="0 0 500 520" fill="none">
-                {/* Line to Top Badge */}
-                <path 
-                  d="M 120 75 Q 160 120 200 140" 
-                  stroke="#93C5FD" 
-                  strokeWidth="1.5" 
-                  strokeDasharray="4 3"
-                  opacity="0.85"
-                />
-                {/* Line to Left Dark Card */}
-                <path 
-                  d="M 155 240 L 195 240" 
-                  stroke="#93C5FD" 
-                  strokeWidth="1.5" 
-                  strokeDasharray="4 3"
-                  opacity="0.85"
-                />
-                {/* Line to Bottom Users Badge */}
-                <path 
-                  d="M 330 380 Q 345 320 330 280" 
-                  stroke="#93C5FD" 
-                  strokeWidth="1.5" 
-                  strokeDasharray="4 3"
-                  opacity="0.85"
-                />
-              </svg>
-
-              {/* Top Floating Badge (#1 Badge) */}
-              <div className="modelled-float-badge-top">
-                <div style={{ fontSize: '18px', marginBottom: '2px' }}>🏆 #1</div>
-                <div style={{ fontSize: '12px', fontWeight: 600, color: '#0F172A', lineHeight: 1.3 }}>
-                  Best website using AI for E-Commerce
-                </div>
+            {/* Email CTA Pill Bar */}
+            <form onSubmit={handleFormSubmit} className="hero-pill-email-form">
+              <div className="hero-email-icon-wrapper">
+                <Mail size={18} />
               </div>
+              <input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="Enter your email"
+                className="hero-email-input-field"
+                aria-label="Your work email address"
+                required
+              />
+              <button type="submit" className="hero-btn-get-started">
+                <span>Get Started</span>
+                <ArrowRight size={15} />
+              </button>
+            </form>
 
-              {/* Left Floating Dark Card (Time / Wave Graph) */}
-              <div className="modelled-float-badge-dark">
-                <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '11px', color: '#94A3B8', marginBottom: '8px' }}>
-                  <Clock size={12} style={{ color: '#38BDF8' }} />
-                  <span>Time Increase</span>
-                </div>
-
-                {/* Glowing Waveform Chart */}
-                <div style={{ margin: '8px 0 10px' }}>
-                  <svg width="125" height="36" viewBox="0 0 125 36" fill="none">
-                    <path
-                      d="M 2 28 Q 30 32 45 16 T 85 8 T 123 26"
-                      stroke="#38BDF8"
-                      strokeWidth="2.5"
-                      strokeLinecap="round"
-                    />
-                    <circle cx="85" cy="8" r="3.5" fill="#FFFFFF" stroke="#38BDF8" strokeWidth="2" />
-                  </svg>
-                </div>
-
-                <div style={{ display: 'flex', alignItems: 'baseline', gap: '4px' }}>
-                  <span style={{ fontSize: '22px', fontWeight: 800, color: '#FFFFFF', lineHeight: 1 }}>5</span>
-                  <span style={{ fontSize: '12px', color: '#94A3B8' }}>second</span>
-                </div>
+            {/* Micro-Trust Indicator Note */}
+            <div className="hero-trust-note">
+              <div className="trust-check-badge">
+                <Check size={10} strokeWidth={3.5} />
               </div>
-
-              {/* Central Smartphone Device Mockup */}
-              <div className="modelled-phone-wrap">
-                <div className="modelled-phone-screen">
-                  {/* Status Bar */}
-                  <div className="modelled-phone-topbar">
-                    <span>9:41</span>
-                    <div className="modelled-phone-notch"></div>
-                    <span>5G 100%</span>
-                  </div>
-
-                  {/* App Header */}
-                  <div className="modelled-phone-header">
-                    <div className="modelled-phone-avatar">
-                      <Bot size={13} />
-                    </div>
-                    <div>
-                      <div style={{ fontSize: '11px', fontWeight: 700, color: '#FFFFFF' }}>CommercePilot AI</div>
-                    </div>
-                  </div>
-
-                  {/* Chat Messages */}
-                  <div className="modelled-phone-chat">
-                    <div style={{ textAlign: 'center', fontSize: '9px', color: '#64748B', margin: '2px 0' }}>
-                      Today 9:41 AM
-                    </div>
-
-                    <div className="modelled-chat-bubble-ai">
-                      Hi, Welcome to CommercePilot AI. How can I help?
-                    </div>
-
-                    <div className="modelled-chat-bubble-user">
-                      Hi, I need help with order verification & stockout risk.
-                    </div>
-
-                    <div className="modelled-chat-bubble-ai">
-                      Sure! I'd be happy to assist. 3 COD orders verified, and Chanderi Saree runway is 3.2 days. Would you like me to auto-approve PO #2009?
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginTop: '6px', color: '#64748B' }}>
-                        <ThumbsUp size={11} />
-                        <Share2 size={11} />
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Bottom Right Floating Badge (100K+ Satisfied Users) */}
-              <div className="modelled-float-badge-users">
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '-6px', marginBottom: '6px' }}>
-                  <div style={{ width: '28px', height: '28px', borderRadius: '50%', background: '#FDE047', border: '2px solid #FFFFFF', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '11px' }}>👩</div>
-                  <div style={{ width: '28px', height: '28px', borderRadius: '50%', background: '#93C5FD', border: '2px solid #FFFFFF', marginLeft: '-6px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '11px' }}>👨</div>
-                  <div style={{ width: '28px', height: '28px', borderRadius: '50%', background: '#86EFAC', border: '2px solid #FFFFFF', marginLeft: '-6px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '11px' }}>🧑</div>
-                </div>
-                <div style={{ fontSize: '13px', fontWeight: 800, color: '#0F172A' }}>100K+</div>
-                <div style={{ fontSize: '10px', fontWeight: 700, color: '#64748B', letterSpacing: '0.04em' }}>SATISFIED USERS</div>
-              </div>
-
+              <span>30 day free trial, no credit card required</span>
             </div>
 
           </div>
 
-          {/* Bottom Half: Modelled Bento Grid (4 Cards exactly matching the image) */}
-          <div className="modelled-bento-grid">
+          {/* ========================================================= */}
+          {/* RIGHT COLUMN: 3D Scene (White Phone, Shopping Cart, Cards) */}
+          {/* ========================================================= */}
+          <div className="home-hero-right">
             
-            {/* Bento Card 1: Deep Navy Stat Card (24K+) */}
-            <div className="modelled-bento-card-dark">
-              <div>
-                <div style={{ fontSize: '38px', fontWeight: 800, lineHeight: 1, letterSpacing: '-0.03em' }}>
-                  24K+
-                </div>
-                <div style={{ display: 'inline-flex', alignItems: 'center', gap: '4px', background: 'rgba(255, 255, 255, 0.12)', padding: '2px 8px', borderRadius: '12px', fontSize: '11px', marginTop: '10px' }}>
-                  <span>+4%</span>
-                </div>
+            {/* Top Floating White Badge: #1 Best Website */}
+            <div className="hero-floating-card-top-left">
+              <div className="badge-trophy-icon">🏆</div>
+              <div className="badge-top-left-content">
+                <div className="badge-num-title">#1</div>
+                <div className="badge-num-desc">Best website using AI for E-Commerce</div>
               </div>
-              <div style={{ fontSize: '13px', color: '#94A3B8', marginTop: '20px' }}>
-                Start a chat with <br />
-                <strong style={{ color: '#FFFFFF' }}>CommercePilot AI</strong>
+
+              {/* Curved Blue Connecting Arrow pointing to Phone */}
+              <svg className="badge-connector-curve" viewBox="0 0 60 40" fill="none">
+                <path 
+                  d="M 6 4 Q 38 4 52 28" 
+                  stroke="#38BDF8" 
+                  strokeWidth="2" 
+                  strokeLinecap="round" 
+                  strokeDasharray="4 3"
+                />
+                <path d="M 47 22 L 53 29 L 45 30" fill="none" stroke="#38BDF8" strokeWidth="2" strokeLinecap="round"/>
+              </svg>
+            </div>
+
+            {/* Middle Left Floating Dark Badge: Sales Growth +125% */}
+            <div className="hero-floating-dark-sales-card">
+              <div className="dark-sales-top-row">
+                <span className="dark-sales-label">Sales Growth</span>
+              </div>
+              <div className="dark-sales-stat-row">
+                <div className="dark-sales-number-col">
+                  <span className="dark-sales-percentage">+125%</span>
+                  <span className="dark-sales-subtext">vs last month</span>
+                </div>
+                {/* Glowing Cyan/Blue Vertical Bar Chart */}
+                <div className="dark-sales-chart-bars">
+                  <div className="chart-bar bar-1" />
+                  <div className="chart-bar bar-2" />
+                  <div className="chart-bar bar-3" />
+                  <div className="chart-bar bar-4" />
+                </div>
               </div>
             </div>
 
-            {/* Bento Card 2: Blue Textured Card with Floating Task Chips */}
-            <div className="modelled-bento-card-blue">
-              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', position: 'relative', zIndex: 1 }}>
-                <span style={{ background: 'rgba(255, 255, 255, 0.22)', backdropFilter: 'blur(8px)', padding: '5px 12px', borderRadius: '20px', fontSize: '12px', fontWeight: 500 }}>
-                  ⚡ Campaign
-                </span>
-                <span style={{ background: 'rgba(255, 255, 255, 0.22)', backdropFilter: 'blur(8px)', padding: '5px 12px', borderRadius: '20px', fontSize: '12px', fontWeight: 500 }}>
-                  ✓ Checklist task
-                </span>
-                <span style={{ background: 'rgba(255, 255, 255, 0.22)', backdropFilter: 'blur(8px)', padding: '5px 12px', borderRadius: '20px', fontSize: '12px', fontWeight: 500 }}>
-                  🎯 Strategy
-                </span>
-                <span style={{ background: 'rgba(255, 255, 255, 0.22)', backdropFilter: 'blur(8px)', padding: '5px 12px', borderRadius: '20px', fontSize: '12px', fontWeight: 500 }}>
-                  💡 Generate ideas
-                </span>
-                <span style={{ background: 'rgba(255, 255, 255, 0.22)', backdropFilter: 'blur(8px)', padding: '5px 12px', borderRadius: '20px', fontSize: '12px', fontWeight: 500 }}>
-                  ✍️ Write a supplier PO
-                </span>
-              </div>
+            {/* Floor Miniature 3D Wire Shopping Cart with Purple & Blue Bags */}
+            <div className="hero-3d-shopping-cart-wrapper" aria-hidden="true">
+              <img 
+                src="/assets/images/3d-shopping-cart.svg" 
+                alt="3D Wire Shopping Cart with Gift Bags" 
+                className="hero-3d-cart-img"
+              />
             </div>
 
-            {/* Bento Card 3: White AI Suggestion Card */}
-            <div className="modelled-bento-card-white">
-              <div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px' }}>
-                  <div style={{ width: '22px', height: '22px', borderRadius: '6px', background: '#E0F2FE', color: '#0284C7', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                    <Bot size={13} />
+            {/* Central Modern Smartphone Mockup with PURE WHITE CHAT THEME */}
+            <div className="hero-phone-mockup-frame">
+              <div className="hero-phone-glass-screen">
+                
+                {/* Phone Status Bar */}
+                <div className="phone-screen-top-bar">
+                  <span className="phone-clock">9:41</span>
+                  <div className="phone-dynamic-island" />
+                  <div className="phone-status-icons">
+                    <span className="status-sig">●●●</span>
+                    <span className="status-wifi">5G</span>
+                    <span className="status-battery">100%</span>
                   </div>
-                  <span style={{ fontSize: '13px', fontWeight: 700, color: '#0F172A' }}>
-                    CommercePilot Suggestion
-                  </span>
                 </div>
-                <p style={{ fontSize: '12.5px', color: '#475569', lineHeight: 1.5, margin: 0 }}>
-                  It's a new batch of eco-friendly Chanderi Sarees. Low stock runway detected.
-                </p>
-              </div>
 
-              <div style={{ marginTop: '14px' }}>
-                <Link to="/app/inventory" style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', background: '#0F172A', color: '#FFFFFF', border: 'none', borderRadius: '20px', padding: '6px 16px', fontSize: '12px', fontWeight: 600, textDecoration: 'none' }}>
-                  <span>✦ Update PO</span>
-                </Link>
+                {/* Phone App Navigation Header */}
+                <div className="phone-app-header">
+                  <div className="phone-app-brand">
+                    <div className="phone-app-logo-box">
+                      <Sparkles size={12} />
+                    </div>
+                    <div>
+                      <div className="phone-app-name">CommercePilot AI</div>
+                      <div className="phone-app-online-status">
+                        <span className="online-green-dot" />
+                        <span>Online</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Phone Chat Conversation Stream (Light / Pure White Theme) */}
+                <div className="phone-chat-scroll-area">
+                  
+                  {/* Message 1: AI Greeting */}
+                  <div className="phone-msg-row ai-msg-row">
+                    <div className="phone-msg-bubble ai-bubble">
+                      Hi, Welcome to CommercePilot AI. How can I help?
+                    </div>
+                    <div className="phone-user-avatar-circle">
+                      <img 
+                        src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=80&q=80" 
+                        alt="Customer Avatar"
+                      />
+                    </div>
+                  </div>
+
+                  {/* Message 2: Customer Query */}
+                  <div className="phone-msg-row user-msg-row">
+                    <div className="phone-msg-bubble user-bubble">
+                      Hi! I need help with order verification &amp; stockout risk.
+                    </div>
+                  </div>
+
+                  {/* Message 3: AI Operational Intelligence & PO Action */}
+                  <div className="phone-msg-row ai-msg-row full-width">
+                    <div className="phone-msg-bubble ai-bubble po-recommendation">
+                      Sure! I'd be happy to assist. 3 COD orders verified, and Chennai's large runway is 3.2 days. Would you like me to approve PO #2009?
+                      
+                      {/* Thumbs Up / Down Action Bar */}
+                      <div className="phone-chat-feedback-actions">
+                        <button type="button" className="chat-feedback-btn" aria-label="Helpful recommendation">
+                          <ThumbsUp size={11} />
+                        </button>
+                        <button type="button" className="chat-feedback-btn" aria-label="Not helpful">
+                          <ThumbsDown size={11} />
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+
+                </div>
+
+                {/* Bottom Message Input Bar */}
+                <div className="phone-chat-input-bar">
+                  <div className="phone-chat-input-box">
+                    <span>Type a message...</span>
+                    <button type="button" className="phone-send-pill-btn" aria-label="Send message">
+                      <Send size={11} />
+                    </button>
+                  </div>
+                </div>
+
               </div>
             </div>
 
-            {/* Bento Card 4: 2x2 Value Tiles Grid */}
-            <div className="modelled-bento-grid-2x2">
-              <div className="modelled-bento-tile">
-                <div style={{ width: '28px', height: '28px', borderRadius: '50%', background: '#EFF6FF', color: '#2563EB', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                  <DollarSign size={15} />
-                </div>
-                <span style={{ fontSize: '11.5px', fontWeight: 600, color: '#0F172A' }}>Cost savings</span>
+            {/* Right Floating White Badge: 100K+ Happy Customers */}
+            <div className="hero-floating-card-right-users">
+              <div className="avatar-overlap-stack">
+                <img 
+                  src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=64&q=80" 
+                  alt="Customer 1" 
+                  className="stack-avatar" 
+                />
+                <img 
+                  src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=64&q=80" 
+                  alt="Customer 2" 
+                  className="stack-avatar" 
+                />
+                <img 
+                  src="https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=64&q=80" 
+                  alt="Customer 3" 
+                  className="stack-avatar" 
+                />
+                <img 
+                  src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=64&q=80" 
+                  alt="Customer 4" 
+                  className="stack-avatar" 
+                />
               </div>
-
-              <div className="modelled-bento-tile">
-                <div style={{ width: '28px', height: '28px', borderRadius: '50%', background: '#ECFDF5', color: '#059669', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                  <Star size={15} />
-                </div>
-                <span style={{ fontSize: '11.5px', fontWeight: 600, color: '#0F172A' }}>User experience</span>
-              </div>
-
-              <div className="modelled-bento-tile">
-                <div style={{ width: '28px', height: '28px', borderRadius: '50%', background: '#FFF7ED', color: '#EA580C', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                  <PhoneCall size={15} />
-                </div>
-                <span style={{ fontSize: '11.5px', fontWeight: 600, color: '#0F172A' }}>24/7 support</span>
-              </div>
-
-              <div className="modelled-bento-tile">
-                <div style={{ width: '28px', height: '28px', borderRadius: '50%', background: '#F0FDF4', color: '#16A34A', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                  <ShieldCheck size={15} />
-                </div>
-                <span style={{ fontSize: '11.5px', fontWeight: 600, color: '#0F172A' }}>Safety guaranteed</span>
-              </div>
+              <div className="users-stat-number">100K+</div>
+              <div className="users-stat-subtext">Happy Customers</div>
             </div>
 
           </div>
 
         </div>
+
       </div>
     </section>
   );

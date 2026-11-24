@@ -62,7 +62,14 @@ const runTrendyThreadsE2ETest = async () => {
     // TEST 1: SMART COD ORDER VERIFICATION
     // -------------------------------------------------------------------------
     console.log('\n--- TEST 1: Smart COD Order Verification (Order TT10245) ---');
-    const orderTT10245 = await Order.findOne({ store: store._id, orderNumber: 'TT10245' });
+    // Reset order state for idempotency across repeated test runs
+    let orderTT10245 = await Order.findOne({ store: store._id, orderNumber: 'TT10245' });
+    if (orderTT10245 && orderTT10245.reviewStatus !== 'PENDING') {
+      orderTT10245.reviewStatus = 'PENDING';
+      orderTT10245.orderStatus = 'PENDING';
+      await orderTT10245.save();
+      orderTT10245 = await Order.findOne({ store: store._id, orderNumber: 'TT10245' });
+    }
     assert(Boolean(orderTT10245), 'Target high-risk COD Order TT10245 found in store');
     assert(orderTT10245.totalAmount === 2500, 'Order amount matches ₹2,500');
     assert(orderTT10245.paymentMethod === 'COD', 'Payment method is Cash on Delivery (COD)');
@@ -127,7 +134,12 @@ const runTrendyThreadsE2ETest = async () => {
     assert(kurtiForecast.suggestedReorderQuantity >= 100, `Suggested reorder quantity recommended at ${kurtiForecast.suggestedReorderQuantity} units`);
 
     // Verify Purchase Order PO-1001
-    const po1001 = await PurchaseOrder.findOne({ store: store._id, poNumber: 'PO-1001' });
+    let po1001 = await PurchaseOrder.findOne({ store: store._id, poNumber: 'PO-1001' });
+    if (po1001 && po1001.status !== 'DRAFT_PENDING_APPROVAL') {
+      po1001.status = 'DRAFT_PENDING_APPROVAL';
+      await po1001.save();
+    }
+    po1001 = await PurchaseOrder.findOne({ store: store._id, poNumber: 'PO-1001' });
     assert(Boolean(po1001), 'Auto-drafted Purchase Order PO-1001 found in MongoDB');
     assert(po1001.supplierName === 'Coimbatore Fabric Mills', 'Supplier assigned to Coimbatore Fabric Mills');
     assert(po1001.totalEstimatedCost === 45000, 'Total PO cost equals ₹45,000 (100 units x ₹450 cost price)');
@@ -143,7 +155,15 @@ const runTrendyThreadsE2ETest = async () => {
     // TEST 3: DELIVERY FAILURE (NDR) RECOVERY & WHATSAPP INTEGRATION
     // -------------------------------------------------------------------------
     console.log('\n--- TEST 3: Delivery Failure Recovery & WhatsApp NDR Flow ---');
-    const delivery = await Delivery.findOne({ store: store._id, awb: 'DEL-TT10245' });
+    let delivery = await Delivery.findOne({ store: store._id, awb: 'DEL-TT10245' });
+    if (delivery && delivery.status !== 'FAILED') {
+      delivery.status = 'FAILED';
+      delivery.recoveryStatus = 'PENDING';
+      delivery.customerResponse = 'PENDING';
+      delivery.attemptsCount = 1;
+      await delivery.save();
+      delivery = await Delivery.findOne({ store: store._id, awb: 'DEL-TT10245' });
+    }
     assert(Boolean(delivery), 'Delivery shipment DEL-TT10245 found for order TT10245');
     assert(delivery.status === 'FAILED', 'Delivery status is FAILED (NDR attempt failed)');
     assert(delivery.courier === 'Delhivery', 'Courier partner verified as Delhivery');

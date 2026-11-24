@@ -1,0 +1,58 @@
+<svg width="220" height="200" viewBox="0 0 220 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <!-- 3D Arrow Gradients -->
+    <linearGradient id="arrowTop" x1="0%" y1="100%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#818CF8"/>
+      <stop offset="40%" stop-color="#6366F1"/>
+      <stop offset="100%" stop-color="#4F46E5"/>
+    </linearGradient>
+
+    <linearGradient id="arrowSide" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#4338CA"/>
+      <stop offset="100%" stop-color="#312E81"/>
+    </linearGradient>
+
+    <!-- Trail & Glow Gradients -->
+    <radialGradient id="nodeGlow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#6366F1" stop-opacity="0.8"/>
+      <stop offset="100%" stop-color="#818CF8" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <!-- Background Trend Line Grid Nodes -->
+  <circle cx="25" cy="165" r="4" fill="#818CF8" opacity="0.6"/>
+  <circle cx="25" cy="165" r="12" fill="url(#nodeGlow)"/>
+
+  <circle cx="85" cy="115" r="4" fill="#818CF8" opacity="0.7"/>
+  <circle cx="85" cy="115" r="12" fill="url(#nodeGlow)"/>
+
+  <circle cx="145" cy="80" r="4.5" fill="#A5B4FC"/>
+  <circle cx="145" cy="80" r="14" fill="url(#nodeGlow)"/>
+
+  <!-- Soft Trailing Path Beneath Arrow -->
+  <path d="M 25 165 Q 60 150 85 115 T 145 80" stroke="#C7D2FE" stroke-width="2" stroke-dasharray="4 4" opacity="0.7"/>
+
+  <!-- 3D Arrow Body -->
+  <g id="ascending-arrow" filter="drop-shadow(0 16px 28px rgba(79, 70, 229, 0.35))">
+    
+    <!-- Arrow 3D Extrusion Side Panels -->
+    <!-- Stem Bottom Extrusion -->
+    <path d="M 18 165 L 75 110 L 132 80 L 132 94 L 75 124 L 18 179 Z" fill="url(#arrowSide)" opacity="0.9"/>
+    
+    <!-- Arrowhead Bottom Extrusion -->
+    <polygon points="120,90 120,104 185,52 185,38" fill="#312E81"/>
+    <polygon points="185,38 185,52 170,12 170,0" fill="url(#arrowSide)"/>
+
+    <!-- Arrow Top Face (Vibrant Gradient) -->
+    <!-- Stem Ribbon -->
+    <path d="M 18 165 Q 52 135 75 110 L 132 80 L 140 68 L 75 96 L 18 150 Z" fill="url(#arrowTop)"/>
+    
+    <!-- 3D Arrowhead Top Polygon -->
+    <polygon points="120,90 205,30 155,5 140,40 108,62" fill="url(#arrowTop)"/>
+    <polygon points="140,40 205,30 155,5" fill="#A5B4FC" opacity="0.4"/>
+  </g>
+
+  <!-- Sparkle Stars near Peak -->
+  <path d="M 195 18 Q 195 24 201 24 Q 195 24 195 30 Q 195 24 189 24 Q 195 24 195 18 Z" fill="#FFFFFF"/>
+  <path d="M 150 14 Q 150 18 154 18 Q 150 18 150 22 Q 150 18 146 18 Q 150 18 150 14 Z" fill="#818CF8"/>
+</svg>
