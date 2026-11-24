@@ -525,8 +525,8 @@ const ProductShowcase = () => {
                 />
               </div>
 
-              {/* Top-Left Corner Chip */}
-              <div className="corner-ai-chip chip-corner-top-left">
+              {/* Top-Right Corner Chip */}
+              <div className="corner-ai-chip chip-corner-top-right">
                 <div className="ai-chip-pulsar pulse-green" />
                 <span>Sub-60s NDR Interception</span>
               </div>
@@ -559,8 +559,8 @@ const ProductShowcase = () => {
                 </div>
               </div>
 
-              {/* Bottom-Right Corner Chip */}
-              <div className="corner-ai-chip chip-corner-bottom-right">
+              {/* Bottom-Left Corner Chip */}
+              <div className="corner-ai-chip chip-corner-bottom-left">
                 <div className="ai-chip-pulsar pulse-green" />
                 <span>Carrier Re-Attempt Scheduled</span>
               </div>
