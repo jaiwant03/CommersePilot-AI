@@ -401,4 +401,108 @@ const SettingsPage = () => {
   );
 };
 
+const DataImporterSubcomponent = ({ onImportSuccess }) => {
+  const [importType, setImportType] = useState('products');
+  const [rawData, setRawData] = useState('');
+  const [importing, setImporting] = useState(false);
+  const [resultMsg, setResultMsg] = useState(null);
+
+  const handleImport = async (e) => {
+    e.preventDefault();
+    if (!rawData.trim()) {
+      alert('Please enter CSV text or JSON data to import.');
+      return;
+    }
+
+    try {
+      setImporting(true);
+      setResultMsg(null);
+
+      let payloadData = rawData.trim();
+      if (payloadData.startsWith('[') || payloadData.startsWith('{')) {
+        try {
+          payloadData = JSON.parse(payloadData);
+        } catch (jsonErr) {
+          // If JSON parse fails, send as string
+        }
+      }
+
+      const res = await workspaceService.importStoreData({
+        type: importType,
+        data: payloadData
+      });
+
+      setResultMsg({
+        success: true,
+        text: res.message || `Successfully imported ${res.importedCount || 0} ${importType} records.`
+      });
+      setRawData('');
+      if (onImportSuccess) onImportSuccess();
+    } catch (err) {
+      setResultMsg({
+        success: false,
+        text: err.response?.data?.message || err.message || 'Import failed.'
+      });
+    } finally {
+      setImporting(false);
+    }
+  };
+
+  return (
+    <form onSubmit={handleImport}>
+      <div className="form-grid-2" style={{ marginBottom: '14px' }}>
+        <div className="workspace-form-group">
+          <label className="workspace-label">Import Target Entity</label>
+          <select
+            className="workspace-select"
+            value={importType}
+            onChange={(e) => setImportType(e.target.value)}
+          >
+            <option value="products">Products Catalog</option>
+            <option value="orders">Orders &amp; Customers</option>
+            <option value="customers">Customer Profiles</option>
+            <option value="inventory">Inventory Adjustments</option>
+          </select>
+        </div>
+      </div>
+
+      <div className="workspace-form-group" style={{ marginBottom: '14px' }}>
+        <label className="workspace-label">Paste CSV or JSON Payload</label>
+        <textarea
+          className="workspace-textarea"
+          rows={5}
+          placeholder={
+            importType === 'products'
+              ? 'title,sku,price,costPrice,stockQuantity\nWomen\'s Black Kurti,TT-KUR-BLK,1299,450,25\nFloral Anarkali Kurti,TT-KUR-FLOR,1999,750,18'
+              : 'orderNumber,customerName,phone,email,city,amount,paymentMethod\nTT10245,Ananya Deshmukh,+919876543210,ananya@example.com,Coimbatore,2500,COD'
+          }
+          value={rawData}
+          onChange={(e) => setRawData(e.target.value)}
+          style={{ fontFamily: 'monospace', fontSize: '12px' }}
+        />
+      </div>
+
+      {resultMsg && (
+        <div style={{
+          padding: '10px 14px',
+          borderRadius: '6px',
+          fontSize: '12.5px',
+          fontWeight: 600,
+          marginBottom: '14px',
+          background: resultMsg.success ? 'rgba(16, 185, 129, 0.1)' : 'rgba(239, 68, 68, 0.1)',
+          color: resultMsg.success ? '#16A34A' : '#DC2626',
+          border: `1px solid ${resultMsg.success ? 'rgba(16, 185, 129, 0.3)' : 'rgba(239, 68, 68, 0.3)'}`
+        }}>
+          {resultMsg.text}
+        </div>
+      )}
+
+      <button type="submit" className="btn btn-primary" disabled={importing}>
+        {importing ? <RefreshCw size={15} className="spinning" /> : <Sliders size={15} />}
+        <span>{importing ? 'Processing Import...' : 'Import Data Into Store'}</span>
+      </button>
+    </form>
+  );
+};
+
 export default SettingsPage;
