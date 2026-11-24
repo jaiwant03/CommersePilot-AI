@@ -814,17 +814,25 @@ body {
   filter: drop-shadow(0 16px 26px rgba(79, 70, 229, 0.16));
 }
 
-/* Central Smartphone Device Mockup (PURE WHITE / LIGHT THEME) */
+/* Central Smartphone Device Mockup (Cross / Tilted 3D Position matching reference) */
 .hero-phone-mockup-frame {
   width: 275px;
   height: 500px;
   background: #1E293B;
   border-radius: 42px;
   border: 5px solid #0F172A;
-  box-shadow: 0 30px 70px -15px rgba(15, 23, 42, 0.28), 0 0 0 1px rgba(255, 255, 255, 0.15) inset;
+  box-shadow: 0 35px 80px -15px rgba(15, 23, 42, 0.32), 15px 25px 45px -10px rgba(79, 70, 229, 0.14), 0 0 0 1px rgba(255, 255, 255, 0.15) inset;
   padding: 8px;
   position: relative;
   z-index: 4;
+  transform: perspective(1200px) rotateY(-4deg) rotateX(2deg) rotate(5.5deg);
+  transform-origin: center center;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.hero-phone-mockup-frame:hover {
+  transform: perspective(1200px) rotateY(-2deg) rotateX(1deg) rotate(4deg) translateY(-4px);
+  box-shadow: 0 42px 90px -15px rgba(15, 23, 42, 0.38), 20px 30px 50px -10px rgba(79, 70, 229, 0.18), 0 0 0 1px rgba(255, 255, 255, 0.2) inset;
 }
 
 .hero-phone-glass-screen {
@@ -1097,6 +1105,12 @@ body {
   box-shadow: 0 16px 36px -6px rgba(15, 23, 42, 0.08), 0 0 0 1px rgba(255, 255, 255, 0.8) inset;
   z-index: 5;
   text-align: center;
+  transform: rotate(2deg);
+  transition: transform 0.25s ease;
+}
+
+.hero-floating-card-right-users:hover {
+  transform: rotate(0deg) translateY(-2px);
 }
 
 .avatar-overlap-stack {
@@ -1202,6 +1216,7 @@ body {
   .hero-phone-mockup-frame {
     width: 250px;
     height: 460px;
+    transform: rotate(3.5deg);
   }
 }
 
