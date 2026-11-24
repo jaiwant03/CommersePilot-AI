@@ -115,7 +115,7 @@ const HomePage = () => {
       </div>
 
       {/* Section 1: Product (Vector SVG Showcases & Interactive Application Tabs) */}
-      <div id="product" className="modelled-island-container">
+      <div id="product" className="product-page-section-wrapper">
         <ProductShowcase />
       </div>
 
