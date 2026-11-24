@@ -556,7 +556,7 @@ const ProductShowcase = () => {
                 </div>
                 <div className="ndr-status-recovered">
                   <CheckCircle2 size={12} />
-                  <span>OUT_FOR_DELIVERY (Attempt #2 Booked)</span>
+                  <span>OUT_FOR_DELIVERY (Attempt #<AnimatedCounter value={2} /> Booked)</span>
                 </div>
               </div>
 
@@ -765,7 +765,9 @@ const ProductShowcase = () => {
                     </div>
                   </div>
                   <div className="item-stat-col">
-                    <span className="margin-percent-badge badge-emerald">68% Margin</span>
+                    <span className="margin-percent-badge badge-emerald">
+                      <AnimatedCounter value={68} suffix="% Margin" />
+                    </span>
                     <span className="margin-rupee">
                       <AnimatedRupee value={1850} suffix=" Profit/Unit" />
                     </span>
@@ -782,7 +784,9 @@ const ProductShowcase = () => {
                     </div>
                   </div>
                   <div className="item-stat-col">
-                    <span className="margin-percent-badge badge-indigo">54% Margin</span>
+                    <span className="margin-percent-badge badge-indigo">
+                      <AnimatedCounter value={54} suffix="% Margin" />
+                    </span>
                     <span className="margin-rupee">
                       <AnimatedRupee value={720} suffix=" Profit/Unit" />
                     </span>
