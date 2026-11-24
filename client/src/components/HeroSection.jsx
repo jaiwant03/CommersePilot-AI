@@ -311,7 +311,7 @@ const HeroSection = () => {
                   className="stack-avatar" 
                 />
               </div>
-              <div className="users-stat-number">100K+</div>
+              <div className="users-stat-number"><AnimatedCounter value={100} suffix="K+" /></div>
               <div className="users-stat-subtext">Happy Customers</div>
             </div>
 

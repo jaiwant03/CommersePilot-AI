@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import AnimatedRupee from './AnimatedRupee';
+import AnimatedCounter from './AnimatedCounter';
 import { Link } from 'react-router-dom';
 import { 
   ShieldCheck, 
