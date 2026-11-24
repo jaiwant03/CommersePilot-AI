@@ -3403,16 +3403,22 @@ body {
 
 .copilot-terminal-card {
   background: #0B1120;
-  border-radius: 16px;
-  border: 1.5px solid rgba(255, 255, 255, 0.12);
-  box-shadow: 0 20px 50px -15px rgba(15, 23, 42, 0.4);
+  border-radius: 20px;
+  border: 1.5px solid rgba(255, 255, 255, 0.14);
+  box-shadow: 0 25px 60px -15px rgba(15, 23, 42, 0.45), 0 0 35px rgba(79, 70, 229, 0.15);
   width: 100%;
-  max-width: 440px;
+  max-width: 530px;
   overflow: hidden;
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease;
+}
+
+.copilot-terminal-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 30px 70px -15px rgba(15, 23, 42, 0.55), 0 0 45px rgba(79, 70, 229, 0.22);
 }
 
 .terminal-header {
-  padding: 14px 18px;
+  padding: 16px 22px;
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
   display: flex;
   justify-content: space-between;
@@ -3423,65 +3429,69 @@ body {
 .terminal-brand-group {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 12px;
 }
 
 .terminal-logo-box {
-  width: 28px;
-  height: 28px;
-  border-radius: 8px;
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
   background: #4F46E5;
   color: #FFFFFF;
   display: flex;
   align-items: center;
   justify-content: center;
+  box-shadow: 0 4px 12px rgba(79, 70, 229, 0.4);
 }
 
 .terminal-app-title {
-  font-size: 13px;
+  font-size: 14.5px;
   font-weight: 700;
   color: #FFFFFF;
+  letter-spacing: -0.01em;
 }
 
 .terminal-grounded-tag {
-  font-size: 10.5px;
+  font-size: 11.5px;
   color: #38BDF8;
+  font-weight: 500;
 }
 
 .live-badge-green {
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 700;
   color: #34D399;
 }
 
 .terminal-chat-body {
-  padding: 18px;
+  padding: 22px 24px;
   display: flex;
   flex-direction: column;
-  gap: 14px;
-  min-height: 200px;
+  gap: 16px;
+  min-height: 235px;
 }
 
 .terminal-user-msg {
   align-self: flex-end;
   background: #1E293B;
   color: #F8FAFC;
-  border-radius: 14px 14px 2px 14px;
-  padding: 10px 14px;
-  font-size: 13px;
-  max-width: 85%;
-  line-height: 1.45;
+  border-radius: 16px 16px 3px 16px;
+  padding: 12px 18px;
+  font-size: 14px;
+  max-width: 88%;
+  line-height: 1.5;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 }
 
 .terminal-ai-msg {
   display: flex;
-  gap: 10px;
+  gap: 12px;
   align-items: flex-start;
 }
 
 .ai-msg-avatar {
-  width: 24px;
-  height: 24px;
+  width: 28px;
+  height: 28px;
   border-radius: 50%;
   background: #4F46E5;
   color: #FFFFFF;
@@ -3490,27 +3500,30 @@ body {
   justify-content: center;
   flex-shrink: 0;
   margin-top: 2px;
+  box-shadow: 0 2px 8px rgba(79, 70, 229, 0.35);
 }
 
 .ai-msg-content {
-  background: rgba(30, 41, 59, 0.7);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 14px 14px 14px 2px;
-  padding: 12px 16px;
-  font-size: 13px;
+  background: rgba(30, 41, 59, 0.75);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 16px 16px 16px 3px;
+  padding: 15px 20px;
+  font-size: 14px;
   color: #E2E8F0;
-  line-height: 1.55;
+  line-height: 1.62;
   flex-grow: 1;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.18);
 }
 
 .ai-msg-badge {
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 700;
-  margin-bottom: 6px;
+  margin-bottom: 8px;
+  letter-spacing: 0.01em;
 }
 
 .terminal-footer-input {
-  padding: 12px 18px;
+  padding: 15px 22px;
   border-top: 1px solid rgba(255, 255, 255, 0.08);
   background: rgba(255, 255, 255, 0.02);
   display: flex;
@@ -3519,14 +3532,14 @@ body {
 }
 
 .input-placeholder-text {
-  font-size: 12px;
+  font-size: 13px;
   color: #64748B;
 }
 
 .terminal-send-btn {
-  width: 26px;
-  height: 26px;
-  border-radius: 6px;
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
   background: #4F46E5;
   color: #FFFFFF;
   border: none;
@@ -3534,6 +3547,12 @@ body {
   align-items: center;
   justify-content: center;
   cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.terminal-send-btn:hover {
+  background: #4338CA;
+  transform: scale(1.05);
 }
 
 /* Business Intelligence Dashboard Visual */
@@ -3541,13 +3560,13 @@ body {
   background: #FFFFFF;
   border: 1.5px solid #E2E8F0;
   border-radius: 16px;
-  padding: 18px;
-  box-shadow: 0 16px 36px -10px rgba(15, 23, 42, 0.12);
+  padding: 22px;
+  box-shadow: 0 18px 42px -10px rgba(15, 23, 42, 0.12);
   width: 100%;
-  max-width: 440px;
+  max-width: 500px;
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 14px;
 }
 
 .kpi-two-col-grid {
@@ -3730,123 +3749,389 @@ body {
 .storytelling-hero-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 36px;
-  align-items: stretch;
-  margin-bottom: 48px;
+  gap: 56px;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 56px;
 }
 
-.lifestyle-image-frame {
+.storytelling-photo-col {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+.story-media-stack {
   position: relative;
-  height: 100%;
-  min-height: 340px;
-  border-radius: 24px;
-  overflow: hidden;
-  box-shadow: 0 20px 45px -10px rgba(15, 23, 42, 0.16);
+  width: 100%;
+  max-width: 480px;
+  min-height: 480px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.lifestyle-img {
+/* Floating 3D Shopping Trolley strictly on top-left behind image */
+.story-trolley {
+  position: absolute;
+  top: -26px;
+  left: -22px;
+  z-index: 1;
+}
+
+/* Distinct Asymmetric Architectural Sculpted Silhouette (NOT square, NOT circle) */
+.lifestyle-image-sculpted {
+  width: 380px;
+  height: 470px;
+  max-width: 100%;
+  border-radius: 200px 36px 180px 36px;
+  overflow: hidden;
+  box-shadow: 0 32px 70px -15px rgba(15, 23, 42, 0.22), 0 0 0 5px #FFFFFF, 0 0 0 6px rgba(99, 102, 241, 0.2);
+  position: relative;
+  background: #F8FAFC;
+  z-index: 2;
+  transform: rotate(-1deg);
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s ease;
+}
+
+.lifestyle-image-sculpted:hover {
+  transform: translateY(-4px) rotate(0deg);
+  box-shadow: 0 38px 85px -15px rgba(79, 70, 229, 0.32), 0 0 0 5px #FFFFFF, 0 0 0 6px rgba(99, 102, 241, 0.4);
+}
+
+.sculpted-lifestyle-img {
   width: 100%;
   height: 100%;
   object-fit: cover;
   display: block;
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.lifestyle-caption-card {
+.lifestyle-image-sculpted:hover .sculpted-lifestyle-img {
+  transform: scale(1.04);
+}
+
+.lifestyle-lux-gradient {
   position: absolute;
-  bottom: 16px;
-  left: 16px;
-  right: 16px;
-  background: rgba(15, 23, 42, 0.88);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  border-radius: 14px;
-  padding: 12px 16px;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(15, 23, 42, 0.05) 0%, transparent 40%, rgba(15, 23, 42, 0.45) 100%);
+  pointer-events: none;
+}
+
+.story-chip {
+  top: 14px;
+  right: -10px;
+  z-index: 4;
+}
+
+/* Floating Boutique Card docked strictly at bottom-right */
+.story-floating-boutique-badge {
+  position: absolute;
+  bottom: -20px;
+  right: -24px;
+  z-index: 5;
+  background: rgba(11, 17, 32, 0.92);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1.5px solid rgba(255, 255, 255, 0.16);
+  border-radius: 18px;
+  padding: 14px 18px;
+  color: #FFFFFF;
+  box-shadow: 0 20px 45px -8px rgba(0, 0, 0, 0.45), 0 0 30px rgba(79, 70, 229, 0.15);
+  max-width: 320px;
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.story-floating-boutique-badge:hover {
+  transform: translateY(-3px);
+}
+
+.boutique-badge-header {
   display: flex;
   align-items: center;
   gap: 12px;
-  color: #FFFFFF;
 }
 
-.caption-avatar {
-  width: 38px;
-  height: 38px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, #4F46E5 0%, #0EA5E9 100%);
-  color: #FFFFFF;
-  font-weight: 800;
-  font-size: 16px;
+.boutique-avatar-gradient {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #4F46E5 0%, #06B6D4 100%);
   display: flex;
   align-items: center;
   justify-content: center;
+  color: #FFFFFF;
   flex-shrink: 0;
+  box-shadow: 0 4px 12px rgba(79, 70, 229, 0.4);
 }
 
-.caption-name {
-  font-size: 14px;
+.boutique-header-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.boutique-title-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.boutique-brand-name {
+  font-size: 13.5px;
+  font-weight: 750;
+  color: #FFFFFF;
+  letter-spacing: -0.01em;
+}
+
+.boutique-status-pill {
+  font-size: 9.5px;
   font-weight: 700;
+  color: #34D399;
+  background: rgba(16, 185, 129, 0.15);
+  padding: 2px 6px;
+  border-radius: 10px;
+  border: 1px solid rgba(52, 211, 153, 0.25);
 }
 
-.caption-role {
-  font-size: 12px;
+.boutique-subtitle {
+  font-size: 11px;
   color: #94A3B8;
+  line-height: 1.35;
+}
+
+/* Right Column: Executive Store Profile Dossier */
+.storytelling-profile-col {
+  display: flex;
+  justify-content: center;
+  width: 100%;
 }
 
 .store-profile-card {
   background: #FFFFFF;
-  border: 1.5px solid #E2E8F0;
-  border-radius: 24px;
-  padding: 32px;
-  box-shadow: 0 16px 36px -8px rgba(15, 23, 42, 0.08);
+  border: 1.5px solid rgba(226, 232, 240, 0.9);
+  border-radius: 28px;
+  padding: 34px 36px;
+  box-shadow: 0 25px 60px -15px rgba(15, 23, 42, 0.08), 0 0 35px rgba(99, 102, 241, 0.04);
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  width: 100%;
+  max-width: 540px;
+  position: relative;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.store-profile-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 32px 70px -15px rgba(15, 23, 42, 0.12), 0 0 45px rgba(99, 102, 241, 0.08);
+}
+
+.profile-card-topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.profile-verified-badge {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 10.5px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  color: #4F46E5;
+  background: rgba(79, 70, 229, 0.08);
+  border: 1px solid rgba(79, 70, 229, 0.18);
+  padding: 4px 10px;
+  border-radius: 20px;
+}
+
+.profile-live-tag {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11.5px;
+  font-weight: 700;
+  color: #059669;
 }
 
 .profile-card-title {
-  font-size: 20px;
-  font-weight: 800;
+  font-size: 22px;
+  font-weight: 850;
+  letter-spacing: -0.025em;
   color: #0F172A;
-  margin-bottom: 12px;
+  margin-bottom: 10px;
 }
 
 .profile-card-summary {
-  font-size: 14.5px;
-  line-height: 1.6;
+  font-size: 14px;
+  line-height: 1.62;
   color: #475569;
+  margin-bottom: 22px;
+}
+
+.profile-lux-tiles-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
   margin-bottom: 24px;
 }
 
-.profile-metrics-list {
+.profile-lux-tile {
+  background: #F8FAFC;
+  border: 1px solid #E2E8F0;
+  border-radius: 16px;
+  padding: 12px 16px;
   display: flex;
-  flex-direction: column;
+  align-items: flex-start;
   gap: 14px;
+  transition: all 0.2s ease;
 }
 
-.profile-metric {
+.profile-lux-tile:hover {
+  background: #F1F5F9;
+  border-color: #CBD5E1;
+  transform: translateX(2px);
+}
+
+.lux-tile-icon-box {
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.tile-indigo {
+  background: #EEF2FF;
+  color: #4F46E5;
+}
+
+.tile-sky {
+  background: #F0F9FF;
+  color: #0284C7;
+}
+
+.tile-emerald {
+  background: #ECFDF5;
+  color: #059669;
+}
+
+.lux-tile-content {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  flex-grow: 1;
+}
+
+.lux-tile-label {
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #64748B;
+}
+
+.lux-tile-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.lux-tag {
+  font-size: 12px;
+  font-weight: 650;
+  color: #1E293B;
+  background: #FFFFFF;
+  border: 1px solid #E2E8F0;
+  padding: 3px 9px;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+}
+
+.lux-channels-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.lux-channel-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 11.5px;
+  font-weight: 650;
+  color: #1E293B;
+  background: #FFFFFF;
+  border: 1px solid #E2E8F0;
+  padding: 3px 9px;
+  border-radius: 8px;
+}
+
+.channel-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+}
+
+.dot-shopify {
+  background: #10B981;
+}
+
+.dot-insta {
+  background: #E1306C;
+}
+
+.dot-wa {
+  background: #25D366;
+}
+
+.lux-tile-val {
+  font-size: 13px;
+  font-weight: 650;
+  color: #1E293B;
+}
+
+.profile-card-footer {
+  border-top: 1.5px solid #F1F5F9;
+  padding-top: 18px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.footer-metric-pill {
   display: flex;
   flex-direction: column;
   gap: 2px;
-  padding-bottom: 12px;
-  border-bottom: 1px solid #F1F5F9;
 }
 
-.profile-metric:last-child {
-  border-bottom: none;
-  padding-bottom: 0;
+.metric-num {
+  font-size: 15px;
+  font-weight: 850;
+  color: #0F172A;
+  letter-spacing: -0.02em;
 }
 
-.m-label {
-  font-size: 11.5px;
-  font-weight: 700;
+.metric-desc {
+  font-size: 11px;
   color: #64748B;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
 }
 
-.m-val {
-  font-size: 14px;
-  font-weight: 600;
-  color: #1E293B;
+.metric-status-text {
+  font-size: 12.5px;
+  font-weight: 750;
+}
+
+.footer-sep {
+  width: 1px;
+  height: 28px;
+  background: #E2E8F0;
 }
 
 .scenarios-grid {

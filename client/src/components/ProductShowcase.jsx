@@ -615,7 +615,7 @@ const ProductShowcase = () => {
               <div className="terminal-header">
                 <div className="terminal-brand-group">
                   <div className="terminal-logo-box">
-                    <Bot size={14} />
+                    <Bot size={16} />
                   </div>
                   <div>
                     <div className="terminal-app-title">CommercePilot AI Assistant</div>
@@ -635,7 +635,7 @@ const ProductShowcase = () => {
                 {/* AI Assistant Grounded Response */}
                 <div className="terminal-ai-msg">
                   <div className="ai-msg-avatar">
-                    <Sparkles size={12} />
+                    <Sparkles size={14} />
                   </div>
                   <div className="ai-msg-content">
                     <div className="ai-msg-badge" style={{ color: copilotQA[selectedQuestionIdx].badgeColor }}>
@@ -649,7 +649,7 @@ const ProductShowcase = () => {
               <div className="terminal-footer-input">
                 <span className="input-placeholder-text">Ask any question about orders, stock, or deliveries...</span>
                 <button type="button" className="terminal-send-btn" aria-label="Send query">
-                  <Send size={12} />
+                  <Send size={14} />
                 </button>
               </div>
             </div>
