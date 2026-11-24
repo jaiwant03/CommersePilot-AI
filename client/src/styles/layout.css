@@ -2501,21 +2501,27 @@ body {
 .prod-collage-canvas {
   position: relative;
   width: 100%;
-  max-width: 460px;
-  min-height: 480px;
+  max-width: 560px;
+  min-height: 520px;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
 .collage-shape-arch {
-  width: 310px;
-  height: 420px;
-  border-radius: 155px 155px 28px 28px;
+  width: 380px;
+  height: 480px;
+  border-radius: 190px 190px 36px 36px;
   overflow: hidden;
-  box-shadow: 0 25px 50px -12px rgba(79, 70, 229, 0.25), 0 0 0 4px #FFFFFF;
+  box-shadow: 0 30px 60px -15px rgba(79, 70, 229, 0.28), 0 0 0 4px #FFFFFF;
   position: relative;
   z-index: 1;
+  transition: transform 0.4s ease, box-shadow 0.4s ease;
+}
+
+.collage-shape-arch:hover {
+  transform: translateY(-4px) scale(1.01);
+  box-shadow: 0 35px 70px -15px rgba(79, 70, 229, 0.35), 0 0 0 4px #FFFFFF;
 }
 
 .collage-img-arch {
@@ -2555,8 +2561,7 @@ body {
 
 .collage-package-card {
   position: absolute;
-  bottom: 24px;
-  left: -20px;
+  bottom: -15px; left: -35px;
   background: #FFFFFF;
   border: 1.5px solid #E0F2FE;
   border-radius: 16px;
@@ -2603,8 +2608,7 @@ body {
 
 .collage-mobile-card {
   position: absolute;
-  top: 90px;
-  right: -30px;
+  top: 60px; right: -45px;
   background: #0D1527;
   color: #FFFFFF;
   border-radius: 18px;
@@ -2682,13 +2686,11 @@ body {
 }
 
 .chip-1 {
-  top: 35px;
-  left: -25px;
+  top: 25px; left: -35px;
 }
 
 .chip-2 {
-  bottom: 85px;
-  right: -25px;
+  bottom: 75px; right: -40px;
 }
 
 .ai-chip-pulsar {
@@ -2830,44 +2832,57 @@ body {
 .visual-media-stack {
   position: relative;
   width: 100%;
-  max-width: 520px;
-  min-height: 440px;
+  max-width: 540px;
   display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: center;
+  gap: 16px;
 }
 
+/* Big, impressive product showcase containers with distinct tangent shapes */
 .visual-organic-crop {
-  width: 440px;
-  height: 380px;
+  width: 100%;
+  height: 390px;
   max-width: 100%;
   overflow: hidden;
-  box-shadow: 0 20px 50px -10px rgba(15, 23, 42, 0.16), 0 0 0 1px rgba(226, 232, 240, 0.9);
+  box-shadow: 0 25px 60px -12px rgba(15, 23, 42, 0.18), 0 0 0 1px rgba(226, 232, 240, 0.95);
   border: 4px solid #FFFFFF;
   position: relative;
-  border-radius: 28px;
   background: #F8FAFC;
+  transition: transform 0.35s ease, box-shadow 0.35s ease;
 }
 
+.visual-organic-crop:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 32px 70px -12px rgba(79, 70, 229, 0.25), 0 0 0 1px rgba(99, 102, 241, 0.4);
+}
+
+/* Distinct Tangent Geometric Shapes for Each Feature */
+/* Feature 1 (Dresses & Kurtis): Asymmetric Diagonal Tangent Wave Arch */
 .crop-kurti {
-  border-radius: 28px 44px 28px 28px;
+  border-radius: 96px 24px 96px 24px;
+  transform: rotate(-1deg);
 }
 
+/* Feature 2 (Athletic Shoes): Sweeping Tangent Stadium Capsule Pill */
 .crop-warehouse {
-  border-radius: 44px 28px 28px 28px;
+  border-radius: 36px 180px 36px 180px;
+  transform: rotate(1deg);
 }
 
+/* Feature 3 (Delivery Parcels): Modern Tangent Architectural Polygon */
 .crop-delivery {
-  border-radius: 28px 28px 44px 28px;
+  border-radius: 120px 28px 120px 28px;
+  transform: rotate(-1deg);
 }
 
 .crop-live-pill {
   position: absolute;
-  top: 16px;
-  left: 16px;
-  background: rgba(15, 23, 42, 0.85);
-  backdrop-filter: blur(8px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  top: 18px;
+  left: 18px;
+  background: rgba(15, 23, 42, 0.88);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.25);
   border-radius: 20px;
   padding: 6px 14px;
   font-size: 11px;
@@ -2878,7 +2893,7 @@ body {
   align-items: center;
   gap: 6px;
   z-index: 2;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
 }
 
 .organic-img {
@@ -2886,54 +2901,63 @@ body {
   height: 100%;
   object-fit: cover;
   display: block;
-  transition: transform 0.4s ease;
+  transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .visual-organic-crop:hover .organic-img {
-  transform: scale(1.03);
+  transform: scale(1.04);
 }
 
 /* Impressive Cyber-Navy Telemetry HUD Cards */
+/* Impressive Cyber-Navy Telemetry HUD Cards - Docked Below Image to NEVER Hide It */
 .floating-telemetry-badge {
-  position: absolute;
+  position: relative;
+  width: 100%;
+  max-width: 520px;
   background: linear-gradient(145deg, #0D1527 0%, #111B33 100%);
   border: 1.5px solid rgba(56, 189, 248, 0.35);
-  border-radius: 22px;
+  border-radius: 20px;
   padding: 18px 22px;
   box-shadow: 
-    0 25px 60px -10px rgba(15, 23, 42, 0.6),
-    0 0 28px rgba(56, 189, 248, 0.16),
+    0 20px 45px -10px rgba(15, 23, 42, 0.5),
+    0 0 25px rgba(56, 189, 248, 0.12),
     inset 0 1px 0 rgba(255, 255, 255, 0.15);
   z-index: 3;
-  width: 320px;
   color: #FFFFFF;
   backdrop-filter: blur(16px);
+  margin-top: 2px;
   transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
 }
 
 .floating-telemetry-badge:hover {
-  transform: translateY(-3px);
+  transform: translateY(-2px);
   border-color: rgba(56, 189, 248, 0.65);
   box-shadow: 
-    0 30px 70px -10px rgba(15, 23, 42, 0.75),
-    0 0 35px rgba(56, 189, 248, 0.25);
+    0 25px 55px -10px rgba(15, 23, 42, 0.65),
+    0 0 30px rgba(56, 189, 248, 0.2);
 }
 
-/* Position cards offset at bottom corner so image is 80%+ completely visible */
+/* Individual badge overrides */
 .badge-risk {
-  bottom: -25px;
-  right: -30px;
+  border-color: rgba(245, 158, 11, 0.4);
+}
+
+.badge-risk:hover {
+  border-color: rgba(245, 158, 11, 0.7);
+  box-shadow: 0 25px 55px -10px rgba(15, 23, 42, 0.65), 0 0 30px rgba(245, 158, 11, 0.2);
 }
 
 .badge-runway {
-  bottom: -25px;
-  left: -30px;
+  border-color: rgba(56, 189, 248, 0.4);
 }
 
 .badge-ndr {
-  bottom: -25px;
-  right: -30px;
-  width: 330px;
+  border-color: rgba(34, 197, 94, 0.4);
+}
+
+.badge-ndr:hover {
+  border-color: rgba(34, 197, 94, 0.7);
+  box-shadow: 0 25px 55px -10px rgba(15, 23, 42, 0.65), 0 0 30px rgba(34, 197, 94, 0.2);
 }
 
 .telemetry-badge-header {

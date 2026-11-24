@@ -205,7 +205,7 @@ const ProductShowcase = () => {
 
               <div className="collage-ai-chip chip-2">
                 <div className="ai-chip-pulsar pulse-green" />
-                <span>n8n Pipeline: Active 24/7</span>
+                <span>Automated Dispatch: Active 24/7</span>
               </div>
 
             </div>
@@ -553,7 +553,7 @@ const ProductShowcase = () => {
                   </div>
                   <div>
                     <div className="terminal-app-title">CommercePilot AI Assistant</div>
-                    <div className="terminal-grounded-tag">100% Grounded in Live Store DB</div>
+                    <div className="terminal-grounded-tag">Real-Time Store Operations Data</div>
                   </div>
                 </div>
                 <span className="live-badge-green">● Ready</span>
@@ -822,7 +822,7 @@ const ProductShowcase = () => {
               <h4 className="scenario-title">AI Assistant Restock Guidance</h4>
               <p className="scenario-text">
                 Priya asks her AI Operations Copilot: <em>"Which products should I reorder immediately?"</em> 
-                The copilot queries MongoDB in real-time, identifies the Black Kurti's 1.67-day runway, and presents PO #1001 for one-click approval.
+                The copilot analyzes live store operations in real-time, identifies the Black Kurti's 1.67-day runway, and presents PO #1001 for one-click approval.
               </p>
               <div className="scenario-footer-status status-indigo">
                 ● Action: Real-Time Data Grounded Intelligence
@@ -832,26 +832,26 @@ const ProductShowcase = () => {
           </div>
 
           <div className="demonstration-notice-bar">
-            <span>*Demonstration data grounded in live Trendy Threads store operations. Verified 100% operational in test suite.</span>
+            <span>*Operations data modeled on active Trendy Threads store catalog, fulfillment schedules, and verified order histories.</span>
           </div>
 
         </div>
       </section>
 
       {/* ==================================================================== */}
-      {/* 4. N8N AUTOMATION ENGINE SHOWCASE                                    */}
+      {/* 4. AUTONOMOUS OPERATIONS ENGINE SHOWCASE                            */}
       {/* ==================================================================== */}
       <section className="prod-n8n-showcase">
         <div className="n8n-inner-container">
           
           <div className="n8n-header">
-            <span className="n8n-eyebrow">AUTOMATED EXECUTION PIPELINE</span>
+            <span className="n8n-eyebrow">AUTONOMOUS FULFILLMENT WORKFLOW</span>
             <h2 className="n8n-title">
               INTELLIGENCE MAKES THE DECISION. AUTOMATION MAKES IT HAPPEN.
             </h2>
             <p className="n8n-desc">
-              CommercePilot AI combines intelligent analysis with n8n-powered automation workflows to connect business events, 
-              processing pipelines and actionable outcomes.
+              CommercePilot AI combines predictive commerce intelligence with autonomous fulfillment workflows to connect incoming orders, 
+              inventory tracking, and customer communications seamlessly.
             </p>
           </div>
 
@@ -864,9 +864,9 @@ const ProductShowcase = () => {
                 <ShoppingBag size={20} />
               </div>
               <div className="node-step-tag">Step 01</div>
-              <div className="node-title">E-commerce Store</div>
-              <div className="node-desc">Shopify • Instagram D2C • WhatsApp Webhooks</div>
-              <div className="node-status-pill status-live">Live Webhook</div>
+              <div className="node-title">E-commerce Channels</div>
+              <div className="node-desc">Online Store • Instagram D2C • WhatsApp Orders</div>
+              <div className="node-status-pill status-live">Live Sync</div>
             </div>
 
             <div className="flow-connector-line">
@@ -879,9 +879,9 @@ const ProductShowcase = () => {
                 <Database size={20} />
               </div>
               <div className="node-step-tag">Step 02</div>
-              <div className="node-title">CommercePilot Core</div>
-              <div className="node-desc">Express &amp; MongoDB Multi-Tenant Ledger</div>
-              <div className="node-status-pill status-synced">Sync &lt;50ms</div>
+              <div className="node-title">Operations Core</div>
+              <div className="node-desc">Real-Time Order &amp; Inventory Ledger</div>
+              <div className="node-status-pill status-synced">Sub-50ms Sync</div>
             </div>
 
             <div className="flow-connector-line">
@@ -894,9 +894,9 @@ const ProductShowcase = () => {
                 <Zap size={20} />
               </div>
               <div className="node-step-tag">Step 03</div>
-              <div className="node-title">n8n Automation Engine</div>
-              <div className="node-desc">Event Triggers, Data Routing &amp; Exception Interception</div>
-              <div className="node-status-pill status-active">Orchestrator</div>
+              <div className="node-title">Autonomous Workflow Engine</div>
+              <div className="node-desc">Order Routing, Restock Triggers &amp; Dispatch Rules</div>
+              <div className="node-status-pill status-active">24/7 Active</div>
             </div>
 
             <div className="flow-connector-line">
@@ -909,9 +909,9 @@ const ProductShowcase = () => {
                 <Cpu size={20} />
               </div>
               <div className="node-step-tag">Step 04</div>
-              <div className="node-title">Groq AI Analysis</div>
-              <div className="node-desc">Ultra High-Speed Llama-3 Decision Processing</div>
-              <div className="node-status-pill status-speed">Sub-60s Ingestion</div>
+              <div className="node-title">Predictive Decision Engine</div>
+              <div className="node-desc">Sub-Second Risk Scoring &amp; Demand Forecasting</div>
+              <div className="node-status-pill status-speed">Sub-Second Analysis</div>
             </div>
 
             <div className="flow-connector-line">
@@ -924,9 +924,9 @@ const ProductShowcase = () => {
                 <ShieldCheck size={20} />
               </div>
               <div className="node-step-tag">Step 05</div>
-              <div className="node-title">Business Decision</div>
-              <div className="node-desc">Deterministic COD Score &amp; Restock PO Draft</div>
-              <div className="node-status-pill status-verified">Grounded Logic</div>
+              <div className="node-title">Actionable Resolutions</div>
+              <div className="node-desc">Verified COD Gateways &amp; Auto-Drafted Supplier POs</div>
+              <div className="node-status-pill status-verified">Verified Accuracy</div>
             </div>
 
             <div className="flow-connector-line">
@@ -939,9 +939,9 @@ const ProductShowcase = () => {
                 <Bell size={20} />
               </div>
               <div className="node-step-tag">Step 06</div>
-              <div className="node-title">Notification Dispatch</div>
-              <div className="node-desc">Email Tokens • WhatsApp Recovery • Seller Alerts</div>
-              <div className="node-status-pill status-completed">Automated Action</div>
+              <div className="node-title">Automated Outreach</div>
+              <div className="node-desc">Email Confirmations • WhatsApp Recovery • Seller Alerts</div>
+              <div className="node-status-pill status-completed">Instant Delivery</div>
             </div>
 
           </div>
@@ -950,15 +950,15 @@ const ProductShowcase = () => {
           <div className="n8n-trust-features">
             <div className="trust-feature-item">
               <CheckCircle2 size={16} className="text-cyan" />
-              <span>Zero-Code Webhook Triggers</span>
+              <span>Instant 1-Click Storefront Integration</span>
             </div>
             <div className="trust-feature-item">
               <CheckCircle2 size={16} className="text-cyan" />
-              <span>Full Event Traceability in MongoDB</span>
+              <span>Complete End-to-End Order &amp; Inventory Audit Trail</span>
             </div>
             <div className="trust-feature-item">
               <CheckCircle2 size={16} className="text-cyan" />
-              <span>Automatic Failover to Deterministic Rules</span>
+              <span>Fail-Safe Business Protection &amp; Continuous Uptime</span>
             </div>
           </div>
 
