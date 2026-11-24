@@ -1,9 +1,96 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import AnimatedRupee from './AnimatedRupee';
 import { Link } from 'react-router-dom';
-import { Check, ArrowRight, Tag } from 'lucide-react';
+import { Check, Minus, ArrowRight, Tag, Sparkles, ChevronDown, ChevronUp } from 'lucide-react';
 
 const PricingSection = () => {
+  const [isComparisonOpen, setIsComparisonOpen] = useState(false);
+
+  useEffect(() => {
+    if (window.location.hash === '#compare-plans') {
+      setIsComparisonOpen(true);
+      setTimeout(() => {
+        const el = document.getElementById('compare-plans');
+        if (el) {
+          el.scrollIntoView({ behavior: 'smooth' });
+        }
+      }, 100);
+    }
+  }, []);
+
+  const handleToggleComparison = () => {
+    setIsComparisonOpen((prev) => {
+      const nextState = !prev;
+      if (nextState) {
+        setTimeout(() => {
+          const el = document.getElementById('compare-plans');
+          if (el) {
+            el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }
+        }, 50);
+      }
+      return nextState;
+    });
+  };
+
+  const comparisonCategories = [
+    {
+      category: 'Order Volume & Storefronts',
+      rows: [
+        { feature: 'Monthly Evaluated Orders', starter: 'Up to 500', growth: 'Up to 2,500', pro: 'Up to 10,000+' },
+        { feature: 'Connected Storefronts', starter: '1 Store', growth: '3 Stores', pro: 'Unlimited' },
+        { feature: 'Additional Order Overage', starter: '₹4 / order', growth: '₹2.5 / order', pro: '₹1.5 / order' }
+      ]
+    },
+    {
+      category: 'COD Intelligence & RTO Shield',
+      rows: [
+        { feature: 'Real-time Risk Scoring Algorithm', starter: true, growth: true, pro: true },
+        { feature: 'Automated Email Address Verification', starter: 'Basic', growth: 'Advanced Interactive', pro: 'Custom Logic' },
+        { feature: 'Dynamic Prepaid Conversion Discounts', starter: false, growth: true, pro: true },
+        { feature: 'Fraud & Chronic Returner Blacklist Sync', starter: true, growth: true, pro: true },
+        { feature: 'Customizable Risk Thresholds', starter: false, growth: true, pro: true }
+      ]
+    },
+    {
+      category: 'Predictive Inventory Management',
+      rows: [
+        { feature: 'Stockout Runway Calculation', starter: true, growth: true, pro: true },
+        { feature: 'Multi-Channel Stock Reservation (Shopify + WooCommerce)', starter: false, growth: true, pro: true },
+        { feature: 'Automated Supplier PO Drafting & Approval', starter: false, growth: true, pro: true },
+        { feature: 'Multi-Warehouse Allocation', starter: false, growth: false, pro: true }
+      ]
+    },
+    {
+      category: 'Delivery Failure Recovery (NDR)',
+      rows: [
+        { feature: 'Courier Webhook Ingestion', starter: true, growth: true, pro: true },
+        { feature: 'Under-60-Second Email Customer Trigger', starter: false, growth: true, pro: true },
+        { feature: 'Self-Serve Re-attempt Scheduling', starter: false, growth: true, pro: true },
+        { feature: 'Fake Courier Attempt Dispute Logging', starter: false, growth: true, pro: true }
+      ]
+    },
+    {
+      category: 'AI Copilot & Automation',
+      rows: [
+        { feature: 'Groq-Powered Operations Copilot', starter: '10 queries/day', growth: 'Unlimited', pro: 'Unlimited Dedicated' },
+        { feature: 'Daily Morning Email Operations Digest', starter: false, growth: true, pro: true },
+        { feature: 'Custom n8n Workflow Webhooks', starter: false, growth: false, pro: true },
+        { feature: 'Dedicated Account Manager & SLA Guarantee', starter: false, growth: false, pro: true }
+      ]
+    }
+  ];
+
+  const renderCell = (val) => {
+    if (val === true) {
+      return <Check size={18} style={{ color: '#10B981', margin: '0 auto' }} />;
+    }
+    if (val === false) {
+      return <Minus size={18} style={{ color: '#94A3B8', margin: '0 auto' }} />;
+    }
+    return <span>{val}</span>;
+  };
+
   const plans = [
     {
       id: 'starter',
@@ -135,31 +222,26 @@ const PricingSection = () => {
         ))}
       </div>
 
-      {/* Bottom Center Compare Plans Link */}
+      {/* Bottom Center Toggle Compare Plans Button */}
       <div style={{ textAlign: 'center', marginTop: '44px', display: 'flex', justifyContent: 'center' }}>
-        <Link
-          to="/pricing#compare-plans"
-          onClick={() => {
-            const el = document.getElementById('compare-plans');
-            if (el) {
-              el.scrollIntoView({ behavior: 'smooth' });
-            }
-          }}
+        <button
+          type="button"
+          onClick={handleToggleComparison}
           className="modelled-nav-btn-white"
           style={{
             display: 'inline-flex',
             alignItems: 'center',
             gap: '8px',
-            padding: '12px 30px',
+            padding: '12px 32px',
             fontSize: '14.5px',
             fontWeight: 700,
             borderRadius: '9999px',
             border: '1.5px solid #0284C7',
             color: '#0284C7',
-            background: 'rgba(2, 132, 199, 0.05)',
+            background: isComparisonOpen ? 'rgba(2, 132, 199, 0.1)' : 'rgba(2, 132, 199, 0.05)',
             boxShadow: '0 4px 14px rgba(2, 132, 199, 0.1)',
-            textDecoration: 'none',
-            transition: 'all 0.2s ease',
+            cursor: 'pointer',
+            transition: 'all 0.25s ease',
             whiteSpace: 'nowrap'
           }}
           onMouseEnter={(e) => {
@@ -169,16 +251,90 @@ const PricingSection = () => {
             e.currentTarget.style.transform = 'translateY(-2px)';
           }}
           onMouseLeave={(e) => {
-            e.currentTarget.style.background = 'rgba(2, 132, 199, 0.05)';
+            e.currentTarget.style.background = isComparisonOpen ? 'rgba(2, 132, 199, 0.1)' : 'rgba(2, 132, 199, 0.05)';
             e.currentTarget.style.color = '#0284C7';
             e.currentTarget.style.boxShadow = '0 4px 14px rgba(2, 132, 199, 0.1)';
             e.currentTarget.style.transform = 'translateY(0)';
           }}
         >
-          <span>Compare All Plans & Features</span>
-          <ArrowRight size={15} />
-        </Link>
+          <span>{isComparisonOpen ? 'Hide Detailed Plan Comparison' : 'Compare All Plans & Features'}</span>
+          {isComparisonOpen ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
+        </button>
       </div>
+
+      {/* In-Page Detailed Plan Feature Matrix (Appears below on the same page) */}
+      {isComparisonOpen && (
+        <div
+          id="compare-plans"
+          style={{
+            marginTop: '48px',
+            animation: 'fadeIn 0.35s ease-out',
+            background: '#FFFFFF',
+            borderRadius: '24px',
+            border: '1.5px solid rgba(226, 232, 240, 0.9)',
+            padding: '36px 28px',
+            boxShadow: '0 20px 45px -15px rgba(15, 23, 42, 0.08)'
+          }}
+        >
+          <div className="section-header" style={{ textAlign: 'center', marginBottom: '28px' }}>
+            <div style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', padding: '4px 14px', background: 'rgba(2, 132, 199, 0.08)', borderRadius: '9999px', fontSize: '12px', fontWeight: 700, color: '#0284C7', marginBottom: '12px' }}>
+              <Sparkles size={13} />
+              <span>Side-by-Side Feature Breakdown</span>
+            </div>
+            <h3 style={{ fontSize: '24px', fontWeight: 800, color: '#0F172A', marginBottom: '8px' }}>
+              Detailed Plan Feature Matrix
+            </h3>
+            <p style={{ fontSize: '14px', color: '#64748B', maxWidth: '600px', margin: '0 auto' }}>
+              Compare capabilities across tiers to select the ideal operational fit for your brand.
+            </p>
+          </div>
+
+          <div style={{ overflowX: 'auto', borderRadius: '16px', border: '1px solid rgba(226, 232, 240, 0.8)' }}>
+            <table style={{ width: '100%', borderCollapse: 'collapse', minWidth: '650px', textAlign: 'left' }}>
+              <thead>
+                <tr style={{ borderBottom: '1px solid #E2E8F0', background: '#F8FAFC' }}>
+                  <th style={{ padding: '14px 18px', width: '40%', fontSize: '13px', fontWeight: 700, color: '#0F172A' }}>Feature / Capability</th>
+                  <th style={{ padding: '14px 18px', textAlign: 'center', width: '20%', fontSize: '13px', fontWeight: 700, color: '#0F172A' }}>Starter</th>
+                  <th style={{ padding: '14px 18px', textAlign: 'center', width: '20%', fontSize: '13px', fontWeight: 800, color: '#0284C7', background: 'rgba(2, 132, 199, 0.06)' }}>Growth (Popular)</th>
+                  <th style={{ padding: '14px 18px', textAlign: 'center', width: '20%', fontSize: '13px', fontWeight: 700, color: '#0F172A' }}>Professional</th>
+                </tr>
+              </thead>
+              <tbody>
+                {comparisonCategories.map((cat, cIdx) => (
+                  <React.Fragment key={cIdx}>
+                    <tr>
+                      <td
+                        colSpan={4}
+                        style={{
+                          background: 'rgba(241, 245, 249, 0.9)',
+                          padding: '10px 18px',
+                          fontSize: '11px',
+                          fontWeight: 800,
+                          color: '#0284C7',
+                          textTransform: 'uppercase',
+                          letterSpacing: '0.06em',
+                          borderTop: '1px solid #E2E8F0',
+                          borderBottom: '1px solid #E2E8F0'
+                        }}
+                      >
+                        {cat.category}
+                      </td>
+                    </tr>
+                    {cat.rows.map((row, rIdx) => (
+                      <tr key={rIdx} style={{ borderBottom: '1px solid #F1F5F9' }}>
+                        <td style={{ padding: '12px 18px', fontSize: '13px', color: '#334155', fontWeight: 500 }}>{row.feature}</td>
+                        <td style={{ padding: '12px 18px', textAlign: 'center', fontSize: '13px', color: '#64748B' }}>{renderCell(row.starter)}</td>
+                        <td style={{ padding: '12px 18px', textAlign: 'center', fontSize: '13px', color: '#0284C7', fontWeight: 600, background: 'rgba(2, 132, 199, 0.03)' }}>{renderCell(row.growth)}</td>
+                        <td style={{ padding: '12px 18px', textAlign: 'center', fontSize: '13px', color: '#64748B' }}>{renderCell(row.pro)}</td>
+                      </tr>
+                    ))}
+                  </React.Fragment>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
