@@ -145,14 +145,14 @@ const ApprovePoPage = () => {
                     +{it.reorderQuantity} units
                   </td>
                   <td style={{ padding: '10px 12px', textAlign: 'right', fontWeight: 600, color: 'var(--color-text-primary)' }}>
-                    ₹{it.estimatedCost?.toLocaleString('en-IN')}
+                    <AnimatedRupee value={it.estimatedCost} />
                   </td>
                 </tr>
               ))}
               <tr style={{ borderTop: '2px solid var(--border-subtle)', background: 'var(--color-bg-secondary)' }}>
                 <td colSpan={2} style={{ padding: '12px', fontWeight: 700, color: 'var(--color-text-primary)' }}>Total Estimated COGS</td>
                 <td style={{ padding: '12px', textAlign: 'right', fontWeight: 700, color: 'var(--color-success)', fontSize: '15px' }}>
-                  ₹{(po.totalEstimatedCost || 0).toLocaleString('en-IN')}
+                  <AnimatedRupee value={po.totalEstimatedCost || 0} />
                 </td>
               </tr>
             </tbody>
