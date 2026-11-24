@@ -18,6 +18,7 @@ import {
 } from 'lucide-react';
 import workspaceService from '../../services/workspace.service';
 import { useAuth } from '../../context/AuthContext';
+import FormattedAssistantMessage from '../../components/FormattedAssistantMessage';
 
 const EXAMPLE_QUESTIONS = [
   { label: 'Which products should I reorder?', icon: <Package size={13} /> },
@@ -158,9 +159,13 @@ const AssistantPage = () => {
                 <div className={`chat-avatar-icon ${isUser ? 'user' : 'assistant'}`}>
                   {isUser ? <User size={16} /> : <Sparkles size={16} />}
                 </div>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', maxWidth: '85%' }}>
-                  <div className="chat-bubble" style={{ whiteSpace: 'pre-wrap', lineHeight: '1.6' }}>
-                    {m.text}
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', maxWidth: isUser ? '80%' : '100%', width: isUser ? 'auto' : '100%' }}>
+                  <div className="chat-bubble">
+                    {isUser ? (
+                      <span style={{ whiteSpace: 'pre-wrap', lineHeight: '1.6' }}>{m.text}</span>
+                    ) : (
+                      <FormattedAssistantMessage content={m.text} />
+                    )}
                   </div>
 
                   {/* Groq AI & Guardrails Security Pills */}
