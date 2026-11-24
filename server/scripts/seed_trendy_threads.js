@@ -226,7 +226,7 @@ const seedTrendyThreads = async () => {
             street: '104, RS Puram West',
             city: 'Coimbatore',
             state: 'Tamil Nadu',
-            postalCode: '641002'
+            pincode: '641002'
           }
         },
         items: [
@@ -258,7 +258,7 @@ const seedTrendyThreads = async () => {
           fullName: 'Kavitha R',
           email: 'kavitha.r@example.com',
           phone: '+91 94433 44556',
-          address: { street: '12, Saibaba Colony', city: 'Coimbatore', state: 'Tamil Nadu', postalCode: '641011' }
+          address: { street: '12, Saibaba Colony', city: 'Coimbatore', state: 'Tamil Nadu', pincode: '641011' }
         },
         items: [{ product: premiumKurti._id, sku: premiumKurti.sku, title: premiumKurti.title, quantity: 2, unitPrice: 2500, totalPrice: 5000 }],
         subtotal: 5000,
@@ -275,7 +275,7 @@ const seedTrendyThreads = async () => {
           fullName: 'Pooja Nair',
           email: 'pooja.nair@example.com',
           phone: '+91 98402 34567',
-          address: { street: '45, Race Course Road', city: 'Coimbatore', state: 'Tamil Nadu', postalCode: '641018' }
+          address: { street: '45, Race Course Road', city: 'Coimbatore', state: 'Tamil Nadu', pincode: '641018' }
         },
         items: [{ product: anarkaliKurti._id, sku: anarkaliKurti.sku, title: anarkaliKurti.title, quantity: 1, unitPrice: 1999, totalPrice: 1999 }],
         subtotal: 1999,
@@ -300,7 +300,7 @@ const seedTrendyThreads = async () => {
           street: 'Near Cross Cut Road, Gandhipuram', // Missing house # / landmark
           city: 'Coimbatore',
           state: 'Tamil Nadu',
-          postalCode: '641012'
+          pincode: '641012'
         }
       },
       items: [
