@@ -1077,41 +1077,6 @@ const ProductShowcase = () => {
         </div>
       </section>
 
-      {/* ==================================================================== */}
-      {/* 5. FINAL CALL TO ACTION: READY TO MAKE COMMERCE INTELLIGENT?         */}
-      {/* ==================================================================== */}
-      <section className="prod-final-cta-section">
-        <div className="prod-final-cta-card">
-          <div className="final-cta-ambient" />
-          
-          <div className="final-cta-content">
-            <h2 className="final-cta-title">
-              READY TO MAKE YOUR COMMERCE BUSINESS INTELLIGENT?
-            </h2>
-            <p className="final-cta-desc">
-              Spend less time managing operational problems and more time growing your business. 
-              Let CommercePilot AI help you protect orders, anticipate inventory needs and streamline everyday commerce operations.
-            </p>
-
-            <div className="final-cta-btn-group">
-              <Link to="/signup" className="final-btn-primary">
-                <span>Launch CommercePilot AI</span>
-                <ArrowRight size={15} />
-              </Link>
-              <Link to="/app/overview" className="final-btn-secondary">
-                <span>Explore Workspace</span>
-                <ArrowUpRight size={15} />
-              </Link>
-            </div>
-
-            <div className="final-cta-guarantee">
-              <Check size={14} className="text-green" />
-              <span>Instant setup • No credit card required • Seamless Indian multi-channel sync</span>
-            </div>
-          </div>
-        </div>
-      </section>
-
     </div>
   );
 };
