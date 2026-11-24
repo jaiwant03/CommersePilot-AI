@@ -118,6 +118,9 @@ Provide a concise, 2-sentence professional explanation of why this risk score wa
  * Handles COD order verification workflow with n8n webhook communication or graceful demo mode
  */
 const orderAutomationService = {
+  calculateDeterministicCodRisk,
+  evaluateCodRisk: (order, customerDoc) => calculateDeterministicCodRisk(order, customerDoc),
+
   /**
    * Execute Order Risk Analysis & Verification Workflow
    */
