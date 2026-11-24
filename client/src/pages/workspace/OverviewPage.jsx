@@ -151,8 +151,8 @@ const OverviewPage = () => {
         <div className="metric-card">
           <div className="metric-top">
             <span className="metric-label">Total Orders</span>
-            <div className="metric-icon-wrap">
-              <ShoppingBag size={16} />
+            <div className="metric-icon-wrap orders">
+              <ShoppingBag size={18} />
             </div>
           </div>
           <div className="metric-value">{metrics.totalOrders || 0}</div>
@@ -166,12 +166,12 @@ const OverviewPage = () => {
         <div className="metric-card">
           <div className="metric-top">
             <span className="metric-label">Gross Revenue</span>
-            <div className="metric-icon-wrap" style={{ background: 'rgba(16, 185, 129, 0.12)', color: '#34D399' }}>
-              <IndianRupee size={16} />
+            <div className="metric-icon-wrap revenue">
+              <IndianRupee size={18} />
             </div>
           </div>
           <div className="metric-value"><AnimatedRupee value={metrics.totalRevenue || 0} /></div>
-          <div className="metric-meta">
+          <div className="metric-meta success">
             <span>Aggregated order value</span>
           </div>
         </div>
@@ -180,8 +180,8 @@ const OverviewPage = () => {
         <div className="metric-card">
           <div className="metric-top">
             <span className="metric-label">COD Orders</span>
-            <div className="metric-icon-wrap" style={{ background: 'rgba(245, 158, 11, 0.12)', color: '#FBBF24' }}>
-              <AlertTriangle size={16} />
+            <div className="metric-icon-wrap cod">
+              <AlertTriangle size={18} />
             </div>
           </div>
           <div className="metric-value">{metrics.codOrders || 0}</div>
@@ -196,8 +196,8 @@ const OverviewPage = () => {
         <div className="metric-card">
           <div className="metric-top">
             <span className="metric-label">Needs Verification</span>
-            <div className="metric-icon-wrap" style={{ background: 'rgba(239, 68, 68, 0.12)', color: '#F87171' }}>
-              <ShieldAlert size={16} />
+            <div className="metric-icon-wrap verification">
+              <ShieldAlert size={18} />
             </div>
           </div>
           <div className="metric-value" style={{ color: metrics.ordersNeedingVerification > 0 ? '#EF4444' : 'inherit' }}>
@@ -212,8 +212,8 @@ const OverviewPage = () => {
         <div className="metric-card">
           <div className="metric-top">
             <span className="metric-label">Low-Stock SKUs</span>
-            <div className="metric-icon-wrap" style={{ background: 'rgba(245, 158, 11, 0.12)', color: '#F59E0B' }}>
-              <Package size={16} />
+            <div className="metric-icon-wrap stock">
+              <Package size={18} />
             </div>
           </div>
           <div className="metric-value" style={{ color: lowStockCount > 0 ? '#F59E0B' : 'inherit' }}>
@@ -228,8 +228,8 @@ const OverviewPage = () => {
         <div className="metric-card">
           <div className="metric-top">
             <span className="metric-label">Delivery NDR / Failed</span>
-            <div className="metric-icon-wrap" style={{ background: 'var(--color-danger-bg)', color: 'var(--color-danger)' }}>
-              <Truck size={16} />
+            <div className="metric-icon-wrap ndr">
+              <Truck size={18} />
             </div>
           </div>
           <div className="metric-value" style={{ color: metrics.failedDeliveries > 0 ? 'var(--color-danger)' : 'inherit' }}>
@@ -242,7 +242,7 @@ const OverviewPage = () => {
       </div>
 
       {/* Two Column Layout: Recent Orders Table & Low Stock Alerts */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'minmax(0, 1.6fr) minmax(0, 1fr)', gap: 'var(--space-6)', alignItems: 'start' }}>
+      <div className="overview-grid-2">
         
         {/* Recent Orders Table */}
         <div className="data-table-card">
@@ -365,25 +365,19 @@ const OverviewPage = () => {
                   return (
                     <div
                       key={p._id}
-                      style={{
-                        padding: '12px',
-                        background: 'rgba(255, 255, 255, 0.02)',
-                        border: '1px solid var(--border-subtle)',
-                        borderRadius: 'var(--radius-lg)',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'space-between'
-                      }}
+                      className="radar-risk-item"
                     >
-                      <div>
-                        <div style={{ fontWeight: 600, fontSize: '13px', color: 'var(--color-text-primary)' }}>
+                      <div className="radar-risk-info">
+                        <div className="radar-risk-title">
                           {p.title}
                         </div>
-                        <div style={{ fontSize: '11px', color: 'var(--color-text-faint)' }}>
-                          SKU: {p.sku || 'N/A'} • Threshold: {threshold}
+                        <div className="radar-risk-meta">
+                          <span>SKU: {p.sku || 'N/A'}</span>
+                          <span className="dot-sep">•</span>
+                          <span>Threshold: {threshold}</span>
                         </div>
                       </div>
-                      <div style={{ textAlign: 'right' }}>
+                      <div className="radar-risk-badge">
                         <span className={`status-badge ${isCritical ? 'badge-danger' : 'badge-warning'}`}>
                           {isCritical ? 'Stockout (0)' : `${totalStock} units left`}
                         </span>
