@@ -107,46 +107,6 @@ const FeaturesSection = () => {
         </p>
       </div>
 
-      {/* Section Sub-Header & 3 Omnichannel Media Cards (Matching Luxury Reference) */}
-      <div style={{ marginBottom: '40px', background: 'rgba(255, 255, 255, 0.7)', backdropFilter: 'blur(10px)', border: '1.5px solid rgba(186, 230, 253, 0.8)', borderRadius: '28px', padding: '32px', boxShadow: '0 16px 36px -8px rgba(14, 165, 233, 0.1)' }}>
-        <div style={{ textAlign: 'center', marginBottom: '24px' }}>
-          <span style={{ fontSize: '11px', fontWeight: 700, padding: '4px 12px', borderRadius: '20px', background: 'rgba(14, 165, 233, 0.1)', color: '#0284C7', textTransform: 'uppercase', letterSpacing: '0.06em' }}>
-            Multi-Channel Protection &amp; Policy Audit Suite
-          </span>
-          <h3 style={{ fontSize: '22px', fontWeight: 800, color: '#0F172A', marginTop: '8px', marginBottom: '6px' }}>
-            Unified Operations Across Instagram, Web Banner Flash Sales &amp; Email
-          </h3>
-          <p style={{ fontSize: '14px', color: '#64748B', maxWidth: '640px', margin: '0 auto' }}>
-            CommercePilot AI continuously inspects ad traffic, social D2C inquiries, and courier status to protect brand profitability 24/7.
-          </p>
-        </div>
-
-        {/* 3 Luxury Media Cards: Instagram Post, Web Banner, Email */}
-        <div className="omnichannel-media-grid" style={{ marginTop: '0', marginBottom: '0' }}>
-          <div className="omnichannel-media-card">
-            <img 
-              src="/assets/images/instagram-d2c-post.svg" 
-              alt="CommercePilot AI Instagram D2C Ad Protection"
-              className="omnichannel-media-img"
-            />
-          </div>
-          <div className="omnichannel-media-card">
-            <img 
-              src="/assets/images/web-banner-creative.svg" 
-              alt="CommercePilot AI Web Banner Flash Sale Protection"
-              className="omnichannel-media-img"
-            />
-          </div>
-          <div className="omnichannel-media-card">
-            <img 
-              src="/assets/images/email-campaign-creative.svg" 
-              alt="CommercePilot AI Email Campaign 1-Click Verification"
-              className="omnichannel-media-img"
-            />
-          </div>
-        </div>
-      </div>
-
       {/* Luxury Features Grid with Embedded Tactical Gadgets */}
       <div className="features-grid">
         {features.map((feature, index) => (
