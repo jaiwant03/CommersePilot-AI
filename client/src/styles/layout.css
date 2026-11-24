@@ -3084,8 +3084,8 @@ body {
 .visual-media-stack {
   position: relative;
   width: 100%;
-  max-width: 500px;
-  min-height: 460px;
+  max-width: 540px;
+  min-height: 440px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -3161,10 +3161,10 @@ body {
   left: -18px;
 }
 
-/* Big, impressive product showcase containers with distinct tangent shapes */
+/* Big, impressive product showcase containers with wide panoramic aspect */
 .visual-organic-crop {
-  width: 360px;
-  height: 440px;
+  width: 480px;
+  height: 380px;
   max-width: 100%;
   overflow: hidden;
   box-shadow: 0 25px 60px -12px rgba(15, 23, 42, 0.18), 0 0 0 4px #FFFFFF;
@@ -3182,19 +3182,19 @@ body {
 /* Distinct Tangent Geometric Shapes for Each Feature */
 /* Feature 1 (Dresses & Kurtis): Asymmetric Diagonal Tangent Wave Arch */
 .crop-kurti {
-  border-radius: 96px 24px 96px 24px;
+  border-radius: 120px 32px 120px 32px;
   transform: rotate(-1deg);
 }
 
 /* Feature 2 (Athletic Shoes): Sweeping Tangent Stadium Capsule Pill */
 .crop-warehouse {
-  border-radius: 36px 180px 36px 180px;
+  border-radius: 40px 180px 40px 180px;
   transform: rotate(1deg);
 }
 
 /* Feature 3 (Delivery Parcels): Modern Tangent Architectural Polygon */
 .crop-delivery {
-  border-radius: 120px 28px 120px 28px;
+  border-radius: 140px 36px 140px 36px;
   transform: rotate(-1deg);
 }
 
