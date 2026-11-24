@@ -3105,23 +3105,25 @@ body {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  font-size: 14px;
-  font-weight: 600;
-  color: #4F46E5;
+  font-size: 13.5px;
+  font-weight: 650;
+  color: #FFFFFF !important;
   padding: 10px 20px;
   border-radius: 10px;
-  background: #EEF2FF;
-  border: 1px solid #C7D2FE;
+  background: linear-gradient(135deg, #0F172A 0%, #1E293B 100%);
+  border: 1px solid #0F172A;
+  box-shadow: 0 4px 14px rgba(15, 23, 42, 0.16);
   text-decoration: none;
   width: fit-content;
-  transition: all 0.2s ease;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  margin-top: 6px;
 }
 
 .prod-feature-cta-btn:hover {
-  background: #4F46E5;
-  color: #FFFFFF;
-  border-color: #4F46E5;
-  transform: translateX(2px);
+  background: linear-gradient(135deg, #1E293B 0%, #334155 100%);
+  color: #FFFFFF !important;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 18px rgba(15, 23, 42, 0.22);
 }
 
 .prod-feature-visual-block {
@@ -3621,44 +3623,98 @@ body {
 /* Copilot Interactive Terminal */
 .copilot-questions-picker {
   margin-bottom: 24px;
+  width: 100%;
 }
 
 .picker-label {
   font-size: 13px;
-  font-weight: 600;
-  color: #475569;
-  margin-bottom: 10px;
-  display: block;
+  font-weight: 650;
+  color: #0F172A;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 7px;
 }
 
 .picker-chips-grid {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+  width: 100%;
+}
+
+@media (max-width: 680px) {
+  .picker-chips-grid {
+    grid-template-columns: 1fr;
+  }
 }
 
 .picker-chip {
-  padding: 8px 14px;
-  background: #F1F5F9;
-  border: 1px solid #E2E8F0;
-  border-radius: 20px;
-  font-size: 12px;
-  font-weight: 600;
+  padding: 10px 14px;
+  background: #FFFFFF;
+  border: 1px solid rgba(226, 232, 240, 0.95);
+  border-radius: 12px;
+  font-size: 12.5px;
+  font-weight: 550;
   color: #334155;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
   text-align: left;
+  line-height: 1.35;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.03);
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  height: 100%;
+}
+
+.picker-chip-bullet {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: #F1F5F9;
+  color: #64748B;
+  font-size: 11px;
+  font-weight: 750;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: all 0.2s ease;
+  border: 1px solid rgba(203, 213, 225, 0.8);
 }
 
 .picker-chip:hover {
-  background: #E2E8F0;
+  background: #F8FAFC;
+  border-color: rgba(2, 132, 199, 0.35);
+  color: #0284C7;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.05);
+}
+
+.picker-chip:hover .picker-chip-bullet {
+  background: rgba(2, 132, 199, 0.12);
+  color: #0284C7;
+  border-color: rgba(2, 132, 199, 0.3);
 }
 
 .picker-chip.active {
-  background: #4F46E5;
-  border-color: #4338CA;
+  background: linear-gradient(135deg, #0284C7 0%, #0369A1 100%);
+  border-color: #0284C7;
   color: #FFFFFF;
-  box-shadow: 0 4px 14px rgba(79, 70, 229, 0.3);
+  font-weight: 600;
+  box-shadow: 0 4px 14px rgba(2, 132, 199, 0.3);
+  transform: translateY(-1px);
+}
+
+.picker-chip.active .picker-chip-bullet {
+  background: rgba(255, 255, 255, 0.22);
+  color: #FFFFFF;
+  border-color: rgba(255, 255, 255, 0.35);
+}
+
+.picker-chip-text {
+  flex: 1;
 }
 
 .copilot-terminal-card {
