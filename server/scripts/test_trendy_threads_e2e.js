@@ -70,15 +70,17 @@ const runTrendyThreadsE2ETest = async () => {
     assert(orderTT10245.customer.address.city === 'Coimbatore', 'Customer delivery city is Coimbatore');
 
     // Run deterministic risk evaluation
-    const evaluatedRisk = await orderAutomationService.evaluateCodRisk(orderTT10245, store._id);
+    const customerWithPastRTO = { rtoHistoryCount: 1, totalOrdersCount: 2 };
+    const evaluatedRisk = orderAutomationService.evaluateCodRisk(orderTT10245, customerWithPastRTO);
     assert(evaluatedRisk.score === 65, `Deterministic COD risk score equals exactly 65/100 (Evaluated: ${evaluatedRisk.score})`);
     assert(evaluatedRisk.level === 'HIGH', `Risk tier classified as HIGH (Evaluated: ${evaluatedRisk.level})`);
-    assert(evaluatedRisk.needsVerification === true, 'Needs verification flagged for high-risk threshold (score >= 60)');
+    assert(evaluatedRisk.decision === 'REQUEST_CONFIRMATION', 'Decision flagged as REQUEST_CONFIRMATION for high-risk threshold (score >= 60)');
     
     // Check risk factors
-    const hasAddressFactor = evaluatedRisk.reasons.some(r => r.toLowerCase().includes('landmark') || r.toLowerCase().includes('incomplete'));
+    const reasons = evaluatedRisk.factors || evaluatedRisk.reasons || [];
+    const hasAddressFactor = reasons.some(r => r.toLowerCase().includes('landmark') || r.toLowerCase().includes('incomplete'));
     assert(hasAddressFactor, 'Address factor detected ("Incomplete delivery address; house number or landmark missing")');
-    const hasRtoFactor = evaluatedRisk.reasons.some(r => r.toLowerCase().includes('history') || r.toLowerCase().includes('failed'));
+    const hasRtoFactor = reasons.some(r => r.toLowerCase().includes('history') || r.toLowerCase().includes('failed') || r.toLowerCase().includes('rto'));
     assert(hasRtoFactor, 'Delivery history factor detected ("Previous failed delivery found in available order history")');
 
     // Verify 4 Verification Action State Transitions
