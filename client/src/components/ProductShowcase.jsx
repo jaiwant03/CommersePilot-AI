@@ -427,15 +427,15 @@ const ProductShowcase = () => {
                 <div className="runway-stat-pills">
                   <div className="runway-pill">
                     <span className="pill-muted">Stock</span>
-                    <span className="pill-bold">25 u</span>
+                    <span className="pill-bold"><AnimatedCounter value={25} suffix=" u" /></span>
                   </div>
                   <div className="runway-pill">
                     <span className="pill-muted">Velocity</span>
-                    <span className="pill-bold text-cyan">15/d</span>
+                    <span className="pill-bold text-cyan"><AnimatedCounter value={15} suffix="/d" /></span>
                   </div>
                   <div className="runway-pill pill-alert">
                     <span className="pill-muted">Runway</span>
-                    <span className="pill-bold text-red">1.67 D</span>
+                    <span className="pill-bold text-red"><AnimatedCounter value={1.67} decimals={2} suffix=" D" /></span>
                   </div>
                 </div>
                 <div className="auto-drafted-po-box">
@@ -445,7 +445,7 @@ const ProductShowcase = () => {
                     <span className="po-ready-pill">Ready</span>
                   </div>
                   <div className="po-box-details">
-                    Coimbatore Fabric Mills • 650 Units
+                    Coimbatore Fabric Mills • <AnimatedCounter value={650} suffix=" Units" />
                   </div>
                 </div>
               </div>
@@ -728,7 +728,9 @@ const ProductShowcase = () => {
                   <div className="kpi-card-val text-navy">
                     <AnimatedRupee value={46731} />
                   </div>
-                  <span className="luxury-trend-badge trend-up">↑ +18.4% this month</span>
+                  <span className="luxury-trend-badge trend-up">
+                    <AnimatedCounter value={18.4} decimals={1} prefix="↑ +" suffix="% this month" />
+                  </span>
                 </div>
 
                 <div className="kpi-mini-card luxury-kpi-electric">
@@ -739,7 +741,7 @@ const ProductShowcase = () => {
                   <div className="kpi-card-val text-white">
                     <AnimatedRupee value={26176} />
                   </div>
-                  <span className="luxury-margin-pill">56% Realized Margin</span>
+                  <span className="luxury-margin-pill"><AnimatedCounter value={56} suffix="% Realized Margin" /></span>
                 </div>
               </div>
 
