@@ -211,25 +211,27 @@ const HeroSection = () => {
               </div>
             </div>
 
-            {/* Bento Card 2: Blue Textured Card with Floating Task Chips */}
-            <div className="modelled-bento-card-blue">
-              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', position: 'relative', zIndex: 1 }}>
-                <span style={{ background: 'rgba(255, 255, 255, 0.22)', backdropFilter: 'blur(8px)', padding: '5px 12px', borderRadius: '20px', fontSize: '12px', fontWeight: 500 }}>
-                  ⚡ Campaign
+            {/* Bento Card 2: 3D Commerce Cart & Bags with Live Chips */}
+            <div className="modelled-bento-card-blue" style={{ position: 'relative', overflow: 'hidden', minHeight: '180px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', padding: '18px' }}>
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px', position: 'relative', zIndex: 2, maxWidth: '65%' }}>
+                <span style={{ background: 'rgba(255, 255, 255, 0.25)', backdropFilter: 'blur(8px)', padding: '4px 10px', borderRadius: '20px', fontSize: '11px', fontWeight: 600 }}>
+                  ⚡ Order #TT10245
                 </span>
-                <span style={{ background: 'rgba(255, 255, 255, 0.22)', backdropFilter: 'blur(8px)', padding: '5px 12px', borderRadius: '20px', fontSize: '12px', fontWeight: 500 }}>
-                  ✓ Checklist task
+                <span style={{ background: 'rgba(255, 255, 255, 0.25)', backdropFilter: 'blur(8px)', padding: '4px 10px', borderRadius: '20px', fontSize: '11px', fontWeight: 600 }}>
+                  🛍️ Black Kurti (1.67d)
                 </span>
-                <span style={{ background: 'rgba(255, 255, 255, 0.22)', backdropFilter: 'blur(8px)', padding: '5px 12px', borderRadius: '20px', fontSize: '12px', fontWeight: 500 }}>
-                  🎯 Strategy
+                <span style={{ background: 'rgba(255, 255, 255, 0.25)', backdropFilter: 'blur(8px)', padding: '4px 10px', borderRadius: '20px', fontSize: '11px', fontWeight: 600 }}>
+                  ✓ PO #PO-1001
                 </span>
-                <span style={{ background: 'rgba(255, 255, 255, 0.22)', backdropFilter: 'blur(8px)', padding: '5px 12px', borderRadius: '20px', fontSize: '12px', fontWeight: 500 }}>
-                  💡 Generate ideas
-                </span>
-                <span style={{ background: 'rgba(255, 255, 255, 0.22)', backdropFilter: 'blur(8px)', padding: '5px 12px', borderRadius: '20px', fontSize: '12px', fontWeight: 500 }}>
-                  ✍️ Write a supplier PO
+                <span style={{ background: 'rgba(255, 255, 255, 0.25)', backdropFilter: 'blur(8px)', padding: '4px 10px', borderRadius: '20px', fontSize: '11px', fontWeight: 600 }}>
+                  💬 WhatsApp NDR
                 </span>
               </div>
+              <img 
+                src="/assets/images/ecommerce-cart-bags-3d.png" 
+                alt="3D E-Commerce Cart & Bags" 
+                style={{ position: 'absolute', right: '-10px', bottom: '-10px', height: '145px', width: 'auto', objectFit: 'contain', zIndex: 1, filter: 'drop-shadow(0 12px 24px rgba(15, 23, 42, 0.35))' }}
+              />
             </div>
 
             {/* Bento Card 3: White AI Suggestion Card */}
@@ -244,13 +246,13 @@ const HeroSection = () => {
                   </span>
                 </div>
                 <p style={{ fontSize: '12.5px', color: '#475569', lineHeight: 1.5, margin: 0 }}>
-                  It's a new batch of eco-friendly Chanderi Sarees. Low stock runway detected.
+                  Women's Black Kurti stock runway is 1.67 days. Auto-drafted PO #PO-1001 for 100 units ready.
                 </p>
               </div>
 
               <div style={{ marginTop: '14px' }}>
                 <Link to="/app/inventory" style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', background: '#0F172A', color: '#FFFFFF', border: 'none', borderRadius: '20px', padding: '6px 16px', fontSize: '12px', fontWeight: 600, textDecoration: 'none' }}>
-                  <span>✦ Update PO</span>
+                  <span>✦ Review PO #1001</span>
                 </Link>
               </div>
             </div>
