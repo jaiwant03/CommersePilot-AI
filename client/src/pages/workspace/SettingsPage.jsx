@@ -335,13 +335,68 @@ const SettingsPage = () => {
         </div>
 
         {/* Submit Button */}
-        <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '12px' }}>
+        <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '12px', marginBottom: '32px' }}>
           <button type="submit" className="btn btn-primary" disabled={saving}>
             {saving ? <RefreshCw size={16} className="spinning" /> : <Save size={16} />}
             <span>{saving ? 'Saving Changes...' : 'Save Store Preferences'}</span>
           </button>
         </div>
       </form>
+
+      {/* Store Connection Status & Sales Channels */}
+      <div className="workspace-card" style={{ marginBottom: '24px' }}>
+        <div className="workspace-card-header">
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <Store size={18} style={{ color: '#4F46E5' }} />
+            <h2 className="workspace-card-title">Store Connection &amp; Sales Channels</h2>
+          </div>
+          <span style={{ fontSize: '11px', padding: '3px 10px', borderRadius: '9999px', background: 'rgba(16, 185, 129, 0.15)', color: '#16A34A', fontWeight: 700, border: '1px solid rgba(16, 185, 129, 0.3)' }}>
+            ● STATUS: {store?.connectionStatus || 'CONNECTED'}
+          </span>
+        </div>
+        <div className="workspace-card-body">
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '16px', marginBottom: '16px' }}>
+            <div>
+              <span style={{ fontSize: '11px', color: 'var(--color-text-faint)', fontWeight: 600 }}>OPERATING CURRENCY</span>
+              <div style={{ fontSize: '14px', fontWeight: 700, color: 'var(--color-text-primary)', marginTop: '2px' }}>
+                {store?.currency || 'INR (₹)'}
+              </div>
+            </div>
+            <div>
+              <span style={{ fontSize: '11px', color: 'var(--color-text-faint)', fontWeight: 600 }}>INTEGRATED CHANNELS</span>
+              <div style={{ fontSize: '14px', fontWeight: 700, color: 'var(--color-text-primary)', marginTop: '2px' }}>
+                {(store?.salesChannels || ['Online Store', 'Instagram', 'WhatsApp']).join(', ')}
+              </div>
+            </div>
+            <div>
+              <span style={{ fontSize: '11px', color: 'var(--color-text-faint)', fontWeight: 600 }}>LAST SYNCHRONIZATION</span>
+              <div style={{ fontSize: '14px', fontWeight: 700, color: 'var(--color-text-primary)', marginTop: '2px' }}>
+                {store?.lastSyncAt ? new Date(store.lastSyncAt).toLocaleString('en-IN') : 'Live Synced (Just now)'}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* CSV / JSON Store Data Importer */}
+      <div className="workspace-card">
+        <div className="workspace-card-header">
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <Sliders size={18} style={{ color: '#0284C7' }} />
+            <h2 className="workspace-card-title">Store Data Importer (CSV / JSON)</h2>
+          </div>
+          <span style={{ fontSize: '11px', color: 'var(--color-text-faint)' }}>
+            Bulk upload Products, Orders &amp; Inventory
+          </span>
+        </div>
+        <div className="workspace-card-body">
+          <p style={{ fontSize: '13px', color: 'var(--color-text-secondary)', marginBottom: '14px', lineHeight: 1.5 }}>
+            Paste comma-separated values (CSV) or JSON array to automatically ingest store catalogs, customer records, and orders into your tenant database with auto-mapping.
+          </p>
+
+          <DataImporterSubcomponent onImportSuccess={fetchSettings} />
+        </div>
+      </div>
     </div>
   );
 };
