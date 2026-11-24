@@ -37,11 +37,3 @@ const PricingPage = () => {
 };
 
 export default PricingPage;
-
-      <FaqSection />
-      <FinalCtaSection />
-    </div>
-  );
-};
-
-export default PricingPage;
