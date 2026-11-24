@@ -507,8 +507,8 @@ const ProductShowcase = () => {
               {/* E-Commerce Courier Shipping Parcels & Packaging */}
               <div className="visual-organic-crop crop-delivery">
                 <img 
-                  src="https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&w=800&q=80" 
-                  alt="E-Commerce Courier Shipping Parcels and Packaging" 
+                  src="https://images.unsplash.com/photo-1633174524827-db00a6b7bc74?auto=format&fit=crop&w=800&q=80" 
+                  alt="Clean E-Commerce Courier Shipping Parcels & Packaging" 
                   className="organic-img"
                 />
                 <div className="crop-live-pill">
