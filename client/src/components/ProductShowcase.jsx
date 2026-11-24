@@ -1,472 +1,963 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { 
   ShieldCheck, 
   Boxes, 
   Truck, 
   Bot, 
+  BarChart3, 
   Check, 
-  Activity, 
-  TrendingUp, 
+  ArrowRight, 
+  Sparkles, 
   CheckCircle2, 
-  ArrowRight,
-  Layers,
-  Sparkles,
+  AlertTriangle,
+  Send,
   Zap,
-  Mail,
-  Instagram,
   ShoppingBag,
-  ExternalLink
+  ExternalLink,
+  Cpu,
+  Layers,
+  ArrowUpRight,
+  Database,
+  RefreshCw,
+  Bell,
+  Smartphone,
+  Package,
+  HelpCircle
 } from 'lucide-react';
-import { Link } from 'react-router-dom';
 
 const ProductShowcase = () => {
-  const [activeTab, setActiveTab] = useState('cod');
+  // Interactive state for Feature 4: AI Operations Copilot
+  const [selectedQuestionIdx, setSelectedQuestionIdx] = useState(0);
+
+  // Copilot questions and grounded responses matching test suite data
+  const copilotQA = [
+    {
+      q: "Which products need immediate restocking?",
+      reply: "Women's Black Kurti (TT-KUR-BLK) has 1.67 days of stock left with 25 units in warehouse and 15 daily sales. Supplier PO #PO-1001 for 650 units has been prepared for Coimbatore Fabric Mills.",
+      badge: "Stockout Warning • Critical Runway",
+      badgeColor: "#EF4444"
+    },
+    {
+      q: "Which COD orders require manual review?",
+      reply: "Order #TT10245 (₹2,500) for Ananya Deshmukh in Coimbatore is flagged with a Risk Score of 65/100 (HIGH RISK) due to an incomplete street address and a past RTO record. Confirmation requested.",
+      badge: "COD Risk Score: 65/100 (HIGH)",
+      badgeColor: "#F59E0B"
+    },
+    {
+      q: "How many deliveries failed today?",
+      reply: "1 courier non-delivery report (NDR) intercepted: AWB DEL-TT10245 via Delhivery ('Customer unavailable'). Automated WhatsApp recovery was triggered; customer replied YES. Redelivery is scheduled.",
+      badge: "1 NDR Recovered (100% Rate)",
+      badgeColor: "#10B981"
+    },
+    {
+      q: "Which operational issues need my attention?",
+      reply: "2 priority actions: 1) Approve Purchase Order PO-1001 (₹45,000) for Coimbatore Fabric Mills to prevent stockout, and 2) Review Order #TT10245 if buyer does not confirm within 6 hours.",
+      badge: "2 Priority Action Items",
+      badgeColor: "#4F46E5"
+    }
+  ];
+
+  const scrollToCapabilities = () => {
+    const el = document.getElementById('capabilities-breakdown');
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  };
 
   return (
-    <div style={{ width: '100%', position: 'relative' }}>
+    <div className="product-showcase-master">
       
-      {/* Section Header */}
-      <div className="section-header" style={{ marginBottom: '36px', textAlign: 'center' }}>
-        <div className="section-tag" style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '6px 18px', background: 'rgba(186, 230, 253, 0.4)', border: '1px solid rgba(14, 165, 233, 0.4)', borderRadius: '9999px', fontSize: '13px', fontWeight: 600, color: '#0284C7', marginBottom: '16px', boxShadow: '0 2px 8px rgba(14, 165, 233, 0.1)' }}>
-          <Activity size={14} />
-          <span>Interactive Platform Architecture</span>
-        </div>
-        <h2 className="section-title" style={{ fontSize: 'clamp(2.2rem, 3.8vw, 3.2rem)', fontWeight: 800, color: '#0F172A', marginBottom: '16px', letterSpacing: '-0.03em' }}>
-          Built for High-Velocity <br />
-          <span className="text-gradient">Indian Ecommerce Operators</span>
-        </h2>
-        <p className="section-subtitle" style={{ fontSize: '16px', color: '#475569', maxWidth: '720px', margin: '0 auto', lineHeight: 1.6 }}>
-          Inspect the live autonomous pipelines and visual telemetry modules that protect your margins, eliminate RTO losses, and automate fulfillment 24/7.
-        </p>
-      </div>
+      {/* ==================================================================== */}
+      {/* 1. PRODUCT PAGE HERO: POWERFUL MARKETING & ASYMMETRIC COLLAGE       */}
+      {/* ==================================================================== */}
+      <section className="prod-hero-section">
+        <div className="prod-hero-ambient-glow" />
+        <div className="prod-blueprint-grid" />
 
-      {/* Tab Navigation Pill Bar */}
-      <div className="tab-nav" role="tablist" style={{ maxWidth: '880px', margin: '0 auto 36px', display: 'flex', gap: '8px', background: 'rgba(255, 255, 255, 0.85)', backdropFilter: 'blur(10px)', padding: '6px', borderRadius: '9999px', border: '1.5px solid rgba(186, 230, 253, 0.8)', boxShadow: '0 8px 24px -4px rgba(14, 165, 233, 0.12)' }}>
-        <button
-          type="button"
-          className={`tab-btn ${activeTab === 'cod' ? 'active' : ''}`}
-          onClick={() => setActiveTab('cod')}
-          role="tab"
-          aria-selected={activeTab === 'cod'}
-        >
-          <ShieldCheck size={16} />
-          <span>COD Risk Radar</span>
-        </button>
-
-        <button
-          type="button"
-          className={`tab-btn ${activeTab === 'inventory' ? 'active' : ''}`}
-          onClick={() => setActiveTab('inventory')}
-          role="tab"
-          aria-selected={activeTab === 'inventory'}
-        >
-          <Boxes size={16} />
-          <span>Predictive Inventory</span>
-        </button>
-
-        <button
-          type="button"
-          className={`tab-btn ${activeTab === 'ndr' ? 'active' : ''}`}
-          onClick={() => setActiveTab('ndr')}
-          role="tab"
-          aria-selected={activeTab === 'ndr'}
-        >
-          <Truck size={16} />
-          <span>NDR Delivery Recovery</span>
-        </button>
-
-        <button
-          type="button"
-          className={`tab-btn ${activeTab === 'copilot' ? 'active' : ''}`}
-          onClick={() => setActiveTab('copilot')}
-          role="tab"
-          aria-selected={activeTab === 'copilot'}
-        >
-          <Bot size={16} />
-          <span>AI Operations Copilot</span>
-        </button>
-
-        <button
-          type="button"
-          className={`tab-btn ${activeTab === 'sync' ? 'active' : ''}`}
-          onClick={() => setActiveTab('sync')}
-          role="tab"
-          aria-selected={activeTab === 'sync'}
-        >
-          <Layers size={16} />
-          <span>Multi-Store Parity</span>
-        </button>
-      </div>
-
-      {/* Tab Content Panes with Vector SVG Demonstrations */}
-      <div className="mockup-wrapper" style={{ marginBottom: '56px' }}>
-        
-        {/* Tab 1: COD Risk Radar */}
-        {activeTab === 'cod' && (
-          <div className="showcase-detail-grid">
-            <div className="showcase-info-col">
-              <span className="badge badge-indigo" style={{ marginBottom: '12px', display: 'inline-flex' }}>
-                Pre-Dispatch Risk Screening
-              </span>
-              <h3 style={{ fontSize: '24px', fontWeight: 800, color: 'var(--color-text-primary)', marginBottom: '14px' }}>
-                Deterministic COD Risk Scoring &amp; Address Verification
-              </h3>
-              <p style={{ fontSize: '14.5px', color: 'var(--color-text-secondary)', lineHeight: 1.6, marginBottom: '24px' }}>
-                Every cash-on-delivery order is scored against multiple risk signals before warehouse packaging. 
-                Incomplete addresses or repeated returners automatically receive a 1-click email confirmation with an expiring link.
-              </p>
-
-              <div className="showcase-feature-points">
-                <div className="showcase-point">
-                  <div className="showcase-point-icon">
-                    <Check size={13} />
-                  </div>
-                  <div>
-                    <strong>Automated Landmark &amp; Pin Code Validation:</strong> Identifies missing house numbers or street landmarks and prompts buyers via branded email.
-                  </div>
-                </div>
-                <div className="showcase-point">
-                  <div className="showcase-point-icon">
-                    <Check size={13} />
-                  </div>
-                  <div>
-                    <strong>Prepaid Conversion Incentive:</strong> Borderline risky orders are incentivized with an instant 5% UPI discount to convert into prepaid.
-                  </div>
-                </div>
-                <div className="showcase-point">
-                  <div className="showcase-point-icon">
-                    <Check size={13} />
-                  </div>
-                  <div>
-                    <strong>99.4% Screening Accuracy:</strong> Reduces courier freight losses and return shipping fees by over 38%.
-                  </div>
-                </div>
-              </div>
-
-              <div style={{ marginTop: '28px' }}>
-                <Link to="/signup" className="modelled-btn-cta">
-                  Test COD Verification Free
-                  <ArrowRight size={16} style={{ marginLeft: '6px' }} />
-                </Link>
-              </div>
-            </div>
-
-            <div className="showcase-visual-container">
-              <img 
-                src="/assets/images/cod-radar-visual.svg" 
-                alt="CommercePilot AI COD Risk Radar Visual Interface" 
-                style={{ width: '100%', height: 'auto', borderRadius: '16px', border: '1.5px solid rgba(186, 230, 253, 0.8)', boxShadow: '0 16px 36px -4px rgba(14, 165, 233, 0.15)' }}
-              />
-            </div>
-          </div>
-        )}
-
-        {/* Tab 2: Predictive Inventory */}
-        {activeTab === 'inventory' && (
-          <div className="showcase-detail-grid">
-            <div className="showcase-info-col">
-              <span className="badge badge-success" style={{ marginBottom: '12px', display: 'inline-flex' }}>
-                Predictive Runway Engine
-              </span>
-              <h3 style={{ fontSize: '24px', fontWeight: 800, color: 'var(--color-text-primary)', marginBottom: '14px' }}>
-                Sales Velocity &amp; Automated Supplier Purchase Orders
-              </h3>
-              <p style={{ fontSize: '14.5px', color: 'var(--color-text-secondary)', lineHeight: 1.6, marginBottom: '24px' }}>
-                Continuously calculates daily sales velocity, supplier lead times, and dynamic safety stock thresholds. 
-                When runway drops below safe limits, a ready-to-approve purchase order is automatically drafted.
-              </p>
-
-              <div className="showcase-feature-points">
-                <div className="showcase-point">
-                  <div className="showcase-point-icon">
-                    <Check size={13} />
-                  </div>
-                  <div>
-                    <strong>Exact Runway Projections:</strong> Displays days of available stock based on real trailing 7-day multi-channel sales.
-                  </div>
-                </div>
-                <div className="showcase-point">
-                  <div className="showcase-point-icon">
-                    <Check size={13} />
-                  </div>
-                  <div>
-                    <strong>Automated Supplier POs:</strong> Generates ready-to-send purchase orders addressed to your registered manufacturers.
-                  </div>
-                </div>
-                <div className="showcase-point">
-                  <div className="showcase-point-icon">
-                    <Check size={13} />
-                  </div>
-                  <div>
-                    <strong>Zero Overselling:</strong> Intelligently locks safety stock reserves across Shopify, Instagram, and WhatsApp channels.
-                  </div>
-                </div>
-              </div>
-
-              <div style={{ marginTop: '28px' }}>
-                <Link to="/signup" className="modelled-btn-cta">
-                  Prevent Stockouts Now
-                  <ArrowRight size={16} style={{ marginLeft: '6px' }} />
-                </Link>
-              </div>
-            </div>
-
-            <div className="showcase-visual-container">
-              <img 
-                src="/assets/images/inventory-radar-visual.svg" 
-                alt="CommercePilot AI Predictive Inventory Runway Interface" 
-                style={{ width: '100%', height: 'auto', borderRadius: '16px', border: '1.5px solid rgba(186, 230, 253, 0.8)', boxShadow: '0 16px 36px -4px rgba(14, 165, 233, 0.15)' }}
-              />
-            </div>
-          </div>
-        )}
-
-        {/* Tab 3: NDR Delivery Recovery */}
-        {activeTab === 'ndr' && (
-          <div className="showcase-detail-grid">
-            <div className="showcase-info-col">
-              <span className="badge badge-warning" style={{ marginBottom: '12px', display: 'inline-flex' }}>
-                Courier Event Interception
-              </span>
-              <h3 style={{ fontSize: '24px', fontWeight: 800, color: 'var(--color-text-primary)', marginBottom: '14px' }}>
-                Sub-60s Delivery Exception (NDR) Customer Recovery
-              </h3>
-              <p style={{ fontSize: '14.5px', color: 'var(--color-text-secondary)', lineHeight: 1.6, marginBottom: '24px' }}>
-                When Delhivery or BlueDart reports a failed delivery attempt ("Customer unavailable" or "Address incomplete"), 
-                CommercePilot AI immediately contacts the customer via branded email to capture a rescheduled slot.
-              </p>
-
-              <div className="showcase-feature-points">
-                <div className="showcase-point">
-                  <div className="showcase-point-icon">
-                    <Check size={13} />
-                  </div>
-                  <div>
-                    <strong>Instant Customer Outreach:</strong> Re-engages the customer while the courier rider is still in their locality.
-                  </div>
-                </div>
-                <div className="showcase-point">
-                  <div className="showcase-point-icon">
-                    <Check size={13} />
-                  </div>
-                  <div>
-                    <strong>Fake Attempt Dispute Logs:</strong> Verifies buyer availability with geolocation timestamps to penalize false courier remarks.
-                  </div>
-                </div>
-                <div className="showcase-point">
-                  <div className="showcase-point-icon">
-                    <Check size={13} />
-                  </div>
-                  <div>
-                    <strong>Automated Re-Attempt Scheduling:</strong> Syncs customer response back to carrier APIs for scheduled delivery.
-                  </div>
-                </div>
-              </div>
-
-              <div style={{ marginTop: '28px' }}>
-                <Link to="/signup" className="modelled-btn-cta">
-                  Start Courier Recovery
-                  <ArrowRight size={16} style={{ marginLeft: '6px' }} />
-                </Link>
-              </div>
-            </div>
-
-            <div className="showcase-visual-container">
-              <img 
-                src="/assets/images/ndr-recovery-visual.svg" 
-                alt="CommercePilot AI NDR Delivery Recovery Interface" 
-                style={{ width: '100%', height: 'auto', borderRadius: '16px', border: '1.5px solid rgba(186, 230, 253, 0.8)', boxShadow: '0 16px 36px -4px rgba(14, 165, 233, 0.15)' }}
-              />
-            </div>
-          </div>
-        )}
-
-        {/* Tab 4: AI Operations Copilot */}
-        {activeTab === 'copilot' && (
-          <div className="showcase-detail-grid">
-            <div className="showcase-info-col">
-              <span className="badge badge-indigo" style={{ marginBottom: '12px', display: 'inline-flex' }}>
-                Groq-Powered Intelligence
-              </span>
-              <h3 style={{ fontSize: '24px', fontWeight: 800, color: 'var(--color-text-primary)', marginBottom: '14px' }}>
-                Data-Grounded Business Intelligence &amp; Margin Analytics
-              </h3>
-              <p style={{ fontSize: '14.5px', color: 'var(--color-text-secondary)', lineHeight: 1.6, marginBottom: '24px' }}>
-                Eliminate spreadsheet chaos. Ask natural language questions about your store's performance, return patterns, 
-                and unit economics. Every answer is strictly computed from your real database with zero hallucination.
-              </p>
-
-              <div className="showcase-feature-points">
-                <div className="showcase-point">
-                  <div className="showcase-point-icon">
-                    <Check size={13} />
-                  </div>
-                  <div>
-                    <strong>Conversational Queries:</strong> "Which SKUs should I reorder?", "How many failed deliveries occurred this week?"
-                  </div>
-                </div>
-                <div className="showcase-point">
-                  <div className="showcase-point-icon">
-                    <Check size={13} />
-                  </div>
-                  <div>
-                    <strong>Realized Net Margin Tracking:</strong> Calculates true profits after deducting courier returns, COD fees, and marketing.
-                  </div>
-                </div>
-                <div className="showcase-point">
-                  <div className="showcase-point-icon">
-                    <Check size={13} />
-                  </div>
-                  <div>
-                    <strong>Automated Morning Digest:</strong> Delivers daily store performance updates directly to your seller inbox.
-                  </div>
-                </div>
-              </div>
-
-              <div style={{ marginTop: '28px' }}>
-                <Link to="/signup" className="modelled-btn-cta">
-                  Ask AI Copilot
-                  <ArrowRight size={16} style={{ marginLeft: '6px' }} />
-                </Link>
-              </div>
-            </div>
-
-            <div className="showcase-visual-container">
-              <img 
-                src="/assets/images/ai-analytics-visual.svg" 
-                alt="CommercePilot AI Copilot Analytics Interface" 
-                style={{ width: '100%', height: 'auto', borderRadius: '16px', border: '1.5px solid rgba(186, 230, 253, 0.8)', boxShadow: '0 16px 36px -4px rgba(14, 165, 233, 0.15)' }}
-              />
-            </div>
-          </div>
-        )}
-
-        {/* Tab 5: Multi-Store Parity */}
-        {activeTab === 'sync' && (
-          <div className="showcase-detail-grid">
-            <div className="showcase-info-col">
-              <span className="badge badge-success" style={{ marginBottom: '12px', display: 'inline-flex' }}>
-                Multi-Channel Inventory Ledger
-              </span>
-              <h3 style={{ fontSize: '24px', fontWeight: 800, color: 'var(--color-text-primary)', marginBottom: '14px' }}>
-                Live Ledger Synchronization Across Storefronts
-              </h3>
-              <p style={{ fontSize: '14.5px', color: 'var(--color-text-secondary)', lineHeight: 1.6, marginBottom: '24px' }}>
-                Synchronize stock availability across Shopify, Instagram D2C orders, and WooCommerce in real-time. 
-                Enforces automated safety buffers so rapid social order surges never lead to unfulfillable cancellations.
-              </p>
-
-              <div className="showcase-feature-points">
-                <div className="showcase-point">
-                  <div className="showcase-point-icon">
-                    <Check size={13} />
-                  </div>
-                  <div>
-                    <strong>Zero-Latency Webhooks:</strong> Immediate balance adjustments when an order is placed anywhere.
-                  </div>
-                </div>
-                <div className="showcase-point">
-                  <div className="showcase-point-icon">
-                    <Check size={13} />
-                  </div>
-                  <div>
-                    <strong>SKU Variant Mapping:</strong> Harmonizes different naming conventions and sizes across storefronts.
-                  </div>
-                </div>
-                <div className="showcase-point">
-                  <div className="showcase-point-icon">
-                    <Check size={13} />
-                  </div>
-                  <div>
-                    <strong>Channel Prioritization:</strong> Allocates high-margin inventory to your most profitable channels first.
-                  </div>
-                </div>
-              </div>
-
-              <div style={{ marginTop: '28px' }}>
-                <Link to="/signup" className="modelled-btn-cta">
-                  Sync Multi-Channel Catalog
-                  <ArrowRight size={16} style={{ marginLeft: '6px' }} />
-                </Link>
-              </div>
-            </div>
-
-            <div className="showcase-visual-container">
-              <img 
-                src="/assets/images/omnichannel-sync-visual.svg" 
-                alt="CommercePilot AI Multi-Channel Synchronization" 
-                style={{ width: '100%', height: 'auto', borderRadius: '16px', border: '1.5px solid rgba(186, 230, 253, 0.8)', boxShadow: '0 16px 36px -4px rgba(14, 165, 233, 0.15)' }}
-              />
-            </div>
-          </div>
-        )}
-
-      </div>
-
-      {/* NEW SECTION: Omnichannel Brand & Media Protection Showcase (Matching Image 4) */}
-      <div style={{ marginTop: '64px', paddingTop: '48px', borderTop: '1.5px solid rgba(186, 230, 253, 0.6)' }}>
-        <div style={{ textAlign: 'center', marginBottom: '28px' }}>
-          <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '5px 16px', background: 'rgba(14, 165, 233, 0.1)', border: '1px solid rgba(14, 165, 233, 0.3)', borderRadius: '9999px', fontSize: '12.5px', fontWeight: 600, color: '#0284C7', marginBottom: '12px' }}>
-            <Sparkles size={13} />
-            <span>Multi-Touchpoint Brand Protection</span>
-          </div>
-          <h3 style={{ fontSize: 'clamp(1.8rem, 3vw, 2.5rem)', fontWeight: 800, color: '#0F172A', letterSpacing: '-0.025em', marginBottom: '12px' }}>
-            Protect Every Customer Touchpoint in Real Time
-          </h3>
-          <p style={{ fontSize: '15px', color: '#64748B', maxWidth: '680px', margin: '0 auto', lineHeight: 1.6 }}>
-            CommercePilot AI continuously inspects ad traffic, web promotion spikes, and email fulfillment batches 
-            to block fraudulent orders and enforce automated safety stock buffers.
-          </p>
-        </div>
-
-        {/* 3 Luxury Visual Cards Grid (Instagram Post, Web Banner, Email Campaign) */}
-        <div className="omnichannel-media-grid">
+        <div className="prod-hero-inner">
           
-          {/* Card 1: Instagram Post */}
-          <div className="omnichannel-media-card">
-            <img 
-              src="/assets/images/instagram-d2c-post.svg" 
-              alt="CommercePilot AI Instagram D2C Ad Protection"
-              className="omnichannel-media-img"
-            />
+          {/* Left Column: Value Messaging */}
+          <div className="prod-hero-text-col">
+            <div className="prod-hero-eyebrow">
+              <Sparkles size={14} className="prod-eyebrow-sparkle" />
+              <span>THE INTELLIGENCE ENGINE FOR MODERN COMMERCE</span>
+            </div>
+
+            <h1 className="prod-hero-title">
+              YOUR COMMERCE BUSINESS. <br />
+              ON AUTOPILOT. <br />
+              <span className="prod-title-gradient">POWERED BY AI.</span>
+            </h1>
+
+            <p className="prod-hero-desc">
+              From preventing risky COD orders to predicting stock shortages and recovering failed deliveries, 
+              CommercePilot AI transforms everyday e-commerce operations into intelligent, automated workflows.
+            </p>
+
+            {/* Three Concise Value Propositions */}
+            <div className="prod-value-props-list">
+              <div className="prod-value-prop-item">
+                <div className="prod-check-circle">
+                  <Check size={12} strokeWidth={3} />
+                </div>
+                <span>Prevent revenue losses before they happen.</span>
+              </div>
+              <div className="prod-value-prop-item">
+                <div className="prod-check-circle">
+                  <Check size={12} strokeWidth={3} />
+                </div>
+                <span>Predict inventory needs before products run out.</span>
+              </div>
+              <div className="prod-value-prop-item">
+                <div className="prod-check-circle">
+                  <Check size={12} strokeWidth={3} />
+                </div>
+                <span>Recover failed deliveries without manual follow-ups.</span>
+              </div>
+            </div>
+
+            {/* Hero CTAs */}
+            <div className="prod-hero-ctas">
+              <button 
+                type="button" 
+                onClick={scrollToCapabilities}
+                className="prod-btn-primary"
+              >
+                <span>Explore AI Capabilities</span>
+                <ArrowRight size={15} />
+              </button>
+              <Link to="/app/overview" className="prod-btn-secondary">
+                <span>Launch Workspace</span>
+                <ArrowUpRight size={15} />
+              </Link>
+            </div>
+
+            {/* Trust-Oriented Indicator */}
+            <div className="prod-trust-bar">
+              <CheckCircle2 size={15} className="prod-trust-check-icon" />
+              <span>One intelligent platform. Four essential commerce operations. Continuous business visibility.</span>
+            </div>
           </div>
 
-          {/* Card 2: Web Banner */}
-          <div className="omnichannel-media-card">
-            <img 
-              src="/assets/images/web-banner-creative.svg" 
-              alt="CommercePilot AI Web Banner Flash Sale Protection"
-              className="omnichannel-media-img"
-            />
-          </div>
+          {/* Right Column: Creative Asymmetric Shopping Image Collage */}
+          <div className="prod-hero-visual-col">
+            <div className="prod-collage-canvas">
+              
+              {/* Main Feature Image: Elegant Indian Ethnic Model in Arch Mask */}
+              <div className="collage-shape-arch">
+                <img 
+                  src="https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=800&q=80" 
+                  alt="Indian Ethnic Fashion Kurti Collection" 
+                  className="collage-img-arch"
+                />
+                <div className="collage-arch-overlay" />
+              </div>
 
-          {/* Card 3: Email Campaign */}
-          <div className="omnichannel-media-card">
-            <img 
-              src="/assets/images/email-campaign-creative.svg" 
-              alt="CommercePilot AI Email Campaign 1-Click Verification"
-              className="omnichannel-media-img"
-            />
+              {/* Floating 3D Gift Shopping Bags (Top-Right Angle) */}
+              <div className="collage-floating-bags">
+                <img 
+                  src="/assets/images/3d-shopping-cart.svg" 
+                  alt="3D Miniature Wire Shopping Cart with Purple & Blue Bags" 
+                  className="collage-bags-svg"
+                />
+              </div>
+
+              {/* Shipping Package Card (Bottom-Left) */}
+              <div className="collage-package-card">
+                <div className="package-card-icon-box">
+                  <Package size={18} />
+                </div>
+                <div>
+                  <div className="package-card-title">Order #TT10245</div>
+                  <div className="package-card-meta">₹2,500 • Prepaid Verified</div>
+                </div>
+                <span className="package-status-tag">Ready to Pack</span>
+              </div>
+
+              {/* Mobile Shopping Verified Screen (Floating Right) */}
+              <div className="collage-mobile-card">
+                <div className="mobile-card-header">
+                  <span className="mobile-signal-dot" />
+                  <span>Live Telemetry</span>
+                </div>
+                <div className="mobile-card-body">
+                  <div className="mobile-card-metric">
+                    <span className="metric-label">Stock Runway</span>
+                    <span className="metric-val text-cyan">1.67 Days</span>
+                  </div>
+                  <div className="mobile-card-metric">
+                    <span className="metric-label">Courier Recovery</span>
+                    <span className="metric-val text-green">91% Recovered</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Subtle Floating AI Intelligence Status Indicators */}
+              <div className="collage-ai-chip chip-1">
+                <div className="ai-chip-pulsar pulse-indigo" />
+                <span>Deterministic COD Risk: Evaluated</span>
+              </div>
+
+              <div className="collage-ai-chip chip-2">
+                <div className="ai-chip-pulsar pulse-green" />
+                <span>n8n Pipeline: Active 24/7</span>
+              </div>
+
+            </div>
           </div>
 
         </div>
+      </section>
 
-        {/* Brand Economics Bar */}
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '32px', flexWrap: 'wrap', padding: '20px 24px', background: 'rgba(255, 255, 255, 0.8)', border: '1px solid rgba(186, 230, 253, 0.8)', borderRadius: '20px', marginTop: '32px', boxShadow: '0 8px 20px -4px rgba(14, 165, 233, 0.08)' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-            <div style={{ width: '10px', height: '10px', borderRadius: '50%', background: '#10B981', boxShadow: '0 0 8px rgba(16, 185, 129, 0.6)' }}></div>
-            <span style={{ fontSize: '13px', fontWeight: 600, color: '#0F172A' }}>Zero Overselling Guaranteed</span>
+      {/* Anchor for Smooth Scroll */}
+      <div id="capabilities-breakdown" />
+
+      {/* ==================================================================== */}
+      {/* 2. FIVE INDIVIDUAL VISUAL STORYTELLING CAPABILITIES                  */}
+      {/* ==================================================================== */}
+
+      {/* ------------------------------------------------------------------ */}
+      {/* FEATURE 01: SMART COD RISK VERIFICATION                           */}
+      {/* ------------------------------------------------------------------ */}
+      <section className="prod-feature-story">
+        <div className="prod-feature-container">
+          
+          <div className="prod-feature-text-block">
+            <span className="prod-feature-eyebrow">PROTECT EVERY ORDER</span>
+            <h2 className="prod-feature-heading">
+              STOP LOSING MONEY TO ORDERS THAT SHOULD NEVER HAVE SHIPPED.
+            </h2>
+            <p className="prod-feature-desc">
+              Not every order deserves immediate dispatch. CommercePilot AI evaluates incoming Cash-on-Delivery orders 
+              using address completeness, order history and available risk signals, helping businesses identify potentially 
+              risky orders before they become expensive returns.
+            </p>
+
+            <div className="prod-feature-highlights">
+              <div className="highlight-row">
+                <div className="highlight-bullet"><Check size={12} strokeWidth={3} /></div>
+                <span>Address completeness verification and landmark checking</span>
+              </div>
+              <div className="highlight-row">
+                <div className="highlight-bullet"><Check size={12} strokeWidth={3} /></div>
+                <span>Historical delivery risk and prior RTO pattern analysis</span>
+              </div>
+              <div className="highlight-row">
+                <div className="highlight-bullet"><Check size={12} strokeWidth={3} /></div>
+                <span>Customer confirmation workflows via 1-click tokenized emails</span>
+              </div>
+              <div className="highlight-row">
+                <div className="highlight-bullet"><Check size={12} strokeWidth={3} /></div>
+                <span>Pre-dispatch risk assessment before warehouse packing begins</span>
+              </div>
+            </div>
+
+            <Link to="/app/orders" className="prod-feature-cta-btn">
+              <span>Discover Smart Order Verification</span>
+              <ArrowRight size={14} />
+            </Link>
           </div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-            <div style={{ width: '10px', height: '10px', borderRadius: '50%', background: '#0284C7', boxShadow: '0 0 8px rgba(2, 132, 199, 0.6)' }}></div>
-            <span style={{ fontSize: '13px', fontWeight: 600, color: '#0F172A' }}>Sub-60s Verification Latency</span>
+
+          <div className="prod-feature-visual-block">
+            <div className="visual-media-stack">
+              {/* Organic Shape Fashion Order Photography */}
+              <div className="visual-organic-crop crop-kurti">
+                <img 
+                  src="https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?auto=format&fit=crop&w=700&q=80" 
+                  alt="Customer Fashion Kurti Order" 
+                  className="organic-img"
+                />
+              </div>
+
+              {/* Floating Live Risk Radar Card */}
+              <div className="floating-telemetry-badge badge-risk">
+                <div className="telemetry-badge-header">
+                  <ShieldCheck size={16} className="text-amber" />
+                  <span className="telemetry-badge-title">COD Risk Radar Evaluation</span>
+                </div>
+                <div className="telemetry-score-row">
+                  <span className="telemetry-big-score text-amber">65/100</span>
+                  <span className="telemetry-tier-tag tier-high">HIGH RISK</span>
+                </div>
+                <div className="telemetry-reasons-list">
+                  <div className="reason-item">⚠ Incomplete address: Missing house/street landmark</div>
+                  <div className="reason-item">⚠ Previous failed delivery in order history</div>
+                </div>
+                <div className="telemetry-action-hint">
+                  Decision: <strong>REQUEST_CONFIRMATION</strong>
+                </div>
+              </div>
+            </div>
           </div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-            <div style={{ width: '10px', height: '10px', borderRadius: '50%', background: '#8B5CF6', boxShadow: '0 0 8px rgba(139, 92, 246, 0.6)' }}></div>
-            <span style={{ fontSize: '13px', fontWeight: 600, color: '#0F172A' }}>Multi-Channel Shopify &amp; Instagram Sync</span>
+
+        </div>
+      </section>
+
+      {/* ------------------------------------------------------------------ */}
+      {/* FEATURE 02: PREDICTIVE INVENTORY INTELLIGENCE                      */}
+      {/* ------------------------------------------------------------------ */}
+      <section className="prod-feature-story reverse">
+        <div className="prod-feature-container">
+          
+          <div className="prod-feature-text-block">
+            <span className="prod-feature-eyebrow">NEVER MISS A RESTOCK MOMENT</span>
+            <h2 className="prod-feature-heading">
+              YOUR NEXT STOCKOUT SHOULDN'T BE A SURPRISE.
+            </h2>
+            <p className="prod-feature-desc">
+              CommercePilot AI analyzes inventory levels and sales velocity to identify products approaching stockout conditions. 
+              Get intelligent reorder recommendations and prepare supplier purchase orders before demand exceeds available stock.
+            </p>
+
+            <div className="prod-feature-highlights">
+              <div className="highlight-row">
+                <div className="highlight-bullet"><Check size={12} strokeWidth={3} /></div>
+                <span>Continuous multi-channel inventory buffer monitoring</span>
+              </div>
+              <div className="highlight-row">
+                <div className="highlight-bullet"><Check size={12} strokeWidth={3} /></div>
+                <span>Sales velocity analysis across trailing 7-day demand spikes</span>
+              </div>
+              <div className="highlight-row">
+                <div className="highlight-bullet"><Check size={12} strokeWidth={3} /></div>
+                <span>Estimated days-of-stock calculations against supplier lead times</span>
+              </div>
+              <div className="highlight-row">
+                <div className="highlight-bullet"><Check size={12} strokeWidth={3} /></div>
+                <span>Reorder recommendations with auto-drafted supplier purchase orders</span>
+              </div>
+              <div className="highlight-row">
+                <div className="highlight-bullet"><Check size={12} strokeWidth={3} /></div>
+                <span>Purchase-order draft preparation ready for 1-click merchant sign-off</span>
+              </div>
+            </div>
+
+            <Link to="/app/inventory" className="prod-feature-cta-btn">
+              <span>Explore Predictive Inventory</span>
+              <ArrowRight size={14} />
+            </Link>
+          </div>
+
+          <div className="prod-feature-visual-block">
+            <div className="visual-media-stack">
+              {/* Apparel Warehouse Racks Photography with Asymmetric Mask */}
+              <div className="visual-organic-crop crop-warehouse">
+                <img 
+                  src="https://images.unsplash.com/photo-1558769132-cb1aea458c5e?auto=format&fit=crop&w=700&q=80" 
+                  alt="Indian Fashion Warehouse Garment Racks" 
+                  className="organic-img"
+                />
+              </div>
+
+              {/* Floating Inventory Runway Card */}
+              <div className="floating-telemetry-badge badge-runway">
+                <div className="telemetry-badge-header">
+                  <Boxes size={16} className="text-cyan" />
+                  <span className="telemetry-badge-title">Predictive Runway Alert</span>
+                </div>
+                <div className="telemetry-sku-title">Women's Black Kurti (TT-KUR-BLK)</div>
+                <div className="runway-stat-pills">
+                  <div className="runway-pill">
+                    <span className="pill-muted">Stock</span>
+                    <span className="pill-bold">25 units</span>
+                  </div>
+                  <div className="runway-pill">
+                    <span className="pill-muted">Velocity</span>
+                    <span className="pill-bold">15/day</span>
+                  </div>
+                  <div className="runway-pill pill-alert">
+                    <span className="pill-muted">Runway</span>
+                    <span className="pill-bold">1.67 Days</span>
+                  </div>
+                </div>
+                <div className="auto-drafted-po-box">
+                  <div className="po-box-header">
+                    <Sparkles size={12} className="text-indigo" />
+                    <span>Auto-Drafted PO #PO-1001</span>
+                  </div>
+                  <div className="po-box-details">
+                    Supplier: Coimbatore Fabric Mills • 650 Units (₹45,000)
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      {/* ------------------------------------------------------------------ */}
+      {/* FEATURE 03: NDR DELIVERY RECOVERY                                  */}
+      {/* ------------------------------------------------------------------ */}
+      <section className="prod-feature-story">
+        <div className="prod-feature-container">
+          
+          <div className="prod-feature-text-block">
+            <span className="prod-feature-eyebrow">TURN FAILED DELIVERIES INTO RECOVERED ORDERS</span>
+            <h2 className="prod-feature-heading">
+              A FAILED DELIVERY DOESN'T HAVE TO MEAN A LOST CUSTOMER.
+            </h2>
+            <p className="prod-feature-desc">
+              When a delivery attempt fails, CommercePilot AI helps initiate timely customer follow-ups, capture redelivery responses 
+              and keep business owners informed. Recover opportunities that might otherwise disappear in manual delivery tracking.
+            </p>
+
+            <div className="prod-feature-highlights">
+              <div className="highlight-row">
+                <div className="highlight-bullet"><Check size={12} strokeWidth={3} /></div>
+                <span>Sub-60 second courier non-delivery report (NDR) interception</span>
+              </div>
+              <div className="highlight-row">
+                <div className="highlight-bullet"><Check size={12} strokeWidth={3} /></div>
+                <span>Automated customer follow-ups via branded email and approved WhatsApp flows</span>
+              </div>
+              <div className="highlight-row">
+                <div className="highlight-bullet"><Check size={12} strokeWidth={3} /></div>
+                <span>Direct customer response tracking: Capture "YES" confirmations or address changes</span>
+              </div>
+              <div className="highlight-row">
+                <div className="highlight-bullet"><Check size={12} strokeWidth={3} /></div>
+                <span>Automated redelivery re-attempt scheduling with carrier APIs</span>
+              </div>
+            </div>
+
+            <Link to="/app/deliveries" className="prod-feature-cta-btn">
+              <span>Explore Delivery Recovery</span>
+              <ArrowRight size={14} />
+            </Link>
+          </div>
+
+          <div className="prod-feature-visual-block">
+            <div className="visual-media-stack">
+              {/* Courier Delivery Logistics Photography in Arch Crop */}
+              <div className="visual-organic-crop crop-delivery">
+                <img 
+                  src="https://images.unsplash.com/photo-1526367790999-0150786686a2?auto=format&fit=crop&w=700&q=80" 
+                  alt="Courier Logistics Delivery Operations" 
+                  className="organic-img"
+                />
+              </div>
+
+              {/* Floating WhatsApp / NDR Message Simulation Card */}
+              <div className="floating-telemetry-badge badge-ndr">
+                <div className="telemetry-badge-header">
+                  <Truck size={16} className="text-green" />
+                  <span className="telemetry-badge-title">WhatsApp Customer NDR Flow</span>
+                </div>
+                <div className="whatsapp-chat-bubble">
+                  <div className="whatsapp-bubble-text">
+                    "Hello! Your Trendy Threads order TT10245 could not be delivered because you were unavailable. Would you like us to arrange another delivery attempt? Reply YES to request redelivery."
+                  </div>
+                  <div className="whatsapp-bubble-time">10:42 AM • Delivered</div>
+                </div>
+                <div className="whatsapp-reply-bubble">
+                  <span>YES, please deliver tomorrow between 2-5 PM</span>
+                  <div className="reply-check-double">✓✓</div>
+                </div>
+                <div className="ndr-status-recovered">
+                  <CheckCircle2 size={13} />
+                  <span>Status: OUT_FOR_DELIVERY (Attempt #2 Scheduled)</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      {/* ------------------------------------------------------------------ */}
+      {/* FEATURE 04: AI OPERATIONS COPILOT                                  */}
+      {/* ------------------------------------------------------------------ */}
+      <section className="prod-feature-story reverse">
+        <div className="prod-feature-container">
+          
+          <div className="prod-feature-text-block">
+            <span className="prod-feature-eyebrow">YOUR BUSINESS. ONE INTELLIGENT ASSISTANT.</span>
+            <h2 className="prod-feature-heading">
+              STOP SWITCHING BETWEEN TOOLS TO UNDERSTAND YOUR BUSINESS.
+            </h2>
+            <p className="prod-feature-desc">
+              Ask questions about your commerce operations in natural language. CommercePilot AI connects business information 
+              with intelligent analysis to help you understand orders, inventory, delivery issues and operational priorities.
+            </p>
+
+            {/* Clickable Example Questions */}
+            <div className="copilot-questions-picker">
+              <span className="picker-label">Click an example question to see live AI analysis:</span>
+              <div className="picker-chips-grid">
+                {copilotQA.map((item, idx) => (
+                  <button
+                    key={idx}
+                    type="button"
+                    onClick={() => setSelectedQuestionIdx(idx)}
+                    className={`picker-chip ${selectedQuestionIdx === idx ? 'active' : ''}`}
+                  >
+                    <span>{item.q}</span>
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <Link to="/app/assistant" className="prod-feature-cta-btn">
+              <span>Meet Your AI Copilot</span>
+              <ArrowRight size={14} />
+            </Link>
+          </div>
+
+          <div className="prod-feature-visual-block">
+            <div className="copilot-terminal-card">
+              <div className="terminal-header">
+                <div className="terminal-brand-group">
+                  <div className="terminal-logo-box">
+                    <Bot size={14} />
+                  </div>
+                  <div>
+                    <div className="terminal-app-title">CommercePilot AI Assistant</div>
+                    <div className="terminal-grounded-tag">100% Grounded in Live Store DB</div>
+                  </div>
+                </div>
+                <span className="live-badge-green">● Ready</span>
+              </div>
+
+              {/* Chat View */}
+              <div className="terminal-chat-body">
+                {/* User Message */}
+                <div className="terminal-user-msg">
+                  <span>{copilotQA[selectedQuestionIdx].q}</span>
+                </div>
+
+                {/* AI Assistant Grounded Response */}
+                <div className="terminal-ai-msg">
+                  <div className="ai-msg-avatar">
+                    <Sparkles size={12} />
+                  </div>
+                  <div className="ai-msg-content">
+                    <div className="ai-msg-badge" style={{ color: copilotQA[selectedQuestionIdx].badgeColor }}>
+                      ● {copilotQA[selectedQuestionIdx].badge}
+                    </div>
+                    <p>{copilotQA[selectedQuestionIdx].reply}</p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="terminal-footer-input">
+                <span className="input-placeholder-text">Ask any question about orders, stock, or deliveries...</span>
+                <button type="button" className="terminal-send-btn" aria-label="Send query">
+                  <Send size={12} />
+                </button>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      {/* ------------------------------------------------------------------ */}
+      {/* FEATURE 05: BUSINESS INTELLIGENCE                                  */}
+      {/* ------------------------------------------------------------------ */}
+      <section className="prod-feature-story">
+        <div className="prod-feature-container">
+          
+          <div className="prod-feature-text-block">
+            <span className="prod-feature-eyebrow">DECISIONS BACKED BY BUSINESS DATA</span>
+            <h2 className="prod-feature-heading">
+              KNOW WHAT'S HAPPENING. KNOW WHAT TO DO NEXT.
+            </h2>
+            <p className="prod-feature-desc">
+              Transform your commerce data into understandable business intelligence. Explore sales trends, product performance, 
+              customer activity and operational metrics through intelligent reports and visual analytics.
+            </p>
+
+            <div className="prod-feature-highlights">
+              <div className="highlight-row">
+                <div className="highlight-bullet"><Check size={12} strokeWidth={3} /></div>
+                <span>True Net Profit Tracking: Gross Revenue (₹46,731) strictly distinguished from Net Margin (₹26,176) after COGS</span>
+              </div>
+              <div className="highlight-row">
+                <div className="highlight-bullet"><Check size={12} strokeWidth={3} /></div>
+                <span>Product performance analysis: Instant margin ranking across Sarees, Kurtis, and Dresses</span>
+              </div>
+              <div className="highlight-row">
+                <div className="highlight-bullet"><Check size={12} strokeWidth={3} /></div>
+                <span>Customer repeat behaviour: Identify loyal buyers to lower acquisition costs</span>
+              </div>
+              <div className="highlight-row">
+                <div className="highlight-bullet"><Check size={12} strokeWidth={3} /></div>
+                <span>Operational performance monitoring: Pinpoint courier return patterns across pin codes</span>
+              </div>
+              <div className="highlight-row">
+                <div className="highlight-bullet"><Check size={12} strokeWidth={3} /></div>
+                <span>AI-generated business recommendations: Actionable next steps, not confusing spreadsheets</span>
+              </div>
+            </div>
+
+            <Link to="/app/analytics" className="prod-feature-cta-btn">
+              <span>Explore Business Intelligence</span>
+              <ArrowRight size={14} />
+            </Link>
+          </div>
+
+          <div className="prod-feature-visual-block">
+            <div className="analytics-visual-dashboard">
+              
+              {/* Financial KPI Summary Cards */}
+              <div className="kpi-two-col-grid">
+                <div className="kpi-mini-card">
+                  <span className="kpi-card-label">Gross Revenue (GMV)</span>
+                  <span className="kpi-card-val text-navy">₹46,731</span>
+                  <span className="kpi-card-trend trend-up">↑ +18.4% this month</span>
+                </div>
+                <div className="kpi-mini-card highlight-profit">
+                  <span className="kpi-card-label">Realized Net Profit</span>
+                  <span className="kpi-card-val text-indigo">₹26,176</span>
+                  <span className="kpi-card-sub">56% Realized Margin</span>
+                </div>
+              </div>
+
+              {/* Top Margin Product Catalog Card */}
+              <div className="top-margin-card">
+                <div className="top-margin-header">
+                  <BarChart3 size={15} className="text-cyan" />
+                  <span>High-Margin Product Performance</span>
+                </div>
+                <div className="margin-item-row">
+                  <div className="item-name-col">
+                    <span className="item-title">Chanderi Silk Saree</span>
+                    <span className="item-sku">SKU: TT-SAR-SILK</span>
+                  </div>
+                  <div className="item-stat-col">
+                    <span className="margin-percent">68% Margin</span>
+                    <span className="margin-rupee">₹1,850 Profit/Unit</span>
+                  </div>
+                </div>
+                <div className="margin-item-row">
+                  <div className="item-name-col">
+                    <span className="item-title">Handloom Cotton Kurti</span>
+                    <span className="item-sku">SKU: TT-KUR-COT</span>
+                  </div>
+                  <div className="item-stat-col">
+                    <span className="margin-percent">54% Margin</span>
+                    <span className="margin-rupee">₹720 Profit/Unit</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Repeat Buyer Cohort Tag */}
+              <div className="retention-cohort-tag">
+                <div className="cohort-dot" />
+                <span>Repeat Buyer Cohort: 14% of customers drive 32% of total store profits</span>
+              </div>
+
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      {/* ==================================================================== */}
+      {/* 3. REAL-WORLD BUSINESS STORYTELLING: TRENDY THREADS COIMBATORE       */}
+      {/* ==================================================================== */}
+      <section className="prod-storytelling-section">
+        <div className="storytelling-container">
+          
+          <div className="storytelling-header">
+            <span className="storytelling-eyebrow">REAL-WORLD COMMERCE SCENARIO</span>
+            <h2 className="storytelling-title">
+              BUILT FOR THE REAL CHALLENGES BEHIND EVERY ONLINE ORDER.
+            </h2>
+            <p className="storytelling-desc">
+              Meet Trendy Threads, a growing online fashion business in Coimbatore. With hundreds of monthly orders 
+              across Instagram, WhatsApp and its online store, managing orders, inventory and deliveries manually 
+              becomes increasingly difficult.
+            </p>
+          </div>
+
+          {/* Entrepreneur Lifestyle Visual Composition */}
+          <div className="storytelling-hero-grid">
+            
+            <div className="storytelling-photo-col">
+              <div className="lifestyle-image-frame">
+                <img 
+                  src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=800&q=80" 
+                  alt="Priya, Founder of Trendy Threads Coimbatore" 
+                  className="lifestyle-img"
+                />
+                <div className="lifestyle-caption-card">
+                  <div className="caption-avatar">P</div>
+                  <div>
+                    <div className="caption-name">Priya Sundaram</div>
+                    <div className="caption-role">Founder, Trendy Threads • Coimbatore, Tamil Nadu</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="storytelling-profile-col">
+              <div className="store-profile-card">
+                <h3 className="profile-card-title">Trendy Threads Business Profile</h3>
+                <p className="profile-card-summary">
+                  Independent women's ethnic fashion brand receiving ~500 monthly orders across three fragmented channels: 
+                  direct website, Instagram DM selling, and WhatsApp catalogs.
+                </p>
+
+                <div className="profile-metrics-list">
+                  <div className="profile-metric">
+                    <span className="m-label">Product Categories</span>
+                    <span className="m-val">Women's Kurtis, Sarees, Jeans, Dresses, Accessories</span>
+                  </div>
+                  <div className="profile-metric">
+                    <span className="m-label">Active Channels</span>
+                    <span className="m-val">Shopify Storefront • Instagram D2C • WhatsApp Business</span>
+                  </div>
+                  <div className="profile-metric">
+                    <span className="m-label">Location &amp; Currency</span>
+                    <span className="m-val">Coimbatore, Tamil Nadu • Default Currency: INR (₹)</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          {/* Four Real-World Operational Situations Grid */}
+          <div className="scenarios-grid">
+            
+            {/* Situation 1 */}
+            <div className="scenario-card">
+              <div className="scenario-header">
+                <div className="scenario-num-badge">01</div>
+                <span className="scenario-type-tag">COD Order Risk</span>
+              </div>
+              <h4 className="scenario-title">Potentially Risky ₹2,500 COD Order</h4>
+              <p className="scenario-text">
+                Order #TT10245 placed via Cash-on-Delivery with an incomplete street address in Coimbatore. 
+                CommercePilot AI's deterministic engine flags a risk score of <strong>65/100 (HIGH)</strong> and 
+                dispatches a tokenized confirmation request before warehouse packaging.
+              </p>
+              <div className="scenario-footer-status status-amber">
+                ● Action: Confirmation Requested Before Dispatch
+              </div>
+            </div>
+
+            {/* Situation 2 */}
+            <div className="scenario-card">
+              <div className="scenario-header">
+                <div className="scenario-num-badge">02</div>
+                <span className="scenario-type-tag">Predictive Inventory</span>
+              </div>
+              <h4 className="scenario-title">Black Kurti: 25 Units Left / 15 Daily Sales</h4>
+              <p className="scenario-text">
+                Sales velocity shows 15 units/day with only 25 units in warehouse—yielding an urgent <strong>1.67 days of stock runway</strong>. 
+                CommercePilot AI auto-drafts Purchase Order #PO-1001 for 650 units with Coimbatore Fabric Mills.
+              </p>
+              <div className="scenario-footer-status status-red">
+                ● Action: Critical Runway Alert &amp; PO Ready to Approve
+              </div>
+            </div>
+
+            {/* Situation 3 */}
+            <div className="scenario-card">
+              <div className="scenario-header">
+                <div className="scenario-num-badge">03</div>
+                <span className="scenario-type-tag">Delivery Failure</span>
+              </div>
+              <h4 className="scenario-title">Failed Delivery Requiring Follow-Up</h4>
+              <p className="scenario-text">
+                Shipment DEL-TT10245 fails delivery with carrier status "Customer unavailable". Within seconds, an automated 
+                WhatsApp recovery message is dispatched. The customer replies "YES" and redelivery is automatically booked.
+              </p>
+              <div className="scenario-footer-status status-green">
+                ● Action: 100% Automated Courier Re-Attempt Scheduled
+              </div>
+            </div>
+
+            {/* Situation 4 */}
+            <div className="scenario-card">
+              <div className="scenario-header">
+                <div className="scenario-num-badge">04</div>
+                <span className="scenario-type-tag">Grounded Copilot</span>
+              </div>
+              <h4 className="scenario-title">AI Assistant Restock Guidance</h4>
+              <p className="scenario-text">
+                Priya asks her AI Operations Copilot: <em>"Which products should I reorder immediately?"</em> 
+                The copilot queries MongoDB in real-time, identifies the Black Kurti's 1.67-day runway, and presents PO #1001 for one-click approval.
+              </p>
+              <div className="scenario-footer-status status-indigo">
+                ● Action: Real-Time Data Grounded Intelligence
+              </div>
+            </div>
+
+          </div>
+
+          <div className="demonstration-notice-bar">
+            <span>*Demonstration data grounded in live Trendy Threads store operations. Verified 100% operational in test suite.</span>
+          </div>
+
+        </div>
+      </section>
+
+      {/* ==================================================================== */}
+      {/* 4. N8N AUTOMATION ENGINE SHOWCASE                                    */}
+      {/* ==================================================================== */}
+      <section className="prod-n8n-showcase">
+        <div className="n8n-inner-container">
+          
+          <div className="n8n-header">
+            <span className="n8n-eyebrow">AUTOMATED EXECUTION PIPELINE</span>
+            <h2 className="n8n-title">
+              INTELLIGENCE MAKES THE DECISION. AUTOMATION MAKES IT HAPPEN.
+            </h2>
+            <p className="n8n-desc">
+              CommercePilot AI combines intelligent analysis with n8n-powered automation workflows to connect business events, 
+              processing pipelines and actionable outcomes.
+            </p>
+          </div>
+
+          {/* Connected Horizontal Workflow Architecture Diagram */}
+          <div className="n8n-pipeline-flow">
+            
+            {/* Step 1 */}
+            <div className="flow-node">
+              <div className="node-icon-box box-blue">
+                <ShoppingBag size={20} />
+              </div>
+              <div className="node-step-tag">Step 01</div>
+              <div className="node-title">E-commerce Store</div>
+              <div className="node-desc">Shopify • Instagram D2C • WhatsApp Webhooks</div>
+              <div className="node-status-pill status-live">Live Webhook</div>
+            </div>
+
+            <div className="flow-connector-line">
+              <div className="connector-pulse" />
+            </div>
+
+            {/* Step 2 */}
+            <div className="flow-node">
+              <div className="node-icon-box box-navy">
+                <Database size={20} />
+              </div>
+              <div className="node-step-tag">Step 02</div>
+              <div className="node-title">CommercePilot Core</div>
+              <div className="node-desc">Express &amp; MongoDB Multi-Tenant Ledger</div>
+              <div className="node-status-pill status-synced">Sync &lt;50ms</div>
+            </div>
+
+            <div className="flow-connector-line">
+              <div className="connector-pulse" />
+            </div>
+
+            {/* Step 3 */}
+            <div className="flow-node highlight-n8n">
+              <div className="node-icon-box box-orange">
+                <Zap size={20} />
+              </div>
+              <div className="node-step-tag">Step 03</div>
+              <div className="node-title">n8n Automation Engine</div>
+              <div className="node-desc">Event Triggers, Data Routing &amp; Exception Interception</div>
+              <div className="node-status-pill status-active">Orchestrator</div>
+            </div>
+
+            <div className="flow-connector-line">
+              <div className="connector-pulse" />
+            </div>
+
+            {/* Step 4 */}
+            <div className="flow-node">
+              <div className="node-icon-box box-purple">
+                <Cpu size={20} />
+              </div>
+              <div className="node-step-tag">Step 04</div>
+              <div className="node-title">Groq AI Analysis</div>
+              <div className="node-desc">Ultra High-Speed Llama-3 Decision Processing</div>
+              <div className="node-status-pill status-speed">Sub-60s Ingestion</div>
+            </div>
+
+            <div className="flow-connector-line">
+              <div className="connector-pulse" />
+            </div>
+
+            {/* Step 5 */}
+            <div className="flow-node">
+              <div className="node-icon-box box-indigo">
+                <ShieldCheck size={20} />
+              </div>
+              <div className="node-step-tag">Step 05</div>
+              <div className="node-title">Business Decision</div>
+              <div className="node-desc">Deterministic COD Score &amp; Restock PO Draft</div>
+              <div className="node-status-pill status-verified">Grounded Logic</div>
+            </div>
+
+            <div className="flow-connector-line">
+              <div className="connector-pulse" />
+            </div>
+
+            {/* Step 6 */}
+            <div className="flow-node">
+              <div className="node-icon-box box-green">
+                <Bell size={20} />
+              </div>
+              <div className="node-step-tag">Step 06</div>
+              <div className="node-title">Notification Dispatch</div>
+              <div className="node-desc">Email Tokens • WhatsApp Recovery • Seller Alerts</div>
+              <div className="node-status-pill status-completed">Automated Action</div>
+            </div>
+
+          </div>
+
+          {/* Workflow Trust Features */}
+          <div className="n8n-trust-features">
+            <div className="trust-feature-item">
+              <CheckCircle2 size={16} className="text-cyan" />
+              <span>Zero-Code Webhook Triggers</span>
+            </div>
+            <div className="trust-feature-item">
+              <CheckCircle2 size={16} className="text-cyan" />
+              <span>Full Event Traceability in MongoDB</span>
+            </div>
+            <div className="trust-feature-item">
+              <CheckCircle2 size={16} className="text-cyan" />
+              <span>Automatic Failover to Deterministic Rules</span>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      {/* ==================================================================== */}
+      {/* 5. FINAL CALL TO ACTION: READY TO MAKE COMMERCE INTELLIGENT?         */}
+      {/* ==================================================================== */}
+      <section className="prod-final-cta-section">
+        <div className="prod-final-cta-card">
+          <div className="final-cta-ambient" />
+          
+          <div className="final-cta-content">
+            <h2 className="final-cta-title">
+              READY TO MAKE YOUR COMMERCE BUSINESS INTELLIGENT?
+            </h2>
+            <p className="final-cta-desc">
+              Spend less time managing operational problems and more time growing your business. 
+              Let CommercePilot AI help you protect orders, anticipate inventory needs and streamline everyday commerce operations.
+            </p>
+
+            <div className="final-cta-btn-group">
+              <Link to="/signup" className="final-btn-primary">
+                <span>Launch CommercePilot AI</span>
+                <ArrowRight size={15} />
+              </Link>
+              <Link to="/app/overview" className="final-btn-secondary">
+                <span>Explore Workspace</span>
+                <ArrowUpRight size={15} />
+              </Link>
+            </div>
+
+            <div className="final-cta-guarantee">
+              <Check size={14} className="text-green" />
+              <span>Instant setup • No credit card required • Seamless Indian multi-channel sync</span>
+            </div>
           </div>
         </div>
-      </div>
+      </section>
 
     </div>
   );
