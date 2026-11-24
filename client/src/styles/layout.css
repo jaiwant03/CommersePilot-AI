@@ -4189,15 +4189,16 @@ body {
   }
 
   .visual-organic-crop {
-    width: 280px;
-    height: 300px;
+    width: 100%;
+    max-width: 360px;
+    height: 310px;
   }
 
   .floating-telemetry-badge {
-    width: calc(100% - 20px);
-    right: 10px !important;
-    left: 10px !important;
-    bottom: -30px;
+    width: 100%;
+    max-width: 360px;
+    margin-top: 10px;
+    padding: 14px 16px;
   }
 
   .scenarios-grid {
