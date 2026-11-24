@@ -13,7 +13,11 @@ const corsOptions = {
     // Allow requests with no origin (like mobile apps, curl, Postman)
     if (!origin) return callback(null, true);
     
-    if (allowedOrigins.indexOf(origin) !== -1 || config.env === 'development') {
+    if (
+      allowedOrigins.indexOf(origin) !== -1 || 
+      config.env === 'development' ||
+      /\.vercel\.app$/.test(origin)
+    ) {
       callback(null, true);
     } else {
       callback(new Error('Blocked by CORS policy'));
