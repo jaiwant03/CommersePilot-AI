@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Check, Minus, HelpCircle, ArrowRight, Sparkles } from 'lucide-react';
 import PricingSection from '../components/PricingSection';
@@ -6,6 +6,16 @@ import FaqSection from '../components/FaqSection';
 import FinalCtaSection from '../components/FinalCtaSection';
 
 const PricingPage = () => {
+  useEffect(() => {
+    if (window.location.hash === '#compare-plans') {
+      const el = document.getElementById('compare-plans');
+      if (el) {
+        setTimeout(() => {
+          el.scrollIntoView({ behavior: 'smooth' });
+        }, 100);
+      }
+    }
+  }, []);
   const comparisonCategories = [
     {
       category: 'Order Volume & Storefronts',
@@ -86,7 +96,7 @@ const PricingPage = () => {
       <PricingSection />
 
       {/* Feature Comparison Matrix */}
-      <div className="container" style={{ marginTop: '64px', marginBottom: '80px' }}>
+      <div id="compare-plans" className="container" style={{ marginTop: '64px', marginBottom: '80px', scrollMarginTop: '100px' }}>
         <div className="section-header">
           <h2 className="section-title">Detailed Plan Feature Matrix</h2>
           <p className="section-subtitle">

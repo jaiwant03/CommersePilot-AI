@@ -48,7 +48,7 @@ const FinalCtaSection = () => {
           Join forward-thinking Indian D2C brands that have eliminated manual delivery tracking, protected profit margins from bogus COD returns, and automated inventory safety 24/7.
         </p>
 
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '16px', flexWrap: 'wrap', marginBottom: '32px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '32px' }}>
           <Link 
             to="/signup" 
             className="modelled-btn-cta" 
@@ -56,29 +56,18 @@ const FinalCtaSection = () => {
               background: '#38BDF8', 
               color: '#0F172A', 
               fontWeight: 800, 
-              padding: '14px 32px', 
-              fontSize: '15px',
-              boxShadow: '0 8px 24px rgba(56, 189, 248, 0.4)'
+              padding: '14px 36px', 
+              fontSize: '15.5px',
+              boxShadow: '0 8px 24px rgba(56, 189, 248, 0.4)',
+              whiteSpace: 'nowrap',
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '8px',
+              textDecoration: 'none'
             }}
           >
-            Start Free Trial Now
-            <ArrowRight size={18} style={{ marginLeft: '8px' }} />
-          </Link>
-          <Link 
-            to="/pricing" 
-            style={{ 
-              background: 'rgba(255, 255, 255, 0.08)', 
-              color: '#FFFFFF', 
-              border: '1.5px solid rgba(255, 255, 255, 0.2)', 
-              borderRadius: '9999px', 
-              padding: '13px 28px', 
-              fontSize: '14.5px', 
-              fontWeight: 700, 
-              textDecoration: 'none',
-              transition: 'all 0.2s ease'
-            }}
-          >
-            Compare Plans
+            <span>Start Free Trial Now</span>
+            <ArrowRight size={18} />
           </Link>
         </div>
 

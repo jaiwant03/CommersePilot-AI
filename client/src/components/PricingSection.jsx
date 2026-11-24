@@ -134,6 +134,51 @@ const PricingSection = () => {
           </div>
         ))}
       </div>
+
+      {/* Bottom Center Compare Plans Link */}
+      <div style={{ textAlign: 'center', marginTop: '44px', display: 'flex', justifyContent: 'center' }}>
+        <Link
+          to="/pricing#compare-plans"
+          onClick={() => {
+            const el = document.getElementById('compare-plans');
+            if (el) {
+              el.scrollIntoView({ behavior: 'smooth' });
+            }
+          }}
+          className="modelled-nav-btn-white"
+          style={{
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: '8px',
+            padding: '12px 30px',
+            fontSize: '14.5px',
+            fontWeight: 700,
+            borderRadius: '9999px',
+            border: '1.5px solid #0284C7',
+            color: '#0284C7',
+            background: 'rgba(2, 132, 199, 0.05)',
+            boxShadow: '0 4px 14px rgba(2, 132, 199, 0.1)',
+            textDecoration: 'none',
+            transition: 'all 0.2s ease',
+            whiteSpace: 'nowrap'
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.background = '#0284C7';
+            e.currentTarget.style.color = '#FFFFFF';
+            e.currentTarget.style.boxShadow = '0 6px 20px rgba(2, 132, 199, 0.28)';
+            e.currentTarget.style.transform = 'translateY(-2px)';
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.background = 'rgba(2, 132, 199, 0.05)';
+            e.currentTarget.style.color = '#0284C7';
+            e.currentTarget.style.boxShadow = '0 4px 14px rgba(2, 132, 199, 0.1)';
+            e.currentTarget.style.transform = 'translateY(0)';
+          }}
+        >
+          <span>Compare All Plans & Features</span>
+          <ArrowRight size={15} />
+        </Link>
+      </div>
     </div>
   );
 };
