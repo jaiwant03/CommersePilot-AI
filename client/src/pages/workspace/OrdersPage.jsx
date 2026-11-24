@@ -16,6 +16,7 @@ import {
   IndianRupee
 } from 'lucide-react';
 import workspaceService from '../../services/workspace.service';
+import AnimatedRupee from '../../components/AnimatedRupee';
 
 const OrdersPage = () => {
   const [orders, setOrders] = useState([]);
@@ -361,7 +362,7 @@ const OrdersPage = () => {
                       </td>
                       <td>
                         <span style={{ fontWeight: 700, color: 'var(--color-text-primary)' }}>
-                          ₹{ord.totalAmount?.toLocaleString('en-IN')}
+                          <AnimatedRupee value={ord.totalAmount || 0} />
                         </span>
                       </td>
                       <td>
@@ -557,14 +558,14 @@ const OrdersPage = () => {
                           <td style={{ padding: '8px 12px', color: 'var(--color-text-faint)' }}>{it.sku || '-'}</td>
                           <td style={{ padding: '8px 12px' }}>{it.quantity}</td>
                           <td style={{ padding: '8px 12px', textAlign: 'right', fontWeight: 600 }}>
-                            ₹{(it.price * it.quantity).toLocaleString('en-IN')}
+                            <AnimatedRupee value={it.price * it.quantity} />
                           </td>
                         </tr>
                       ))}
                       <tr style={{ borderTop: '2px solid var(--border-subtle)', fontWeight: 700 }}>
                         <td colSpan={3} style={{ padding: '10px 12px' }}>Total Amount</td>
                         <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--color-primary-light)' }}>
-                          ₹{selectedOrder.totalAmount?.toLocaleString('en-IN')}
+                          <AnimatedRupee value={selectedOrder.totalAmount || 0} />
                         </td>
                       </tr>
                     </tbody>
