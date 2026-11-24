@@ -1,0 +1,161 @@
+{
+  "name": "CommercePilot - COD Order Risk Intelligence & Verification",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "commercepilot/order-analysis",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "node-webhook-order-in",
+      "name": "Webhook Trigger",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [
+        220,
+        300
+      ],
+      "webhookId": "commercepilot-order-analysis"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Extract order payload\nconst body = $input.first().json.body || $input.first().json;\n\nconst orderId = body.orderId || body.id;\nconst orderNumber = body.orderNumber || 'ORD-UNKNOWN';\nconst totalAmount = Number(body.totalAmount) || 0;\nconst customer = body.customer || {};\nconst items = body.items || [];\nconst pastOrdersCount = Number(customer.pastOrdersCount) || 0;\nconst pastDeliveredCount = Number(customer.pastDeliveredCount) || 0;\nconst pastRtoCount = Number(customer.pastRtoCount) || 0;\n\n// Deterministic Risk Engine\nlet score = 15; // Baseline risk\nconst riskFactors = [];\n\n// 1. Phone number sanity (India 10-digit check)\nconst phoneDigits = (customer.phone || '').replace(/\\D/g, '');\nif (!phoneDigits || phoneDigits.length < 10 || /^(\\d)\\1{9}$/.test(phoneDigits)) {\n  score += 30;\n  riskFactors.push('Unverified or repetitive phone number');\n}\n\n// 2. Shipping address verification\nconst address = customer.address || '';\nconst pincode = customer.pincode || '';\nif (!address || address.trim().length < 15) {\n  score += 25;\n  riskFactors.push('Incomplete or brief shipping address');\n}\nif (!pincode || pincode.trim().length !== 6 || !/^\\d{6}$/.test(pincode.trim())) {\n  score += 20;\n  riskFactors.push('Missing or invalid 6-digit postal code');\n}\n\n// 3. Buyer order history & return ratio\nif (pastRtoCount > 0) {\n  const rtoPenalty = Math.min(pastRtoCount * 25, 45);\n  score += rtoPenalty;\n  riskFactors.push(`Buyer has ${pastRtoCount} recorded return-to-origin (RTO) failures`);\n} else if (pastOrdersCount === 0) {\n  if (totalAmount > 3000) {\n    score += 15;\n    riskFactors.push('First-time buyer with high COD cart value (> ₹3,000)');\n  }\n} else if (pastDeliveredCount > 2 && pastRtoCount === 0) {\n  score = Math.max(5, score - 20);\n  riskFactors.push('Trusted repeat customer with 100% past delivery success');\n}\n\n// 4. Cart composition anomaly\nif (items.length > 5 && totalAmount < 1000) {\n  score += 15;\n  riskFactors.push('High item quantity with unusually low basket value');\n}\n\nscore = Math.min(Math.max(score, 5), 98);\n\nlet recommendation = 'PROCEED';\nlet riskLevel = 'LOW';\nif (score >= 70) {\n  recommendation = 'MANUAL_REVIEW';\n  riskLevel = 'HIGH';\n} else if (score >= 40) {\n  recommendation = 'REQUEST_CONFIRMATION';\n  riskLevel = 'MEDIUM';\n}\n\nreturn {\n  json: {\n    orderId,\n    orderNumber,\n    riskScore: score,\n    riskLevel,\n    recommendation,\n    reasons: riskFactors,\n    requiresAction: recommendation !== 'PROCEED',\n    suggestedAction: recommendation === 'REQUEST_CONFIRMATION' ? 'EMAIL_CONFIRMATION' : 'MERCHANT_MANUAL_REVIEW',\n    analysisPrompt: `Analyze COD order ${orderNumber} for buyer ${customer.name || 'Customer'}. Order total is ₹${totalAmount}. Risk score is ${score}/100. Factors: ${riskFactors.join(', ')}. Provide a 2-sentence risk summary.`\n  }\n};"
+      },
+      "id": "node-code-risk-engine",
+      "name": "Deterministic Risk Scoring",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        460,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.groq.com/openai/v1/chat/completions",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer {{$env.GROQ_API_KEY}}"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"model\": \"llama-3.3-70b-versatile\",\n  \"messages\": [\n    {\n      \"role\": \"system\",\n      \"content\": \"You are CommercePilot AI, an Indian ecommerce COD risk specialist. Provide a brief 2-sentence executive explanation of the risk score and suggest whether to request confirmation or review.\"\n    },\n    {\n      \"role\": \"user\",\n      \"content\": $json.analysisPrompt\n    }\n  ],\n  \"temperature\": 0.2,\n  \"max_tokens\": 150\n}",
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "json"
+            }
+          }
+        }
+      },
+      "id": "node-http-groq-explain",
+      "name": "Groq AI Risk Explanation",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        700,
+        300
+      ],
+      "continueOnFail": true
+    },
+    {
+      "parameters": {
+        "jsCode": "const prev = $('Deterministic Risk Scoring').first().json;\nconst groqRes = $input.first().json;\n\nlet aiSummary = '';\ntry {\n  aiSummary = groqRes.choices?.[0]?.message?.content?.trim() || '';\n} catch (e) {\n  aiSummary = `Deterministic risk evaluation of ${prev.riskScore}/100 due to: ${prev.reasons.join(', ')}`;\n}\n\nif (!aiSummary) {\n  aiSummary = `Order flagged with risk score ${prev.riskScore}/100. Verification recommended based on risk triggers.`;\n}\n\nreturn {\n  json: {\n    orderId: prev.orderId,\n    orderNumber: prev.orderNumber,\n    riskScore: prev.riskScore,\n    riskLevel: prev.riskLevel,\n    recommendation: prev.recommendation,\n    reasons: prev.reasons,\n    aiAnalysis: {\n      summary: aiSummary,\n      model: 'llama-3.3-70b-versatile',\n      confidence: prev.riskScore > 65 ? 0.91 : 0.84\n    },\n    requiresAction: prev.requiresAction,\n    suggestedAction: prev.suggestedAction,\n    timestamp: new Date().toISOString()\n  }\n};"
+      },
+      "id": "node-code-package-response",
+      "name": "Package Result Payload",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        940,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ JSON.stringify($json) }}",
+        "options": {
+          "responseHeaders": {
+            "entries": [
+              {
+                "name": "Content-Type",
+                "value": "application/json"
+              }
+            ]
+          }
+        }
+      },
+      "id": "node-respond-webhook",
+      "name": "Respond to CommercePilot",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        1180,
+        300
+      ]
+    }
+  ],
+  "connections": {
+    "Webhook Trigger": {
+      "main": [
+        [
+          {
+            "node": "Deterministic Risk Scoring",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Deterministic Risk Scoring": {
+      "main": [
+        [
+          {
+            "node": "Groq AI Risk Explanation",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Groq AI Risk Explanation": {
+      "main": [
+        [
+          {
+            "node": "Package Result Payload",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Package Result Payload": {
+      "main": [
+        [
+          {
+            "node": "Respond to CommercePilot",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  }
+}

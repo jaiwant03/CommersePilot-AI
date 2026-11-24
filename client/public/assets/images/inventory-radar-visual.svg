@@ -1,0 +1,97 @@
+<svg width="800" height="520" viewBox="0 0 800 520" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="800" height="520" rx="16" fill="#F8FAFC"/>
+  <rect x="1" y="1" width="798" height="518" rx="15" stroke="#E2E8F0" stroke-width="2"/>
+  
+  <!-- Header Bar -->
+  <rect x="24" y="24" width="752" height="64" rx="12" fill="#FFFFFF" stroke="#E2E8F0"/>
+  <circle cx="56" cy="56" r="16" fill="#FEF3C7"/>
+  <path d="M56 46V56M56 62H56.01" stroke="#D97706" stroke-width="2.5" stroke-linecap="round"/>
+  <text x="84" y="52" fill="#111827" font-family="Inter, sans-serif" font-size="15" font-weight="700">Predictive Stockout Radar &amp; Automated PO Engine</text>
+  <text x="84" y="70" fill="#64748B" font-family="Inter, sans-serif" font-size="12">SKU: QA-TEST-2265 • Banarasi Silk Saree • Surat Handloom &amp; Apparel Mills</text>
+  <rect x="650" y="44" width="110" height="26" rx="13" fill="#FEE2E2"/>
+  <text x="705" y="61" fill="#DC2626" font-family="Inter, sans-serif" font-size="11" font-weight="700" text-anchor="middle">STOCK RUNWAY: 4d</text>
+
+  <!-- Left Column: Velocity & Burn-Down Analytics -->
+  <g transform="translate(24, 104)">
+    <rect width="360" height="392" rx="12" fill="#FFFFFF" stroke="#E2E8F0"/>
+    <text x="24" y="36" fill="#111827" font-family="Inter, sans-serif" font-size="14" font-weight="700">Multi-Channel Sales Velocity</text>
+    <text x="24" y="54" fill="#64748B" font-family="Inter, sans-serif" font-size="12">7-Day Moving Average: 4.8 units/day</text>
+    
+    <!-- Mini Stock Stat Cards -->
+    <g transform="translate(24, 72)">
+      <rect width="96" height="64" rx="8" fill="#F8FAFC" stroke="#E2E8F0"/>
+      <text x="12" y="24" fill="#64748B" font-family="Inter, sans-serif" font-size="11">Current Stock</text>
+      <text x="12" y="48" fill="#111827" font-family="Inter, sans-serif" font-size="20" font-weight="800">19</text>
+    </g>
+    <g transform="translate(132, 72)">
+      <rect width="96" height="64" rx="8" fill="#F8FAFC" stroke="#E2E8F0"/>
+      <text x="12" y="24" fill="#64748B" font-family="Inter, sans-serif" font-size="11">Reorder Point</text>
+      <text x="12" y="48" fill="#D97706" font-family="Inter, sans-serif" font-size="20" font-weight="800">25</text>
+    </g>
+    <g transform="translate(240, 72)">
+      <rect width="96" height="64" rx="8" fill="#F8FAFC" stroke="#E2E8F0"/>
+      <text x="12" y="24" fill="#64748B" font-family="Inter, sans-serif" font-size="11">Lead Time</text>
+      <text x="12" y="48" fill="#4F46E5" font-family="Inter, sans-serif" font-size="20" font-weight="800">5 days</text>
+    </g>
+
+    <!-- Visual Burn-down Curve -->
+    <g transform="translate(24, 156)">
+      <rect width="312" height="130" rx="8" fill="#F8FAFC" stroke="#E2E8F0"/>
+      <text x="16" y="24" fill="#475569" font-family="Inter, sans-serif" font-size="11" font-weight="600">Stock Depletion Trajectory vs Threshold</text>
+      <!-- Grid lines -->
+      <line x1="20" y1="95" x2="292" y2="95" stroke="#E2E8F0" stroke-dasharray="3 3"/>
+      <line x1="20" y1="65" x2="292" y2="65" stroke="#E2E8F0" stroke-dasharray="3 3"/>
+      <!-- Critical line -->
+      <line x1="20" y1="80" x2="292" y2="80" stroke="#F87171" stroke-width="1.5" stroke-dasharray="4 2"/>
+      <text x="290" y="76" fill="#DC2626" font-family="Inter, sans-serif" font-size="9" font-weight="700" text-anchor="end">Safety Threshold</text>
+      <!-- Trendline -->
+      <path d="M20 45 Q 120 60, 200 85 T 280 110" stroke="#4F46E5" stroke-width="3" fill="none"/>
+      <circle cx="200" cy="85" r="4" fill="#DC2626"/>
+      <!-- Day markers -->
+      <text x="20" y="118" fill="#94A3B8" font-family="Inter, sans-serif" font-size="9">Today</text>
+      <text x="100" y="118" fill="#94A3B8" font-family="Inter, sans-serif" font-size="9">+2 Days</text>
+      <text x="190" y="118" fill="#94A3B8" font-family="Inter, sans-serif" font-size="9">+4 Days (Critical)</text>
+      <text x="280" y="118" fill="#94A3B8" font-family="Inter, sans-serif" font-size="9">+7 Days</text>
+    </g>
+
+    <!-- Forecast Synthesis -->
+    <g transform="translate(24, 302)">
+      <rect width="312" height="70" rx="8" fill="#FEF3C7" stroke="#FDE68A"/>
+      <text x="16" y="26" fill="#92400E" font-family="Inter, sans-serif" font-size="12" font-weight="700">Prediction: Stockout in 4 Days</text>
+      <text x="16" y="46" fill="#B45309" font-family="Inter, sans-serif" font-size="11.5">Supplier PO drafted automatically to avoid ₹42,000 in lost revenue.</text>
+    </g>
+  </g>
+
+  <!-- Right Column: Auto-Drafted Supplier PO -->
+  <g transform="translate(400, 104)">
+    <rect width="376" height="392" rx="12" fill="#FFFFFF" stroke="#E2E8F0"/>
+    <rect x="0" y="0" width="376" height="40" rx="12" fill="#F1F5F9"/>
+    <circle cx="20" cy="20" r="5" fill="#EF4444"/>
+    <circle cx="36" cy="20" r="5" fill="#F59E0B"/>
+    <circle cx="52" cy="20" r="5" fill="#10B981"/>
+    <text x="188" y="25" fill="#64748B" font-family="Inter, sans-serif" font-size="11" font-weight="600" text-anchor="middle">Draft Purchase Order #PO-CHI-2009</text>
+
+    <!-- Document Preview -->
+    <rect x="24" y="60" width="328" height="308" rx="10" fill="#F8FAFC" stroke="#E2E8F0"/>
+    
+    <text x="40" y="90" fill="#111827" font-family="Inter, sans-serif" font-size="14" font-weight="700">PURCHASE ORDER</text>
+    <text x="40" y="108" fill="#64748B" font-family="Inter, sans-serif" font-size="11">Vendor: Surat Handloom &amp; Apparel Mills</text>
+    <text x="40" y="124" fill="#64748B" font-family="Inter, sans-serif" font-size="11">Destination: Chic Couture Central Warehouse, Mumbai</text>
+
+    <!-- PO Line Item Table -->
+    <rect x="40" y="140" width="296" height="74" rx="6" fill="#FFFFFF" stroke="#E2E8F0"/>
+    <text x="52" y="160" fill="#1E293B" font-family="Inter, sans-serif" font-size="12" font-weight="600">Pure Kanjivaram Silk Saree (Crimson Red)</text>
+    <text x="52" y="178" fill="#64748B" font-family="Inter, sans-serif" font-size="11">Order Qty: 50 Units • Unit Cost: ₹1,450</text>
+    <text x="52" y="196" fill="#059669" font-family="Inter, sans-serif" font-size="11" font-weight="700">Subtotal: ₹72,500 (Payment terms: Net 30)</text>
+
+    <!-- Automation Audit Pill -->
+    <rect x="40" y="226" width="296" height="36" rx="6" fill="#EEF2FF" stroke="#C7D2FE"/>
+    <text x="52" y="248" fill="#3730A3" font-family="Inter, sans-serif" font-size="11" font-weight="600">⚡ Created via n8n Inventory Automation Flow</text>
+
+    <!-- 1-Click Approve Button -->
+    <rect x="40" y="274" width="296" height="42" rx="8" fill="#16A34A"/>
+    <text x="188" y="300" fill="#FFFFFF" font-family="Inter, sans-serif" font-size="13" font-weight="700" text-anchor="middle">✓ Approve &amp; Dispatch PO to Supplier</text>
+    
+    <text x="188" y="338" fill="#94A3B8" font-family="Inter, sans-serif" font-size="10" text-anchor="middle">Dispatches formal PDF PO &amp; updates incoming stock tracking.</text>
+  </g>
+</svg>

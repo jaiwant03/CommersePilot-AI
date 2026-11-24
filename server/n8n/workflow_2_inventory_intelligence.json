@@ -1,0 +1,86 @@
+{
+  "name": "CommercePilot - Inventory Intelligence & Auto-PO Workflow",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "commercepilot/inventory-analysis",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "node-webhook-inventory-in",
+      "name": "Webhook Trigger",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [
+        220,
+        300
+      ],
+      "webhookId": "commercepilot-inventory-analysis"
+    },
+    {
+      "parameters": {
+        "jsCode": "const body = $input.first().json.body || $input.first().json;\nconst items = body.items || [];\nconst storeId = body.storeId;\n\nconst alerts = [];\nconst poLineItems = [];\nlet totalEstimatedCost = 0;\n\nitems.forEach(item => {\n  const stock = Number(item.stockQuantity) || 0;\n  const threshold = Number(item.reorderThreshold) || 10;\n  const velocity30 = Number(item.salesVelocity30Days) || 0;\n  const dailyVelocity = velocity30 > 0 ? (velocity30 / 30) : 0.5;\n  const runwayDays = Math.round(stock / dailyVelocity);\n  const costPrice = Number(item.costPrice) || Math.round((Number(item.price) || 1000) * 0.45);\n\n  // Check if reorder triggered\n  if (stock <= threshold || runwayDays <= 14) {\n    // Target 45 days of buffer stock\n    const targetStock = Math.ceil(dailyVelocity * 45);\n    const suggestedQty = Math.max(targetStock - stock, 15);\n    const estimatedCost = suggestedQty * costPrice;\n    totalEstimatedCost += estimatedCost;\n\n    alerts.push({\n      productId: item.id || item._id,\n      title: item.title,\n      sku: item.sku,\n      currentStock: stock,\n      threshold,\n      runwayDays,\n      dailyVelocity: Number(dailyVelocity.toFixed(2)),\n      severity: runwayDays <= 5 ? 'CRITICAL' : 'WARNING'\n    });\n\n    poLineItems.push({\n      productId: item.id || item._id,\n      title: item.title,\n      sku: item.sku,\n      suggestedQuantity: suggestedQty,\n      costPrice,\n      estimatedCost\n    });\n  }\n});\n\nconst poNumber = `PO-${Date.now().toString().slice(-6)}`;\nconst defaultSupplier = {\n  name: 'Apex Apparel & Textile Mills',\n  email: 'orders@apextextiles.in',\n  leadTimeDays: 7\n};\n\nreturn {\n  json: {\n    storeId,\n    scannedProductsCount: items.length,\n    alertsCount: alerts.length,\n    alerts,\n    purchaseOrderDraft: poLineItems.length > 0 ? {\n      poNumber,\n      supplier: defaultSupplier,\n      items: poLineItems,\n      totalEstimatedCost,\n      status: 'DRAFT_PENDING_APPROVAL'\n    } : null,\n    summary: alerts.length > 0 \n      ? `Identified ${alerts.length} SKU(s) requiring inventory replenishment. Generated draft purchase order ${poNumber}.`\n      : 'All product inventory runways are healthy (> 14 days). No replenishment needed.',\n    timestamp: new Date().toISOString()\n  }\n};"
+      },
+      "id": "node-code-inventory-runway",
+      "name": "Compute Velocity & Runway",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        480,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ JSON.stringify($json) }}",
+        "options": {
+          "responseHeaders": {
+            "entries": [
+              {
+                "name": "Content-Type",
+                "value": "application/json"
+              }
+            ]
+          }
+        }
+      },
+      "id": "node-respond-inventory",
+      "name": "Respond to CommercePilot",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        740,
+        300
+      ]
+    }
+  ],
+  "connections": {
+    "Webhook Trigger": {
+      "main": [
+        [
+          {
+            "node": "Compute Velocity & Runway",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Compute Velocity & Runway": {
+      "main": [
+        [
+          {
+            "node": "Respond to CommercePilot",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  }
+}

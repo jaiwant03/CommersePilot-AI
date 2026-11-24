@@ -1,0 +1,29 @@
+{
+  "name": "commercepilot-ai",
+  "version": "0.1.0",
+  "description": "CommercePilot AI — AI-powered ecommerce operations platform for order failure reduction, predictive inventory, and automated business operations.",
+  "private": true,
+  "scripts": {
+    "dev": "npm run dev:all",
+    "dev:all": "concurrently \"npm run dev:server\" \"npm run dev:client\"",
+    "dev:server": "npm run --prefix server dev",
+    "dev:client": "npm run --prefix client dev",
+    "start:server": "npm run --prefix server start",
+    "build:client": "npm run --prefix client build",
+    "install:all": "npm install && npm install --prefix server && npm install --prefix client"
+  },
+  "keywords": [
+    "ecommerce",
+    "ai-operations",
+    "inventory-management",
+    "cod-intelligence",
+    "d2c",
+    "n8n-automation",
+    "groq-ai"
+  ],
+  "author": "CommercePilot AI Architecture Team",
+  "license": "UNLICENSED",
+  "devDependencies": {
+    "concurrently": "^9.1.2"
+  }
+}

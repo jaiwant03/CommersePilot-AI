@@ -1,0 +1,186 @@
+{
+  "name": "CommercePilot - Daily AI Business Briefing Workflow",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "0 9 * * *"
+            }
+          ]
+        }
+      },
+      "id": "node-schedule-daily",
+      "name": "Daily 9AM Schedule Trigger",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        200,
+        220
+      ]
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "commercepilot/daily-report",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "node-webhook-manual-report",
+      "name": "Manual Webhook Trigger",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [
+        200,
+        420
+      ],
+      "webhookId": "commercepilot-daily-report"
+    },
+    {
+      "parameters": {
+        "jsCode": "const input = $input.first().json;\nconst metrics = input.body?.metrics || input.metrics || {\n  storeName: 'Chic Couture India',\n  totalRevenue: 245000,\n  orderCount: 48,\n  codOrdersCount: 32,\n  flaggedCodCount: 6,\n  lowStockCount: 3,\n  ndrPendingCount: 2,\n  deliveredCount: 41\n};\n\nconst prompt = `Synthesize an executive ecommerce daily operational briefing for ${metrics.storeName || 'D2C Merchant'}.\nKey 24-hour performance:\n- Total Revenue: ₹${metrics.totalRevenue}\n- Orders Processed: ${metrics.orderCount} (${metrics.codOrdersCount} COD, ${metrics.flaggedCodCount} high-risk verified)\n- Deliveries Completed: ${metrics.deliveredCount}\n- Pending Carrier NDRs: ${metrics.ndrPendingCount}\n- SKUs at Low Stock: ${metrics.lowStockCount}\n\nFormat in 3 structured sections: 1. Highlights & Revenue, 2. Urgent Action Items (NDR & Low Stock), 3. AI Predictive Advice.`;\n\nreturn {\n  json: {\n    metrics,\n    recipientEmail: input.body?.recipientEmail || 'owner@chiccouture.in',\n    prompt\n  }\n};"
+      },
+      "id": "node-code-prep-report",
+      "name": "Prepare Report Metrics",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        460,
+        320
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.groq.com/openai/v1/chat/completions",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer {{$env.GROQ_API_KEY}}"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"model\": \"llama-3.3-70b-versatile\",\n  \"messages\": [\n    {\n      \"role\": \"system\",\n      \"content\": \"You are CommercePilot AI, an elite AI operations director for Indian D2C brands. Write concise, highly actionable daily briefings.\"\n    },\n    {\n      \"role\": \"user\",\n      \"content\": $json.prompt\n    }\n  ],\n  \"temperature\": 0.3,\n  \"max_tokens\": 450\n}",
+        "options": {}
+      },
+      "id": "node-http-groq-report",
+      "name": "Groq AI Report Synthesis",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        700,
+        320
+      ],
+      "continueOnFail": true
+    },
+    {
+      "parameters": {
+        "jsCode": "const prep = $('Prepare Report Metrics').first().json;\nconst groqRes = $input.first().json;\n\nlet executiveSummary = '';\ntry {\n  executiveSummary = groqRes.choices?.[0]?.message?.content?.trim() || '';\n} catch (e) {\n  executiveSummary = 'Daily briefing generated: revenue ₹' + prep.metrics.totalRevenue + ' across ' + prep.metrics.orderCount + ' orders. 3 critical low-stock items require attention.';\n}\n\nreturn {\n  json: {\n    status: 'REPORT_GENERATED',\n    metrics: prep.metrics,\n    executiveSummary,\n    recipientEmail: prep.recipientEmail,\n    generatedAt: new Date().toISOString()\n  }\n};"
+      },
+      "id": "node-code-package-report",
+      "name": "Package Report",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        940,
+        320
+      ]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ JSON.stringify($json) }}",
+        "options": {
+          "responseHeaders": {
+            "entries": [
+              {
+                "name": "Content-Type",
+                "value": "application/json"
+              }
+            ]
+          }
+        }
+      },
+      "id": "node-respond-report",
+      "name": "Respond to CommercePilot",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        1180,
+        320
+      ]
+    }
+  ],
+  "connections": {
+    "Daily 9AM Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "Prepare Report Metrics",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Manual Webhook Trigger": {
+      "main": [
+        [
+          {
+            "node": "Prepare Report Metrics",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare Report Metrics": {
+      "main": [
+        [
+          {
+            "node": "Groq AI Report Synthesis",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Groq AI Report Synthesis": {
+      "main": [
+        [
+          {
+            "node": "Package Report",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Package Report": {
+      "main": [
+        [
+          {
+            "node": "Respond to CommercePilot",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  }
+}

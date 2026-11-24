@@ -1,0 +1,99 @@
+<svg width="800" height="520" viewBox="0 0 800 520" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="800" height="520" rx="16" fill="#F8FAFC"/>
+  <rect x="1" y="1" width="798" height="518" rx="15" stroke="#E2E8F0" stroke-width="2"/>
+  
+  <!-- Header Bar -->
+  <rect x="24" y="24" width="752" height="64" rx="12" fill="#FFFFFF" stroke="#E2E8F0"/>
+  <circle cx="56" cy="56" r="16" fill="#E0F2FE"/>
+  <path d="M48 56H64M58 50L64 56L58 62" stroke="#0284C7" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="84" y="52" fill="#111827" font-family="Inter, sans-serif" font-size="15" font-weight="700">NDR Delivery Recovery &amp; Courier Interception</text>
+  <text x="84" y="70" fill="#64748B" font-family="Inter, sans-serif" font-size="12">AWB: DEL-9821731 • Delhivery Express • Order #ORD-QA-2294 (₹8,999)</text>
+  <rect x="640" y="44" width="120" height="26" rx="13" fill="#DCFCE7"/>
+  <text x="700" y="61" fill="#15803D" font-family="Inter, sans-serif" font-size="11" font-weight="700" text-anchor="middle">RECOVERED: OUT</text>
+
+  <!-- Left Column: Courier Interception Stream -->
+  <g transform="translate(24, 104)">
+    <rect width="360" height="392" rx="12" fill="#FFFFFF" stroke="#E2E8F0"/>
+    <text x="24" y="36" fill="#111827" font-family="Inter, sans-serif" font-size="14" font-weight="700">Courier Event Interception Feed</text>
+    <text x="24" y="54" fill="#64748B" font-family="Inter, sans-serif" font-size="12">Autonomous webhook listener active</text>
+
+    <!-- Event 1: Failed Attempt -->
+    <g transform="translate(24, 76)">
+      <rect width="312" height="68" rx="8" fill="#FEF2F2" stroke="#FECACA"/>
+      <circle cx="20" cy="24" r="8" fill="#DC2626"/>
+      <text x="36" y="22" fill="#991B1B" font-family="Inter, sans-serif" font-size="12" font-weight="700">14:18 • Non-Delivery Report Logged</text>
+      <text x="36" y="38" fill="#B91C1C" font-family="Inter, sans-serif" font-size="11">Reason: "Customer unavailable / Door locked"</text>
+      <text x="36" y="54" fill="#64748B" font-family="Inter, sans-serif" font-size="10">Delhivery Hub: Bandra West, Mumbai</text>
+    </g>
+
+    <!-- Event 2: Immediate Auto-Trigger -->
+    <g transform="translate(24, 156)">
+      <rect width="312" height="68" rx="8" fill="#EFF6FF" stroke="#BFDBFE"/>
+      <circle cx="20" cy="24" r="8" fill="#2563EB"/>
+      <text x="36" y="22" fill="#1E40AF" font-family="Inter, sans-serif" font-size="12" font-weight="700">14:19 • Autonomous NDR Trigger</text>
+      <text x="36" y="38" fill="#1D4ED8" font-family="Inter, sans-serif" font-size="11">Dispatched customer reschedule email in 42s</text>
+      <text x="36" y="54" fill="#64748B" font-family="Inter, sans-serif" font-size="10">Cryptographic action token generated</text>
+    </g>
+
+    <!-- Event 3: Customer Action -->
+    <g transform="translate(24, 236)">
+      <rect width="312" height="68" rx="8" fill="#F0FDF4" stroke="#BBF7D0"/>
+      <circle cx="20" cy="24" r="8" fill="#16A34A"/>
+      <text x="36" y="22" fill="#166534" font-family="Inter, sans-serif" font-size="12" font-weight="700">14:26 • Customer Selected Slot</text>
+      <text x="36" y="38" fill="#15803D" font-family="Inter, sans-serif" font-size="11">Confirmed for Tomorrow 14:00 - 17:00</text>
+      <text x="36" y="54" fill="#64748B" font-family="Inter, sans-serif" font-size="10">Alternative phone added: +91 98201 44512</text>
+    </g>
+
+    <!-- Stat banner -->
+    <g transform="translate(24, 316)">
+      <rect width="312" height="56" rx="8" fill="#F8FAFC" stroke="#E2E8F0"/>
+      <text x="16" y="24" fill="#4F46E5" font-family="Inter, sans-serif" font-size="12" font-weight="700">RTO Prevented: ₹8,999 Order Saved</text>
+      <text x="16" y="42" fill="#64748B" font-family="Inter, sans-serif" font-size="11">Saved two-way reverse logistics courier penalty of ₹320</text>
+    </g>
+  </g>
+
+  <!-- Right Column: Customer Rescheduling UI Preview -->
+  <g transform="translate(400, 104)">
+    <rect width="376" height="392" rx="12" fill="#FFFFFF" stroke="#E2E8F0"/>
+    <rect x="0" y="0" width="376" height="40" rx="12" fill="#F1F5F9"/>
+    <circle cx="20" cy="20" r="5" fill="#EF4444"/>
+    <circle cx="36" cy="20" r="5" fill="#F59E0B"/>
+    <circle cx="52" cy="20" r="5" fill="#10B981"/>
+    <text x="188" y="25" fill="#64748B" font-family="Inter, sans-serif" font-size="11" font-weight="600" text-anchor="middle">Customer Self-Service Delivery Portal</text>
+
+    <!-- Reschedule Card -->
+    <rect x="24" y="60" width="328" height="308" rx="10" fill="#F8FAFC" stroke="#E2E8F0"/>
+    <text x="40" y="90" fill="#111827" font-family="Inter, sans-serif" font-size="15" font-weight="700">We Missed You Today!</text>
+    <text x="40" y="108" fill="#64748B" font-family="Inter, sans-serif" font-size="11.5">Choose your preferred re-attempt date and delivery notes:</text>
+
+    <!-- Date selector pills -->
+    <g transform="translate(40, 126)">
+      <rect width="90" height="48" rx="6" fill="#EEF2FF" stroke="#4F46E5"/>
+      <text x="45" y="22" fill="#4F46E5" font-family="Inter, sans-serif" font-size="11" font-weight="700" text-anchor="middle">Tomorrow</text>
+      <text x="45" y="38" fill="#4338CA" font-family="Inter, sans-serif" font-size="10" text-anchor="middle">Nov 25</text>
+
+      <rect x="102" y="0" width="90" height="48" rx="6" fill="#FFFFFF" stroke="#E2E8F0"/>
+      <text x="147" y="22" fill="#1E293B" font-family="Inter, sans-serif" font-size="11" font-weight="600" text-anchor="middle">Wednesday</text>
+      <text x="147" y="38" fill="#64748B" font-family="Inter, sans-serif" font-size="10" text-anchor="middle">Nov 26</text>
+
+      <rect x="204" y="0" width="90" height="48" rx="6" fill="#FFFFFF" stroke="#E2E8F0"/>
+      <text x="249" y="22" fill="#1E293B" font-family="Inter, sans-serif" font-size="11" font-weight="600" text-anchor="middle">Thursday</text>
+      <text x="249" y="38" fill="#64748B" font-family="Inter, sans-serif" font-size="10" text-anchor="middle">Nov 27</text>
+    </g>
+
+    <!-- Time slot selection -->
+    <rect x="40" y="186" width="296" height="44" rx="6" fill="#FFFFFF" stroke="#E2E8F0"/>
+    <text x="52" y="206" fill="#1E293B" font-family="Inter, sans-serif" font-size="12" font-weight="600">Preferred Time Slot: Afternoon</text>
+    <text x="52" y="222" fill="#64748B" font-family="Inter, sans-serif" font-size="10.5">2:00 PM – 5:00 PM (Courier delivery agent assigned)</text>
+
+    <!-- Address note -->
+    <rect x="40" y="240" width="296" height="34" rx="6" fill="#FFFFFF" stroke="#E2E8F0"/>
+    <text x="52" y="261" fill="#475569" font-family="Inter, sans-serif" font-size="11">Note: "Leave with security guard if not available"</text>
+
+    <!-- Confirm Reschedule Button -->
+    <rect x="40" y="286" width="296" height="42" rx="8" fill="#0284C7"/>
+    <text x="188" y="312" fill="#FFFFFF" font-family="Inter, sans-serif" font-size="13" font-weight="700" text-anchor="middle">✓ Confirm Rescheduled Delivery</text>
+    
+    <text x="188" y="348" fill="#94A3B8" font-family="Inter, sans-serif" font-size="10" text-anchor="middle">Instant courier webhook push to Delhivery dispatch system.</text>
+  </g>
+</svg>

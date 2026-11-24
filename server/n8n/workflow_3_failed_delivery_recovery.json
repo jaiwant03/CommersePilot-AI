@@ -1,0 +1,86 @@
+{
+  "name": "CommercePilot - Failed Delivery (NDR) Recovery Workflow",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "commercepilot/delivery-recovery",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "node-webhook-ndr-in",
+      "name": "Webhook Trigger",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [
+        220,
+        300
+      ],
+      "webhookId": "commercepilot-delivery-recovery"
+    },
+    {
+      "parameters": {
+        "jsCode": "const body = $input.first().json.body || $input.first().json;\n\nconst deliveryId = body.deliveryId || body.id;\nconst awb = body.awb || 'UNKNOWN_AWB';\nconst courier = body.courier || 'Courier Partner';\nconst ndrReason = body.ndrReason || 'Customer unavailable during delivery attempt';\nconst orderNumber = body.orderNumber || 'ORD-UNKNOWN';\nconst customerEmail = body.customerEmail || 'customer@example.com';\nconst customerName = body.customerName || 'Valued Customer';\n\n// Determine resolution strategy based on carrier exception reason\nlet recoveryStrategy = 'RESCHEDULE_DELIVERY_SLOT';\nlet suggestedSlots = ['Tomorrow 10 AM - 2 PM', 'Tomorrow 2 PM - 6 PM', 'Day After Tomorrow Any Time'];\n\nconst lowerReason = ndrReason.toLowerCase();\nif (lowerReason.includes('address') || lowerReason.includes('pincode') || lowerReason.includes('landmark')) {\n  recoveryStrategy = 'COLLECT_LANDMARK_AND_ADDRESS';\n} else if (lowerReason.includes('refuse') || lowerReason.includes('reject') || lowerReason.includes('cod amount')) {\n  recoveryStrategy = 'CONFIRM_INTENT_OR_CANCEL';\n}\n\nreturn {\n  json: {\n    deliveryId,\n    awb,\n    courier,\n    ndrReason,\n    customerEmail,\n    customerName,\n    orderNumber,\n    recoveryStrategy,\n    suggestedSlots,\n    emailSubject: `Important: Re-schedule your delivery for Order #${orderNumber} (${courier})`,\n    emailMessage: `Hi ${customerName}, your delivery partner (${courier}) attempted delivery for Order #${orderNumber} but could not complete it: \"${ndrReason}\". Please select a convenient time slot and nearest landmark using the secure link.`,\n    status: 'NDR_INTERVENTION_INITIATED',\n    timestamp: new Date().toISOString()\n  }\n};"
+      },
+      "id": "node-code-ndr-strategy",
+      "name": "NDR Evaluation & Strategy",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        480,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ JSON.stringify($json) }}",
+        "options": {
+          "responseHeaders": {
+            "entries": [
+              {
+                "name": "Content-Type",
+                "value": "application/json"
+              }
+            ]
+          }
+        }
+      },
+      "id": "node-respond-ndr",
+      "name": "Respond to CommercePilot",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        740,
+        300
+      ]
+    }
+  ],
+  "connections": {
+    "Webhook Trigger": {
+      "main": [
+        [
+          {
+            "node": "NDR Evaluation & Strategy",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "NDR Evaluation & Strategy": {
+      "main": [
+        [
+          {
+            "node": "Respond to CommercePilot",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  }
+}
