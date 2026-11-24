@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
+import AnimatedRupee from './AnimatedRupee';
 import { Link } from 'react-router-dom';
 import { 
   ShieldCheck, 
   Boxes, 
   Truck, 
   Bot, 
-  BarChart3, 
+  BarChart3,
+  TrendingUp, 
   Check, 
   ArrowRight, 
   Sparkles, 
@@ -174,7 +176,7 @@ const ProductShowcase = () => {
                 </div>
                 <div>
                   <div className="package-card-title">Order #TT10245</div>
-                  <div className="package-card-meta">₹2,500 • Prepaid Verified</div>
+                  <div className="package-card-meta"><AnimatedRupee value={2500} suffix=" • Prepaid Verified" /></div>
                 </div>
                 <span className="package-status-tag">Ready to Pack</span>
               </div>
@@ -701,53 +703,93 @@ const ProductShowcase = () => {
           </div>
 
           <div className="prod-feature-visual-block">
-            <div className="analytics-visual-dashboard">
+            <div className="analytics-visual-dashboard luxury-card-elevation">
               
-              {/* Financial KPI Summary Cards */}
-              <div className="kpi-two-col-grid">
-                <div className="kpi-mini-card">
-                  <span className="kpi-card-label">Gross Revenue (GMV)</span>
-                  <span className="kpi-card-val text-navy">₹46,731</span>
-                  <span className="kpi-card-trend trend-up">↑ +18.4% this month</span>
+              {/* Luxury Top Status Header */}
+              <div className="luxury-dash-topbar">
+                <div className="dash-brand-pill">
+                  <Sparkles size={12} className="text-indigo" />
+                  <span>Verified Financial Ledger</span>
                 </div>
-                <div className="kpi-mini-card highlight-profit">
-                  <span className="kpi-card-label">Realized Net Profit</span>
-                  <span className="kpi-card-val text-indigo">₹26,176</span>
-                  <span className="kpi-card-sub">56% Realized Margin</span>
+                <div className="dash-live-badge">
+                  <span className="live-pulse-dot dot-green" />
+                  <span>Live Sync</span>
+                </div>
+              </div>
+
+              {/* Financial KPI Summary Cards with Animated Rupee Counter */}
+              <div className="kpi-two-col-grid">
+                <div className="kpi-mini-card luxury-kpi-glass">
+                  <div className="kpi-card-label-row">
+                    <span className="kpi-card-label">Gross Revenue (GMV)</span>
+                    <TrendingUp size={13} className="text-green" />
+                  </div>
+                  <div className="kpi-card-val text-navy">
+                    <AnimatedRupee value={46731} />
+                  </div>
+                  <span className="luxury-trend-badge trend-up">↑ +18.4% this month</span>
+                </div>
+
+                <div className="kpi-mini-card luxury-kpi-electric">
+                  <div className="kpi-card-label-row">
+                    <span className="kpi-card-label text-white-80">Realized Net Profit</span>
+                    <Sparkles size={13} className="text-cyan" />
+                  </div>
+                  <div className="kpi-card-val text-white">
+                    <AnimatedRupee value={26176} />
+                  </div>
+                  <span className="luxury-margin-pill">56% Realized Margin</span>
                 </div>
               </div>
 
               {/* Top Margin Product Catalog Card */}
-              <div className="top-margin-card">
+              <div className="top-margin-card luxury-margin-card">
                 <div className="top-margin-header">
-                  <BarChart3 size={15} className="text-cyan" />
-                  <span>High-Margin Product Performance</span>
+                  <div className="header-icon-box">
+                    <BarChart3 size={13} className="text-indigo" />
+                  </div>
+                  <span className="margin-header-title">High-Margin Product Performance</span>
+                  <span className="live-tag-pill">Catalog</span>
                 </div>
+
+                {/* Saree Item */}
                 <div className="margin-item-row">
                   <div className="item-name-col">
                     <span className="item-title">Chanderi Silk Saree</span>
                     <span className="item-sku">SKU: TT-SAR-SILK</span>
+                    <div className="margin-mini-track">
+                      <div className="margin-mini-fill fill-emerald" style={{ width: '68%' }} />
+                    </div>
                   </div>
                   <div className="item-stat-col">
-                    <span className="margin-percent">68% Margin</span>
-                    <span className="margin-rupee">₹1,850 Profit/Unit</span>
+                    <span className="margin-percent-badge badge-emerald">68% Margin</span>
+                    <span className="margin-rupee">
+                      <AnimatedRupee value={1850} suffix=" Profit/Unit" />
+                    </span>
                   </div>
                 </div>
+
+                {/* Kurti Item */}
                 <div className="margin-item-row">
                   <div className="item-name-col">
                     <span className="item-title">Handloom Cotton Kurti</span>
                     <span className="item-sku">SKU: TT-KUR-COT</span>
+                    <div className="margin-mini-track">
+                      <div className="margin-mini-fill fill-indigo" style={{ width: '54%' }} />
+                    </div>
                   </div>
                   <div className="item-stat-col">
-                    <span className="margin-percent">54% Margin</span>
-                    <span className="margin-rupee">₹720 Profit/Unit</span>
+                    <span className="margin-percent-badge badge-indigo">54% Margin</span>
+                    <span className="margin-rupee">
+                      <AnimatedRupee value={720} suffix=" Profit/Unit" />
+                    </span>
                   </div>
                 </div>
               </div>
 
               {/* Repeat Buyer Cohort Tag */}
-              <div className="retention-cohort-tag">
-                <div className="cohort-dot" />
+              <div className="retention-cohort-tag luxury-cohort-banner">
+                <div className="cohort-dot pulse-cyan-dot" />
                 <span>Repeat Buyer Cohort: 14% of customers drive 32% of total store profits</span>
               </div>
 

@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import AnimatedRupee from './AnimatedRupee';
 import { Link } from 'react-router-dom';
 import { Check, ArrowRight, Tag, Sparkles } from 'lucide-react';
 
@@ -152,7 +153,7 @@ const PricingSection = () => {
             <div className="plan-pricing-area" style={{ display: 'flex', alignItems: 'baseline', gap: '4px', marginBottom: '4px' }}>
               <span className="plan-currency" style={{ fontSize: '22px', fontWeight: 700, color: '#0F172A' }}>₹</span>
               <span className="plan-price" style={{ fontSize: '40px', fontWeight: 900, color: '#0F172A', letterSpacing: '-0.03em' }}>
-                {isAnnual ? plan.annualPrice : plan.monthlyPrice}
+                <AnimatedRupee value={isAnnual ? plan.annualPrice : plan.monthlyPrice} prefix="" />
               </span>
               <span className="plan-period" style={{ fontSize: '12.5px', color: '#64748B' }}>
                 {isAnnual ? '/ mo (annual)' : '/ month'}
