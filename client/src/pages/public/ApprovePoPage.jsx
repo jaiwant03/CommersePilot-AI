@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useSearchParams, Link } from 'react-router-dom';
 import { Package, CheckCircle2, XCircle, AlertTriangle, RefreshCw, Send, ShieldCheck } from 'lucide-react';
 import workspaceService from '../../services/workspace.service';
+import AnimatedRupee from '../../components/AnimatedRupee';
 
 const ApprovePoPage = () => {
   const [searchParams] = useSearchParams();

@@ -676,7 +676,7 @@ const ProductShowcase = () => {
             <div className="prod-feature-highlights">
               <div className="highlight-row">
                 <div className="highlight-bullet"><Check size={12} strokeWidth={3} /></div>
-                <span>True Net Profit Tracking: Gross Revenue (₹46,731) strictly distinguished from Net Margin (₹26,176) after COGS</span>
+                <span>True Net Profit Tracking: Gross Revenue (<AnimatedRupee value={46731} />) strictly distinguished from Net Margin (<AnimatedRupee value={26176} />) after COGS</span>
               </div>
               <div className="highlight-row">
                 <div className="highlight-bullet"><Check size={12} strokeWidth={3} /></div>
@@ -875,7 +875,7 @@ const ProductShowcase = () => {
                 <div className="scenario-num-badge">01</div>
                 <span className="scenario-type-tag">COD Order Risk</span>
               </div>
-              <h4 className="scenario-title">Potentially Risky ₹2,500 COD Order</h4>
+              <h4 className="scenario-title">Potentially Risky <AnimatedRupee value={2500} /> COD Order</h4>
               <p className="scenario-text">
                 Order #TT10245 placed via Cash-on-Delivery with an incomplete street address in Coimbatore. 
                 CommercePilot AI's deterministic engine flags a risk score of <strong>65/100 (HIGH)</strong> and 

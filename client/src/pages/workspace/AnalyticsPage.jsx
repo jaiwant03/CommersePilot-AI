@@ -35,6 +35,7 @@ import {
   Legend
 } from 'recharts';
 import workspaceService from '../../services/workspace.service';
+import AnimatedRupee from '../../components/AnimatedRupee';
 
 const TIME_RANGES = [
   { key: '7d', label: 'Last 7 Days' },
@@ -226,7 +227,7 @@ const AnalyticsPage = () => {
               <IndianRupee size={16} />
             </div>
           </div>
-          <div className="metric-value">₹{(kpis.grossRevenue || 0).toLocaleString('en-IN')}</div>
+          <div className="metric-value"><AnimatedRupee value={kpis.grossRevenue || 0} /></div>
           <div className="metric-meta success">
             <ArrowUpRight size={13} />
             <span>Total billed orders</span>
@@ -241,7 +242,7 @@ const AnalyticsPage = () => {
               <TrendingUp size={16} />
             </div>
           </div>
-          <div className="metric-value">₹{(kpis.netProfit || 0).toLocaleString('en-IN')}</div>
+          <div className="metric-value"><AnimatedRupee value={kpis.netProfit || 0} /></div>
           <div className="metric-meta success">
             <span>{kpis.grossProfitMargin || 0}% margin (after COGS)</span>
           </div>
@@ -255,7 +256,7 @@ const AnalyticsPage = () => {
               <ShoppingBag size={16} />
             </div>
           </div>
-          <div className="metric-value">₹{(kpis.averageOrderValue || 0).toLocaleString('en-IN')}</div>
+          <div className="metric-value"><AnimatedRupee value={kpis.averageOrderValue || 0} /></div>
           <div className="metric-meta">
             <span>{kpis.totalOrders || 0} valid customer orders</span>
           </div>
@@ -760,13 +761,13 @@ const AnalyticsPage = () => {
                       <span style={{ fontWeight: 600 }}>{p.unitsSold} units</span>
                     </td>
                     <td>
-                      <span style={{ fontWeight: 700, color: '#10B981' }}>₹{p.revenue.toLocaleString('en-IN')}</span>
+                      <span style={{ fontWeight: 700, color: '#10B981' }}><AnimatedRupee value={p.revenue} /></span>
                     </td>
                     <td>
-                      <span style={{ color: 'var(--color-text-muted)', fontSize: '12px' }}>₹{p.cogs.toLocaleString('en-IN')}</span>
+                      <span style={{ color: 'var(--color-text-muted)', fontSize: '12px' }}><AnimatedRupee value={p.cogs} /></span>
                     </td>
                     <td>
-                      <span style={{ fontWeight: 700, color: '#38BDF8' }}>₹{p.grossProfit.toLocaleString('en-IN')}</span>
+                      <span style={{ fontWeight: 700, color: '#38BDF8' }}><AnimatedRupee value={p.grossProfit} /></span>
                     </td>
                     <td>
                       <span className={`status-badge ${p.profitMargin >= 50 ? 'badge-success' : p.profitMargin >= 30 ? 'badge-purple' : 'badge-warning'}`}>

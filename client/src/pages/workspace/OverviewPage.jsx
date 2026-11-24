@@ -15,6 +15,7 @@ import {
   Plus
 } from 'lucide-react';
 import workspaceService from '../../services/workspace.service';
+import AnimatedRupee from '../../components/AnimatedRupee';
 
 const OverviewPage = () => {
   const [data, setData] = useState(null);
@@ -169,7 +170,7 @@ const OverviewPage = () => {
               <IndianRupee size={16} />
             </div>
           </div>
-          <div className="metric-value">₹{(metrics.totalRevenue || 0).toLocaleString('en-IN')}</div>
+          <div className="metric-value"><AnimatedRupee value={metrics.totalRevenue || 0} /></div>
           <div className="metric-meta">
             <span>Aggregated order value</span>
           </div>
@@ -297,7 +298,7 @@ const OverviewPage = () => {
                           </div>
                         </td>
                         <td>
-                          <span style={{ fontWeight: 600 }}>₹{order.totalAmount?.toLocaleString('en-IN')}</span>
+                          <span style={{ fontWeight: 600 }}><AnimatedRupee value={order.totalAmount || 0} /></span>
                         </td>
                         <td>
                           <span className={`status-badge ${order.paymentMethod === 'COD' ? 'badge-warning' : 'badge-info'}`}>

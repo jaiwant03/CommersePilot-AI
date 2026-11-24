@@ -1,4 +1,5 @@
 import React from 'react';
+import AnimatedRupee from './AnimatedRupee';
 import { 
   ShieldCheck, 
   Boxes, 
@@ -207,7 +208,7 @@ const FeaturesSection = () => {
                     <span style={{ color: '#0284C7', fontWeight: 800, background: '#E0F2FE', padding: '1px 6px', borderRadius: '4px', fontSize: '10px' }}>ACCURATE</span>
                   </div>
                   <div style={{ color: '#334155', fontSize: '11px' }}>Q: "Which product gives highest profit margin?"</div>
-                  <div style={{ color: '#16A34A', fontSize: '11px', fontWeight: 600, marginTop: '4px' }}>AI: Premium Kurti (₹1,600 profit, 64.0% margin)</div>
+                  <div style={{ color: '#16A34A', fontSize: '11px', fontWeight: 600, marginTop: '4px' }}>AI: Premium Kurti (<AnimatedRupee value={1600} /> profit, 64.0% margin)</div>
                 </div>
               )}
               {index === 4 && (
