@@ -8,6 +8,7 @@ import { ProtectedRoute, PublicOnlyRoute } from './components/ProtectedRoute';
 
 // Public & Marketing Pages
 import HomePage from './pages/HomePage';
+import ProductPage from './pages/ProductPage';
 import FeaturesPage from './pages/FeaturesPage';
 import HowItWorksPage from './pages/HowItWorksPage';
 import PricingPage from './pages/PricingPage';
@@ -64,6 +65,7 @@ function App() {
             <Route path="/" element={<MainLayout />}>
               {/* Public Marketing Pages */}
               <Route index element={<HomePage />} />
+              <Route path="product" element={<ProductPage />} />
               <Route path="features" element={<FeaturesPage />} />
               <Route path="how-it-works" element={<HowItWorksPage />} />
               <Route path="pricing" element={<PricingPage />} />
