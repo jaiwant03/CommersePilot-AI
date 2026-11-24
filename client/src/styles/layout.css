@@ -2527,7 +2527,7 @@ body {
   overflow: hidden;
   box-shadow: 0 30px 60px -15px rgba(79, 70, 229, 0.28), 0 0 0 4px #FFFFFF;
   position: relative;
-  z-index: 1;
+  z-index: 2;
   transition: transform 0.4s ease, box-shadow 0.4s ease;
 }
 
@@ -2552,12 +2552,14 @@ body {
 
 .collage-floating-bags {
   position: absolute;
-  top: -10px;
-  right: 0px;
+  top: -24px;
+  left: -20px;
+  right: auto;
   width: 160px;
-  z-index: 2;
+  z-index: 1;
   filter: drop-shadow(0 15px 25px rgba(99, 102, 241, 0.3));
   animation: floatBags 6s ease-in-out infinite;
+  pointer-events: none;
 }
 
 .collage-bags-svg {
@@ -2573,7 +2575,8 @@ body {
 
 .collage-package-card {
   position: absolute;
-  bottom: -15px; left: -35px;
+  bottom: -20px;
+  left: -30px;
   background: #FFFFFF;
   border: 1.5px solid #E0F2FE;
   border-radius: 16px;
@@ -2582,7 +2585,7 @@ body {
   display: flex;
   align-items: center;
   gap: 12px;
-  z-index: 3;
+  z-index: 4;
 }
 
 .package-card-icon-box {
@@ -2620,14 +2623,17 @@ body {
 
 .collage-mobile-card {
   position: absolute;
-  top: 60px; right: -45px;
+  bottom: -20px;
+  right: -30px;
+  top: auto;
+  left: auto;
   background: #0D1527;
   color: #FFFFFF;
   border-radius: 18px;
   padding: 14px 18px;
   box-shadow: 0 20px 45px -10px rgba(15, 23, 42, 0.35);
   border: 1.5px solid rgba(255, 255, 255, 0.12);
-  z-index: 3;
+  z-index: 4;
   width: 195px;
 }
 
@@ -2698,11 +2704,15 @@ body {
 }
 
 .chip-1 {
-  top: 25px; left: -35px;
+  top: 25px;
+  right: -25px;
+  left: auto;
 }
 
 .chip-2 {
-  bottom: 75px; right: -40px;
+  bottom: 75px;
+  left: -35px;
+  right: auto;
 }
 
 .ai-chip-pulsar {
@@ -2871,13 +2881,14 @@ body {
   justify-content: center;
 }
 
-/* Floating 3D Shopping Trolley on the top corner above the image */
+/* Floating 3D Shopping Trolley strictly on the top-left corner BEHIND the image */
 .floating-trolley-badge {
   position: absolute;
-  top: -22px;
-  right: -8px;
-  width: 135px;
-  z-index: 5;
+  top: -26px;
+  left: -20px;
+  right: auto;
+  width: 145px;
+  z-index: 1; /* strictly behind the image */
   filter: drop-shadow(0 15px 25px rgba(99, 102, 241, 0.28));
   animation: floatBags 6s ease-in-out infinite;
   pointer-events: none;
@@ -2891,7 +2902,8 @@ body {
 
 .prod-feature-story.reverse .floating-trolley-badge {
   right: auto;
-  left: -8px;
+  left: -20px;
+  top: -26px;
 }
 
 /* Floating Accent Corner Chips */
@@ -2913,24 +2925,30 @@ body {
   white-space: nowrap;
 }
 
+.chip-corner-top-right,
 .chip-corner-top-left {
   top: 18px;
-  left: -20px;
+  right: -20px;
+  left: auto;
 }
 
+.chip-corner-bottom-left,
 .chip-corner-bottom-right {
   bottom: 22px;
-  right: -15px;
+  left: -18px;
+  right: auto;
 }
 
+.prod-feature-story.reverse .chip-corner-top-right,
 .prod-feature-story.reverse .chip-corner-top-left {
   left: auto;
   right: -20px;
 }
 
+.prod-feature-story.reverse .chip-corner-bottom-left,
 .prod-feature-story.reverse .chip-corner-bottom-right {
   right: auto;
-  left: -15px;
+  left: -18px;
 }
 
 /* Big, impressive product showcase containers with distinct tangent shapes */
@@ -2942,7 +2960,7 @@ body {
   box-shadow: 0 25px 60px -12px rgba(15, 23, 42, 0.18), 0 0 0 4px #FFFFFF;
   position: relative;
   background: #F8FAFC;
-  z-index: 1;
+  z-index: 2; /* elevated in front of trolley so trolley is behind top-left */
   transition: transform 0.4s ease, box-shadow 0.4s ease;
 }
 
@@ -3002,12 +3020,13 @@ body {
   transform: scale(1.04);
 }
 
-/* Impressive Cyber-Navy Telemetry HUD Cards */
-/* Impressive Cyber-Navy Telemetry HUD Cards - Compact, Sleek Dimensions Docked Below Image */
+/* Impressive Cyber-Navy Telemetry HUD Cards - Docked strictly on bottom-right corner */
 .floating-telemetry-badge {
   position: absolute;
-  top: 70px;
+  bottom: -22px;
   right: -25px;
+  top: auto;
+  left: auto;
   width: 260px;
   background: linear-gradient(145deg, #0D1527 0%, #111B33 100%);
   border: 1.5px solid rgba(56, 189, 248, 0.35);
@@ -3017,15 +3036,17 @@ body {
     0 20px 45px -10px rgba(15, 23, 42, 0.5),
     0 0 20px rgba(56, 189, 248, 0.12),
     inset 0 1px 0 rgba(255, 255, 255, 0.15);
-  z-index: 3;
+  z-index: 5;
   color: #FFFFFF;
   backdrop-filter: blur(16px);
   transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
 }
 
 .prod-feature-story.reverse .floating-telemetry-badge {
-  right: auto;
-  left: -25px;
+  bottom: -22px;
+  right: -25px;
+  top: auto;
+  left: auto;
 }
 
 .floating-telemetry-badge:hover {
@@ -4271,17 +4292,21 @@ body {
 
   .collage-floating-bags {
     width: 120px;
+    left: -10px;
+    top: -15px;
+    right: auto;
   }
 
   .collage-package-card {
     left: -10px;
-    bottom: 10px;
+    bottom: -15px;
     padding: 10px 14px;
   }
 
   .collage-mobile-card {
     right: -10px;
-    top: 70px;
+    bottom: -15px;
+    top: auto;
     width: 165px;
     padding: 10px 12px;
   }
@@ -4300,11 +4325,34 @@ body {
     height: 310px;
   }
 
+  .floating-trolley-badge {
+    left: -10px;
+    top: -18px;
+    width: 110px;
+    right: auto;
+  }
+
+  .prod-feature-story.reverse .floating-trolley-badge {
+    left: -10px;
+    top: -18px;
+    right: auto;
+  }
+
   .floating-telemetry-badge {
-    width: 100%;
-    max-width: 360px;
-    margin-top: 10px;
-    padding: 14px 16px;
+    position: absolute;
+    bottom: -15px;
+    right: -10px;
+    top: auto;
+    left: auto;
+    width: 250px;
+    padding: 12px 14px;
+  }
+
+  .prod-feature-story.reverse .floating-telemetry-badge {
+    bottom: -15px;
+    right: -10px;
+    top: auto;
+    left: auto;
   }
 
   .scenarios-grid {
