@@ -573,7 +573,10 @@ const ProductShowcase = () => {
 
             {/* Clickable Example Questions */}
             <div className="copilot-questions-picker">
-              <span className="picker-label">Click an example question to see live AI analysis:</span>
+              <span className="picker-label">
+                <Sparkles size={14} style={{ color: '#0284C7' }} />
+                <span>Click an example question to see live AI analysis:</span>
+              </span>
               <div className="picker-chips-grid">
                 {copilotQA.map((item, idx) => (
                   <button
@@ -582,7 +585,8 @@ const ProductShowcase = () => {
                     onClick={() => setSelectedQuestionIdx(idx)}
                     className={`picker-chip ${selectedQuestionIdx === idx ? 'active' : ''}`}
                   >
-                    <span>{item.q}</span>
+                    <span className="picker-chip-bullet">{idx + 1}</span>
+                    <span className="picker-chip-text">{item.q}</span>
                   </button>
                 ))}
               </div>
