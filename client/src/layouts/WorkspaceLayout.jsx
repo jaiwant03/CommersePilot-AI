@@ -265,7 +265,6 @@ const WorkspaceLayout = () => {
 
                   <Link
                     to="/"
-                    target="_blank"
                     className="dropdown-item"
                     onClick={() => setProfileOpen(false)}
                   >
