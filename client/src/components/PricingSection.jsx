@@ -113,14 +113,13 @@ const PricingSection = () => {
             </div>
 
             {/* Pricing Buttons */}
-            <div className="plan-cta" style={{ marginBottom: '24px' }}>
+            <div className="plan-cta">
               <Link
                 to={`/signup?plan=${plan.id}`}
                 className={plan.popular ? 'modelled-btn-cta' : 'modelled-nav-btn-white'}
-                style={{ width: '100%', justifyContent: 'center', padding: '12px', whiteSpace: 'nowrap', display: 'flex', alignItems: 'center', gap: '6px' }}
               >
                 <span>Choose {plan.name}</span>
-                <ArrowRight size={14} />
+                <ArrowRight size={14} style={{ flexShrink: 0 }} />
               </Link>
             </div>
 

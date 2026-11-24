@@ -2165,7 +2165,55 @@ body {
 }
 
 .plan-cta {
+  width: 100%;
   margin-bottom: var(--space-6);
+  display: flex;
+}
+
+.plan-cta a {
+  width: 100% !important;
+  box-sizing: border-box !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 8px !important;
+  white-space: nowrap !important;
+  padding: 12px 24px !important;
+  font-size: 14px !important;
+  font-weight: 700 !important;
+  border-radius: 9999px !important;
+  text-decoration: none !important;
+  text-align: center !important;
+  transition: all 0.25s ease !important;
+}
+
+.plan-cta a.modelled-btn-cta {
+  background: linear-gradient(135deg, #0284C7 0%, #0EA5E9 100%) !important;
+  color: #FFFFFF !important;
+  border: 1.5px solid #0284C7 !important;
+  box-shadow: 0 4px 16px rgba(14, 165, 233, 0.4) !important;
+}
+
+.plan-cta a.modelled-btn-cta:hover {
+  background: linear-gradient(135deg, #0369A1 0%, #0284C7 100%) !important;
+  color: #FFFFFF !important;
+  box-shadow: 0 8px 24px rgba(14, 165, 233, 0.55) !important;
+  transform: translateY(-2px) !important;
+}
+
+.plan-cta a.modelled-nav-btn-white {
+  background: #FFFFFF !important;
+  color: #0F172A !important;
+  border: 1.5px solid #CBD5E1 !important;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04) !important;
+}
+
+.plan-cta a.modelled-nav-btn-white:hover {
+  background: #F8FAFC !important;
+  border-color: #94A3B8 !important;
+  color: #0F172A !important;
+  transform: translateY(-2px) !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08) !important;
 }
 
 .plan-features-list {
