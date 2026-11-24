@@ -828,19 +828,51 @@ const ProductShowcase = () => {
           <div className="storytelling-hero-grid">
             
             <div className="storytelling-photo-col">
-              <div className="lifestyle-image-frame">
-                <img 
-                  src="https://images.unsplash.com/photo-1479064555552-3ef4979f8908?auto=format&fit=crop&w=800&q=80" 
-                  alt="Trendy Threads Curated Catalog - Dresses, Shoes & Accessories" 
-                  className="lifestyle-img"
-                />
-                <div className="lifestyle-caption-card">
-                  <div className="caption-avatar">
-                    <ShoppingBag size={18} />
+              <div className="story-media-stack">
+                {/* 3D Shopping Trolley strictly on the top-left corner BEHIND the image */}
+                <div className="floating-trolley-badge story-trolley">
+                  <img 
+                    src="/assets/images/3d-shopping-cart.svg" 
+                    alt="E-Commerce Shopping Cart" 
+                    className="trolley-svg"
+                  />
+                </div>
+
+                {/* Asymmetric Sculpted Architectural Silhouette */}
+                <div className="lifestyle-image-sculpted">
+                  <img 
+                    src="https://images.unsplash.com/photo-1479064555552-3ef4979f8908?auto=format&fit=crop&w=800&q=80" 
+                    alt="Trendy Threads Curated Catalog - Dresses, Shoes & Accessories" 
+                    className="sculpted-lifestyle-img"
+                  />
+                  <div className="lifestyle-lux-gradient" />
+                  
+                  {/* Top-Right Pill inside the frame */}
+                  <div className="crop-live-pill">
+                    <ShoppingBag size={11} />
+                    <span>Trendy Threads Storefront</span>
                   </div>
-                  <div>
-                    <div className="caption-name">Trendy Threads Boutique</div>
-                    <div className="caption-role">Independent Online Fashion &amp; Footwear • Coimbatore, Tamil Nadu</div>
+                </div>
+
+                {/* Top-Right Ambient Chip */}
+                <div className="corner-ai-chip chip-corner-top-right story-chip">
+                  <div className="ai-chip-pulsar pulse-indigo" />
+                  <span>Curated Catalog • 500+ SKUs</span>
+                </div>
+
+                {/* Floating Boutique Card strictly docked at the bottom right */}
+                <div className="story-floating-boutique-badge">
+                  <div className="boutique-badge-header">
+                    <div className="boutique-avatar-gradient">
+                      <ShoppingBag size={16} />
+                    </div>
+                    <div className="boutique-header-text">
+                      <div className="boutique-title-row">
+                        <span className="boutique-brand-name">Trendy Threads Boutique</span>
+                        <span className="boutique-status-pill">● Verified D2C</span>
+                      </div>
+                      <div className="boutique-subtitle">Independent Fashion &amp; Footwear • Coimbatore, TN</div>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -848,26 +880,91 @@ const ProductShowcase = () => {
 
             <div className="storytelling-profile-col">
               <div className="store-profile-card">
+                
+                {/* Top Status Header */}
+                <div className="profile-card-topbar">
+                  <div className="profile-verified-badge">
+                    <Sparkles size={12} className="text-indigo" />
+                    <span>VERIFIED MERCHANT CASE STUDY</span>
+                  </div>
+                  <div className="profile-live-tag">
+                    <span className="live-pulse-dot dot-green" />
+                    <span>3 Active Channels</span>
+                  </div>
+                </div>
+
                 <h3 className="profile-card-title">Trendy Threads Business Profile</h3>
                 <p className="profile-card-summary">
                   Independent women's ethnic fashion brand receiving ~500 monthly orders across three fragmented channels: 
                   direct website, Instagram DM selling, and WhatsApp catalogs.
                 </p>
 
-                <div className="profile-metrics-list">
-                  <div className="profile-metric">
-                    <span className="m-label">Product Categories</span>
-                    <span className="m-val">Women's Kurtis, Sarees, Jeans, Dresses, Accessories</span>
+                {/* 3 Luxury Structured Specification Tiles */}
+                <div className="profile-lux-tiles-stack">
+                  
+                  {/* Tile 1: Products */}
+                  <div className="profile-lux-tile">
+                    <div className="lux-tile-icon-box tile-indigo">
+                      <Layers size={16} />
+                    </div>
+                    <div className="lux-tile-content">
+                      <span className="lux-tile-label">Product Categories</span>
+                      <div className="lux-tile-tags">
+                        <span className="lux-tag">Women's Kurtis</span>
+                        <span className="lux-tag">Sarees</span>
+                        <span className="lux-tag">Jeans</span>
+                        <span className="lux-tag">Dresses</span>
+                        <span className="lux-tag">Accessories</span>
+                      </div>
+                    </div>
                   </div>
-                  <div className="profile-metric">
-                    <span className="m-label">Active Channels</span>
-                    <span className="m-val">Shopify Storefront • Instagram D2C • WhatsApp Business</span>
+
+                  {/* Tile 2: Channels */}
+                  <div className="profile-lux-tile">
+                    <div className="lux-tile-icon-box tile-sky">
+                      <Smartphone size={16} />
+                    </div>
+                    <div className="lux-tile-content">
+                      <span className="lux-tile-label">Active Channels</span>
+                      <div className="lux-channels-row">
+                        <span className="lux-channel-pill"><span className="channel-dot dot-shopify" />Shopify Storefront</span>
+                        <span className="lux-channel-pill"><span className="channel-dot dot-insta" />Instagram D2C</span>
+                        <span className="lux-channel-pill"><span className="channel-dot dot-wa" />WhatsApp Business</span>
+                      </div>
+                    </div>
                   </div>
-                  <div className="profile-metric">
-                    <span className="m-label">Location &amp; Currency</span>
-                    <span className="m-val">Coimbatore, Tamil Nadu • Default Currency: INR (₹)</span>
+
+                  {/* Tile 3: Operations & Currency */}
+                  <div className="profile-lux-tile">
+                    <div className="lux-tile-icon-box tile-emerald">
+                      <Database size={16} />
+                    </div>
+                    <div className="lux-tile-content">
+                      <span className="lux-tile-label">Location &amp; Currency</span>
+                      <span className="lux-tile-val">Coimbatore, Tamil Nadu • Default Currency: INR (₹)</span>
+                    </div>
+                  </div>
+
+                </div>
+
+                {/* Bottom Live Metric Footer Strip */}
+                <div className="profile-card-footer">
+                  <div className="footer-metric-pill">
+                    <span className="metric-num"><AnimatedCounter value={500} />+</span>
+                    <span className="metric-desc">Monthly Orders</span>
+                  </div>
+                  <div className="footer-sep" />
+                  <div className="footer-metric-pill">
+                    <span className="metric-num"><AnimatedRupee value={46731} /></span>
+                    <span className="metric-desc">Monthly GMV</span>
+                  </div>
+                  <div className="footer-sep" />
+                  <div className="footer-metric-pill">
+                    <span className="metric-status-text text-green">● Auto-Sync 24/7</span>
+                    <span className="metric-desc">Unified Operations</span>
                   </div>
                 </div>
+
               </div>
             </div>
 
