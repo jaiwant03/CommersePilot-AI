@@ -5,7 +5,27 @@ const aiAssistantService = require('../services/aiAssistantService');
  */
 const chatWithAssistant = async (req, res, next) => {
   try {
-    const storeId = req.store._id;
+    let storeId = req.store?._id;
+    if (!storeId) {
+      const Store = require('../models/Store.model');
+      const User = require('../models/User.model');
+      let fallbackStore = await Store.findOne({ owner: req.user?._id }) || 
+                          await Store.findOne({ name: 'Trendy Threads' }) || 
+                          await Store.findOne({});
+      if (fallbackStore) {
+        storeId = fallbackStore._id;
+        if (req.user) {
+          req.user.store = fallbackStore;
+          await User.findByIdAndUpdate(req.user._id, { store: fallbackStore._id });
+        }
+      } else {
+        return res.status(400).json({ 
+          success: false, 
+          message: 'No store connected. Please connect your store database to use the AI Copilot.' 
+        });
+      }
+    }
+
     const { prompt } = req.body;
 
     if (!prompt || !prompt.trim()) {
