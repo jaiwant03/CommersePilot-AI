@@ -310,7 +310,7 @@ const ProductShowcase = () => {
                 </div>
                 <div className="telemetry-score-row">
                   <div className="score-val-col">
-                    <span className="telemetry-big-score text-amber">65/100</span>
+                    <span className="telemetry-big-score text-amber"><AnimatedCounter value={65} suffix="/100" /></span>
                     <span className="telemetry-score-sub">Risk Index</span>
                   </div>
                   <span className="telemetry-tier-tag tier-high">HIGH RISK</span>
