@@ -2941,18 +2941,18 @@ body {
 }
 
 /* Impressive Cyber-Navy Telemetry HUD Cards */
-/* Impressive Cyber-Navy Telemetry HUD Cards - Docked Below Image to NEVER Hide It */
+/* Impressive Cyber-Navy Telemetry HUD Cards - Compact, Sleek Dimensions Docked Below Image */
 .floating-telemetry-badge {
   position: relative;
   width: 100%;
-  max-width: 520px;
+  max-width: 440px;
   background: linear-gradient(145deg, #0D1527 0%, #111B33 100%);
   border: 1.5px solid rgba(56, 189, 248, 0.35);
-  border-radius: 20px;
-  padding: 18px 22px;
+  border-radius: 16px;
+  padding: 12px 16px;
   box-shadow: 
-    0 20px 45px -10px rgba(15, 23, 42, 0.5),
-    0 0 25px rgba(56, 189, 248, 0.12),
+    0 16px 36px -8px rgba(15, 23, 42, 0.45),
+    0 0 20px rgba(56, 189, 248, 0.1),
     inset 0 1px 0 rgba(255, 255, 255, 0.15);
   z-index: 3;
   color: #FFFFFF;
@@ -2995,20 +2995,25 @@ body {
 .telemetry-badge-header {
   display: flex;
   align-items: center;
-  gap: 10px;
-  margin-bottom: 12px;
-  padding-bottom: 8px;
+  gap: 8px;
+  margin-bottom: 8px;
+  padding-bottom: 6px;
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 .telemetry-icon-box {
-  width: 32px;
-  height: 32px;
-  border-radius: 8px;
+  width: 26px;
+  height: 26px;
+  border-radius: 6px;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
+}
+
+.telemetry-icon-box svg {
+  width: 14px;
+  height: 14px;
 }
 
 .telemetry-icon-box.text-amber {
@@ -3032,14 +3037,14 @@ body {
 }
 
 .telemetry-badge-title {
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 750;
   color: #FFFFFF;
-  line-height: 1.25;
+  line-height: 1.2;
 }
 
 .telemetry-sub-tag {
-  font-size: 10px;
+  font-size: 9.5px;
   font-weight: 600;
   color: #94A3B8;
   letter-spacing: 0.02em;
@@ -3081,23 +3086,23 @@ body {
 }
 
 .telemetry-big-score {
-  font-size: 30px;
+  font-size: 24px;
   font-weight: 900;
   letter-spacing: -0.02em;
   line-height: 1;
 }
 
 .telemetry-score-sub {
-  font-size: 10px;
+  font-size: 9.5px;
   color: #94A3B8;
-  margin-top: 2px;
+  margin-top: 1px;
 }
 
 .telemetry-tier-tag {
-  font-size: 11px;
+  font-size: 10px;
   font-weight: 800;
-  padding: 4px 10px;
-  border-radius: 8px;
+  padding: 3px 8px;
+  border-radius: 6px;
 }
 
 .tier-high {
@@ -3107,13 +3112,13 @@ body {
 }
 
 .telemetry-reasons-list {
-  font-size: 11.5px;
+  font-size: 10.5px;
   color: #CBD5E1;
   display: flex;
   flex-direction: column;
-  gap: 5px;
-  margin-bottom: 10px;
-  line-height: 1.4;
+  gap: 3px;
+  margin-bottom: 8px;
+  line-height: 1.35;
 }
 
 .telemetry-action-hint {
@@ -3138,24 +3143,24 @@ body {
 }
 
 .telemetry-sku-title {
-  font-size: 13.5px;
+  font-size: 12px;
   font-weight: 750;
   color: #FFFFFF;
-  margin-bottom: 10px;
+  margin-bottom: 8px;
 }
 
 .runway-stat-pills {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 8px;
-  margin-bottom: 12px;
+  gap: 6px;
+  margin-bottom: 8px;
 }
 
 .runway-pill {
   background: rgba(255, 255, 255, 0.05);
   border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 10px;
-  padding: 8px;
+  border-radius: 8px;
+  padding: 5px 6px;
   text-align: center;
   display: flex;
   flex-direction: column;
@@ -3167,7 +3172,7 @@ body {
 }
 
 .runway-pill .pill-muted {
-  font-size: 10px;
+  font-size: 9px;
   color: #94A3B8;
   font-weight: 600;
   text-transform: uppercase;
@@ -3175,10 +3180,10 @@ body {
 }
 
 .runway-pill .pill-bold {
-  font-size: 13px;
+  font-size: 11.5px;
   font-weight: 800;
   color: #FFFFFF;
-  margin-top: 2px;
+  margin-top: 1px;
 }
 
 .text-red {
@@ -3188,24 +3193,24 @@ body {
 .auto-drafted-po-box {
   background: rgba(79, 70, 229, 0.2);
   border: 1px solid rgba(99, 102, 241, 0.45);
-  border-radius: 12px;
-  padding: 10px 12px;
+  border-radius: 10px;
+  padding: 8px 10px;
 }
 
 .po-box-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  font-size: 11.5px;
+  font-size: 10.5px;
   font-weight: 750;
   color: #A5B4FC;
-  margin-bottom: 4px;
+  margin-bottom: 3px;
 }
 
 .po-ready-pill {
-  font-size: 9.5px;
+  font-size: 9px;
   font-weight: 700;
-  padding: 2px 7px;
+  padding: 2px 6px;
   border-radius: 4px;
   background: rgba(34, 197, 94, 0.2);
   color: #4ADE80;
@@ -3213,28 +3218,28 @@ body {
 }
 
 .po-box-details {
-  font-size: 11.5px;
+  font-size: 10.5px;
   color: #CBD5E1;
-  line-height: 1.4;
+  line-height: 1.35;
 }
 
 .whatsapp-chat-bubble {
   background: rgba(16, 185, 129, 0.12);
   border: 1px solid rgba(52, 211, 153, 0.25);
-  border-radius: 12px 12px 12px 2px;
-  padding: 10px 12px;
-  margin-bottom: 8px;
+  border-radius: 10px 10px 10px 2px;
+  padding: 8px 10px;
+  margin-bottom: 6px;
 }
 
 .whatsapp-bubble-text {
-  font-size: 11.5px;
+  font-size: 10.5px;
   color: #D1FAE5;
-  line-height: 1.45;
-  margin-bottom: 4px;
+  line-height: 1.38;
+  margin-bottom: 3px;
 }
 
 .whatsapp-bubble-time {
-  font-size: 10px;
+  font-size: 9px;
   color: #6EE7B7;
   text-align: right;
 }
@@ -3242,12 +3247,12 @@ body {
 .whatsapp-reply-bubble {
   background: rgba(16, 185, 129, 0.25);
   border: 1px solid #34D399;
-  border-radius: 12px 12px 2px 12px;
-  padding: 8px 12px;
-  font-size: 11.5px;
+  border-radius: 10px 10px 2px 10px;
+  padding: 6px 10px;
+  font-size: 10.5px;
   color: #FFFFFF;
-  margin-left: 20px;
-  margin-bottom: 10px;
+  margin-left: 16px;
+  margin-bottom: 8px;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -3257,11 +3262,11 @@ body {
 .ndr-status-recovered {
   display: flex;
   align-items: center;
-  gap: 6px;
-  font-size: 11.5px;
+  gap: 5px;
+  font-size: 10.5px;
   font-weight: 700;
   color: #4ADE80;
-  padding-top: 6px;
+  padding-top: 4px;
   border-top: 1px solid rgba(255, 255, 255, 0.08);
 }
 
@@ -3310,11 +3315,11 @@ body {
 
 .copilot-terminal-card {
   background: #0B1120;
-  border-radius: 20px;
+  border-radius: 16px;
   border: 1.5px solid rgba(255, 255, 255, 0.12);
-  box-shadow: 0 25px 60px -15px rgba(15, 23, 42, 0.4);
+  box-shadow: 0 20px 50px -15px rgba(15, 23, 42, 0.4);
   width: 100%;
-  max-width: 480px;
+  max-width: 440px;
   overflow: hidden;
 }
 
@@ -3447,14 +3452,14 @@ body {
 .analytics-visual-dashboard {
   background: #FFFFFF;
   border: 1.5px solid #E2E8F0;
-  border-radius: 20px;
-  padding: 24px;
-  box-shadow: 0 20px 45px -10px rgba(15, 23, 42, 0.12);
+  border-radius: 16px;
+  padding: 18px;
+  box-shadow: 0 16px 36px -10px rgba(15, 23, 42, 0.12);
   width: 100%;
-  max-width: 480px;
+  max-width: 440px;
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 12px;
 }
 
 .kpi-two-col-grid {
