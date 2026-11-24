@@ -497,6 +497,258 @@ const InventoryPage = () => {
             </div>
           </div>
         </>
+      ) : activeTab === 'forecast' ? (
+        /* Demand Forecasting & Stock Runways Tab */
+        <div className="data-table-card">
+          <div style={{ padding: '20px', borderBottom: '1px solid var(--border-subtle)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '12px' }}>
+            <div>
+              <h2 style={{ fontSize: '16px', fontWeight: 700, color: 'var(--color-text-primary)' }}>
+                Predictive Demand Forecasting &amp; Stock Runways
+              </h2>
+              <p style={{ fontSize: '12.5px', color: 'var(--color-text-secondary)', marginTop: '2px' }}>
+                Algorithmic inventory intelligence based on 30-day trailing sales velocity (ADD) and supplier lead times
+              </p>
+            </div>
+            <button onClick={fetchForecast} className="btn btn-secondary" style={{ fontSize: '12px' }}>
+              <RefreshCw size={14} className={loadingForecast ? 'spinning' : ''} />
+              <span>Refresh Forecast</span>
+            </button>
+          </div>
+
+          {forecastData?.summary && (
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '16px', padding: '16px 20px', background: 'rgba(255, 255, 255, 0.02)', borderBottom: '1px solid var(--border-subtle)' }}>
+              <div style={{ padding: '12px', borderRadius: '8px', background: 'var(--color-bg-secondary)', border: '1px solid var(--border-subtle)' }}>
+                <span style={{ fontSize: '11px', color: 'var(--color-text-faint)', fontWeight: 600 }}>SKUS SCANNED</span>
+                <div style={{ fontSize: '20px', fontWeight: 800, color: 'var(--color-text-primary)', marginTop: '4px' }}>
+                  {forecastData.summary.totalSkusScanned || 0}
+                </div>
+              </div>
+              <div style={{ padding: '12px', borderRadius: '8px', background: 'rgba(239, 68, 68, 0.08)', border: '1px solid rgba(239, 68, 68, 0.2)' }}>
+                <span style={{ fontSize: '11px', color: '#EF4444', fontWeight: 600 }}>ITEMS NEEDING REORDER</span>
+                <div style={{ fontSize: '20px', fontWeight: 800, color: '#DC2626', marginTop: '4px' }}>
+                  {forecastData.summary.skusNeedingReorder || 0}
+                </div>
+              </div>
+              <div style={{ padding: '12px', borderRadius: '8px', background: 'rgba(79, 70, 229, 0.08)', border: '1px solid rgba(79, 70, 229, 0.2)' }}>
+                <span style={{ fontSize: '11px', color: '#4F46E5', fontWeight: 600 }}>EST. REPLENISHMENT CAPITAL</span>
+                <div style={{ fontSize: '20px', fontWeight: 800, color: '#4F46E5', marginTop: '4px' }}>
+                  ₹{(forecastData.summary.totalEstimatedReorderBudget || 0).toLocaleString('en-IN')}
+                </div>
+              </div>
+            </div>
+          )}
+
+          <div className="data-table-scroll">
+            <table className="data-table">
+              <thead>
+                <tr>
+                  <th>Product &amp; SKU</th>
+                  <th>Current Stock</th>
+                  <th>Avg Daily Demand (ADD)</th>
+                  <th>Days of Stock (Runway)</th>
+                  <th>Reorder Point (ROP)</th>
+                  <th>Suggested Restock</th>
+                  <th>Est. Cost</th>
+                  <th>Status &amp; Urgency</th>
+                </tr>
+              </thead>
+              <tbody>
+                {loadingForecast ? (
+                  <tr>
+                    <td colSpan={8} style={{ textAlign: 'center', padding: '36px', color: 'var(--color-text-muted)' }}>
+                      <RefreshCw size={24} className="spinning" style={{ margin: '0 auto 10px' }} />
+                      <p>Running moving-average demand models...</p>
+                    </td>
+                  </tr>
+                ) : (forecastData?.forecasts || []).length === 0 ? (
+                  <tr>
+                    <td colSpan={8} style={{ textAlign: 'center', padding: '36px', color: 'var(--color-text-muted)' }}>
+                      No demand telemetry available yet.
+                    </td>
+                  </tr>
+                ) : (
+                  (forecastData?.forecasts || []).map((f) => {
+                    const isCritical = f.daysOfStock <= 3 || f.runwayCategory === 'CRITICAL_RUNWAY';
+                    const isOut = f.availableStock === 0 || f.runwayCategory === 'OUT_OF_STOCK';
+
+                    return (
+                      <tr key={f.sku}>
+                        <td>
+                          <div style={{ fontWeight: 700, color: 'var(--color-text-primary)' }}>{f.title}</div>
+                          <code style={{ fontSize: '11px' }}>{f.sku}</code>
+                        </td>
+                        <td>
+                          <span style={{ fontWeight: 700, color: isOut ? '#EF4444' : isCritical ? '#D97706' : 'inherit' }}>
+                            {f.availableStock} units
+                          </span>
+                        </td>
+                        <td>
+                          <span style={{ fontWeight: 600 }}>{f.averageDailyDemand} units/day</span>
+                        </td>
+                        <td>
+                          <span style={{
+                            padding: '3px 8px',
+                            borderRadius: '4px',
+                            fontWeight: 700,
+                            fontSize: '11px',
+                            background: isOut ? '#FEE2E2' : isCritical ? '#FEF3C7' : '#DCFCE7',
+                            color: isOut ? '#DC2626' : isCritical ? '#B45309' : '#16A34A'
+                          }}>
+                            {isOut ? '0.00 days (OUT OF STOCK)' : `${f.daysOfStock} days`}
+                          </span>
+                        </td>
+                        <td>
+                          <span style={{ fontWeight: 600 }}>{f.reorderPoint} units</span>
+                        </td>
+                        <td>
+                          <span style={{ fontWeight: 700, color: '#4F46E5' }}>{f.suggestedReorderQuantity} units</span>
+                        </td>
+                        <td>
+                          <span style={{ fontWeight: 600 }}>₹{(f.estimatedReorderCost || 0).toLocaleString('en-IN')}</span>
+                        </td>
+                        <td>
+                          <span style={{
+                            fontSize: '11px',
+                            fontWeight: 700,
+                            padding: '2px 8px',
+                            borderRadius: '4px',
+                            background: isOut || isCritical ? 'rgba(239, 68, 68, 0.15)' : 'rgba(16, 185, 129, 0.15)',
+                            color: isOut || isCritical ? '#DC2626' : '#16A34A'
+                          }}>
+                            {isOut ? 'IMMEDIATE PO' : isCritical ? 'CRITICAL RUNWAY' : 'SAFE BUFFER'}
+                          </span>
+                        </td>
+                      </tr>
+                    );
+                  })
+                )}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      ) : activeTab === 'purchase_orders' ? (
+        /* Purchase Orders Tab */
+        <div className="data-table-card">
+          <div style={{ padding: '20px', borderBottom: '1px solid var(--border-subtle)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '12px' }}>
+            <div>
+              <h2 style={{ fontSize: '16px', fontWeight: 700, color: 'var(--color-text-primary)' }}>
+                Supplier Purchase Orders (POs)
+              </h2>
+              <p style={{ fontSize: '12.5px', color: 'var(--color-text-secondary)', marginTop: '2px' }}>
+                Auto-drafted purchase orders generated when SKU stock runway drops below lead times
+              </p>
+            </div>
+            <button onClick={fetchPOs} className="btn btn-secondary" style={{ fontSize: '12px' }}>
+              <RefreshCw size={14} className={loadingPOs ? 'spinning' : ''} />
+              <span>Refresh POs</span>
+            </button>
+          </div>
+
+          <div className="data-table-scroll">
+            <table className="data-table">
+              <thead>
+                <tr>
+                  <th>PO #</th>
+                  <th>Supplier / Manufacturer</th>
+                  <th>Replenishment Items</th>
+                  <th>Estimated Capital</th>
+                  <th>Status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {loadingPOs ? (
+                  <tr>
+                    <td colSpan={6} style={{ textAlign: 'center', padding: '36px', color: 'var(--color-text-muted)' }}>
+                      <RefreshCw size={24} className="spinning" style={{ margin: '0 auto 10px' }} />
+                      <p>Loading purchase orders...</p>
+                    </td>
+                  </tr>
+                ) : purchaseOrders.length === 0 ? (
+                  <tr>
+                    <td colSpan={6} style={{ textAlign: 'center', padding: '36px', color: 'var(--color-text-muted)' }}>
+                      No purchase orders recorded yet.
+                    </td>
+                  </tr>
+                ) : (
+                  purchaseOrders.map((po) => {
+                    const isDraft = po.status === 'DRAFT' || po.status === 'PENDING';
+                    const isApproved = po.status === 'APPROVED';
+
+                    return (
+                      <tr key={po._id}>
+                        <td>
+                          <span style={{ fontWeight: 700, color: 'var(--color-text-primary)' }}>
+                            {po.poNumber || `PO-${po._id.slice(-6).toUpperCase()}`}
+                          </span>
+                          <div style={{ fontSize: '11px', color: 'var(--color-text-faint)' }}>
+                            {new Date(po.createdAt).toLocaleDateString('en-IN')}
+                          </div>
+                        </td>
+                        <td>
+                          <div style={{ fontWeight: 600 }}>{po.supplier?.name || 'Coimbatore Fabric Mills'}</div>
+                          <div style={{ fontSize: '11px', color: 'var(--color-text-faint)' }}>
+                            {po.supplier?.email || 'supplies@coimbatorefabric.in'}
+                          </div>
+                        </td>
+                        <td>
+                          <div style={{ fontSize: '12px' }}>
+                            {(po.items || []).map((it, idx) => (
+                              <div key={idx}>
+                                {it.title || it.sku} x <strong>{it.quantity} units</strong> (₹{it.unitCost}/unit)
+                              </div>
+                            ))}
+                          </div>
+                        </td>
+                        <td>
+                          <span style={{ fontWeight: 700, color: 'var(--color-text-primary)' }}>
+                            ₹{(po.totalEstimatedCost || po.totalCost || 0).toLocaleString('en-IN')}
+                          </span>
+                        </td>
+                        <td>
+                          <span style={{
+                            padding: '3px 8px',
+                            borderRadius: '4px',
+                            fontSize: '11px',
+                            fontWeight: 700,
+                            background: isApproved ? 'rgba(16, 185, 129, 0.15)' : 'rgba(234, 179, 8, 0.15)',
+                            color: isApproved ? '#16A34A' : '#D97706'
+                          }}>
+                            {po.status || 'DRAFT'}
+                          </span>
+                        </td>
+                        <td>
+                          {isDraft ? (
+                            <div style={{ display: 'flex', gap: '6px' }}>
+                              <button
+                                onClick={() => handleApprovePO(po._id)}
+                                className="btn"
+                                style={{ background: '#16A34A', color: '#fff', border: 'none', padding: '6px 10px', fontSize: '11px', fontWeight: 600, borderRadius: '6px', cursor: 'pointer' }}
+                              >
+                                ✓ Approve &amp; Dispatch PO
+                              </button>
+                              <button
+                                onClick={() => handleRejectPO(po._id)}
+                                className="btn"
+                                style={{ background: '#DC2626', color: '#fff', border: 'none', padding: '6px 10px', fontSize: '11px', fontWeight: 600, borderRadius: '6px', cursor: 'pointer' }}
+                              >
+                                ✕ Reject
+                              </button>
+                            </div>
+                          ) : (
+                            <span style={{ fontSize: '12px', color: '#16A34A', fontWeight: 600 }}>
+                              ✓ Dispatched to Supplier
+                            </span>
+                          )}
+                        </td>
+                      </tr>
+                    );
+                  })
+                )}
+              </tbody>
+            </table>
+          </div>
+        </div>
       ) : (
         /* Inventory Movements / Audit Log Tab */
         <div className="data-table-card">
