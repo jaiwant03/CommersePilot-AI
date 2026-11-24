@@ -72,7 +72,7 @@ const Navbar = () => {
           <a
             href="/#product"
             onClick={(e) => handleNavClick('product', e)}
-            className={`nav-link ${location.pathname === '/' && activeSection === 'product' ? 'active' : ''}`}
+            className={`nav-link ${location.pathname === '/' && activeSection === 'product' ? 'active' : location.pathname === '/product' ? 'active' : ''}`}
           >
             Product
           </a>
@@ -163,7 +163,7 @@ const Navbar = () => {
           <a
             href="/#product"
             onClick={(e) => { handleNavClick('product', e); toggleMobileMenu(false); }}
-            className={`mobile-nav-link ${location.pathname === '/' && activeSection === 'product' ? 'active' : ''}`}
+            className={`mobile-nav-link ${location.pathname === '/' && activeSection === 'product' ? 'active' : location.pathname === '/product' ? 'active' : ''}`}
           >
             Product
           </a>
