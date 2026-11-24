@@ -81,12 +81,12 @@ const HowItWorksSection = () => {
 
       <div className="steps-container">
         {steps.map((step, index) => (
-          <div key={index} className="step-card" style={{ background: 'rgba(255, 255, 255, 0.95)', border: '1.5px solid rgba(186, 230, 253, 0.75)', borderRadius: '24px', padding: '28px', boxShadow: '0 10px 25px -5px rgba(14, 165, 233, 0.08)' }}>
+          <div key={index} className="step-card">
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '18px' }}>
-              <div style={{ width: '38px', height: '38px', borderRadius: '12px', background: '#0F172A', color: '#FFFFFF', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '13px', fontWeight: 800 }}>
+              <div className="step-num-badge" style={{ width: '38px', height: '38px', borderRadius: '12px', background: '#0F172A', color: '#FFFFFF', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '13px', fontWeight: 800, transition: 'all 0.3s ease' }}>
                 {step.number}
               </div>
-              <div style={{ width: '38px', height: '38px', borderRadius: '12px', background: 'linear-gradient(135deg, #E0F2FE 0%, #BAE6FD 100%)', color: '#0284C7', border: '1px solid #7DD3FC', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <div className="step-icon-glow" style={{ width: '38px', height: '38px', borderRadius: '12px', background: 'linear-gradient(135deg, #E0F2FE 0%, #BAE6FD 100%)', color: '#0284C7', border: '1px solid #7DD3FC', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'all 0.3s ease' }}>
                 {step.icon}
               </div>
             </div>
