@@ -37,32 +37,51 @@ const HomePage = () => {
     }
   }, []);
 
-  // IntersectionObserver to track current active section naturally as user scrolls
+  // Scroll listener to track current active section naturally and reliably as user scrolls
   useEffect(() => {
-    const observerOptions = {
-      root: null,
-      rootMargin: '-20% 0px -40% 0px',
-      threshold: [0.1, 0.25, 0.5]
-    };
+    const handleScroll = () => {
+      const navHeight = 90;
+      let current = 'home';
 
-    const handleIntersect = (entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          const id = entry.target.id;
-          if (id && SECTIONS.some((s) => s.id === id)) {
-            setActiveSection(id);
+      if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 60) {
+        current = 'pricing';
+      } else {
+        for (const sec of SECTIONS) {
+          const el = document.getElementById(sec.id);
+          if (el) {
+            const rect = el.getBoundingClientRect();
+            if (rect.top <= navHeight + 80 && rect.bottom > navHeight) {
+              current = sec.id;
+            }
           }
         }
-      });
+      }
+
+      if (current !== activeSectionRef.current) {
+        setActiveSection(current);
+      }
     };
 
-    const observer = new IntersectionObserver(handleIntersect, observerOptions);
-    SECTIONS.forEach((s) => {
-      const el = document.getElementById(s.id);
-      if (el) observer.observe(el);
-    });
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    handleScroll();
 
-    return () => observer.disconnect();
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  // Handle URL hash on initial load (e.g. /#product)
+  useEffect(() => {
+    if (window.location.hash) {
+      const hashId = window.location.hash.replace('#', '');
+      const el = document.getElementById(hashId);
+      if (el) {
+        setTimeout(() => {
+          const yOffset = -70;
+          const y = el.getBoundingClientRect().top + window.pageYOffset + yOffset;
+          window.scrollTo({ top: y, behavior: 'smooth' });
+          setActiveSection(hashId);
+        }, 120);
+      }
+    }
   }, []);
 
   // Keyboard navigation support (PageDown, PageUp, ArrowDown, ArrowUp)

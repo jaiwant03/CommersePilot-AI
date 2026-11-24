@@ -11,15 +11,44 @@ const Navbar = () => {
   const { user, store, isAuthenticated, logout } = useAuth();
   const location = useLocation();
 
+  const NAV_SECTIONS = ['home', 'product', 'features', 'how-it-works', 'pricing'];
+
+  // Scroll spy: update active navbar link as user scrolls
   useEffect(() => {
     const handleScroll = () => {
-      setScrolled(window.scrollY > 20);
-    };
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+      const scrollY = window.scrollY;
+      setScrolled(scrollY > 20);
 
-  // Listen for active section changes on the landing page
+      // On landing page, dynamically detect which section is in view
+      if (location.pathname === '/') {
+        const navHeight = 90;
+        let current = 'home';
+
+        // Check if scrolled near the bottom of document
+        if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 60) {
+          current = 'pricing';
+        } else {
+          for (const sectionId of NAV_SECTIONS) {
+            const el = document.getElementById(sectionId);
+            if (el) {
+              const rect = el.getBoundingClientRect();
+              if (rect.top <= navHeight + 80 && rect.bottom > navHeight) {
+                current = sectionId;
+              }
+            }
+          }
+        }
+        setActiveSection(current);
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    handleScroll();
+
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [location.pathname]);
+
+  // Also listen for active section changes dispatched from landing page components
   useEffect(() => {
     if (location.pathname !== '/') return;
     const handleSectionChange = (e) => {
@@ -41,7 +70,9 @@ const Navbar = () => {
       e.preventDefault();
       const el = document.getElementById(sectionId);
       if (el) {
-        el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        const yOffset = -70;
+        const y = el.getBoundingClientRect().top + window.pageYOffset + yOffset;
+        window.scrollTo({ top: y, behavior: 'smooth' });
         setActiveSection(sectionId);
       }
     }
