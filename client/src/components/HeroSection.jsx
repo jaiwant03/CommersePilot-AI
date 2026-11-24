@@ -47,9 +47,9 @@ const HeroSection = () => {
 
             {/* Main Rhyming Headline with Stylized Cyan Glowing Wave under "AI" */}
             <h1 className="home-hero-title">
-              Sell Without Stress. <br />
-              Scale With Success <br />
-              with <span className="title-ai-wrapper">
+              <span className="hero-word-blue">Sell</span> Without <span className="hero-word-blue">Stress</span>. <br />
+              <span className="hero-word-blue">Scale</span> With <span className="hero-word-blue">Success</span> <br />
+              with <span className="title-ai-wrapper hero-word-blue">
                 AI
                 <svg className="title-ai-wave" viewBox="0 0 130 26" fill="none" aria-hidden="true">
                   <path d="M4 18 C30 22, 58 6, 84 13 C104 18, 118 4, 126 2 C124 7, 112 16, 94 18 C70 21, 48 25, 4 18 Z" fill="url(#waveGlowGrad)"/>

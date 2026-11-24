@@ -518,10 +518,15 @@ body {
   margin-bottom: 16px;
 }
 
+.hero-word-blue {
+  color: #0284C7;
+  display: inline-block;
+}
+
 .title-ai-wrapper {
   position: relative;
   display: inline-block;
-  color: #4F46E5;
+  color: #0284C7;
 }
 
 .title-ai-wave {
