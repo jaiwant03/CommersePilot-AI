@@ -1717,12 +1717,105 @@ body {
 }
 
 /* ==========================================================================
-   Features Grid
+   Features Grid & Alternating Staggered Rows with Bidirectional Jump Animation
    ========================================================================== */
 .features-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: var(--space-6);
+}
+
+.features-stagger-list {
+  display: flex;
+  flex-direction: column;
+  gap: 36px;
+  width: 100%;
+  position: relative;
+  padding: 16px 0;
+}
+
+.feature-stagger-row {
+  display: flex;
+  width: 100%;
+  align-items: center;
+}
+
+.feature-stagger-row.row-left {
+  justify-content: flex-start;
+}
+
+.feature-stagger-row.row-right {
+  justify-content: flex-end;
+}
+
+/* Feature Jumping Box */
+.feature-jumping-box {
+  width: 100%;
+  max-width: 580px;
+  background: rgba(255, 255, 255, 0.98);
+  border: 1.5px solid rgba(186, 230, 253, 0.85);
+  border-radius: 24px;
+  padding: 30px 32px;
+  box-shadow: 0 14px 34px -8px rgba(14, 165, 233, 0.12), 0 0 0 1px rgba(255, 255, 255, 0.9) inset;
+  display: flex;
+  flex-direction: column;
+  will-change: transform, opacity, filter;
+  position: relative;
+}
+
+/* Hidden States: off-screen and ready to jump */
+.feature-jumping-box.jump-hidden.jump-from-left {
+  opacity: 0;
+  transform: translate3d(-75px, 50px, 0) scale(0.85);
+  filter: blur(6px);
+  pointer-events: none;
+  transition: transform 0.4s ease-in, opacity 0.35s ease-in, filter 0.35s ease-in;
+}
+
+.feature-jumping-box.jump-hidden.jump-from-right {
+  opacity: 0;
+  transform: translate3d(75px, 50px, 0) scale(0.85);
+  filter: blur(6px);
+  pointer-events: none;
+  transition: transform 0.4s ease-in, opacity 0.35s ease-in, filter 0.35s ease-in;
+}
+
+/* Jumped-In Visible State (Dynamic Spring Jump Bounce) */
+.feature-jumping-box.jump-visible {
+  opacity: 1;
+  transform: translate3d(0, 0, 0) scale(1);
+  filter: blur(0px);
+  pointer-events: auto;
+  transition: 
+    transform 0.75s cubic-bezier(0.34, 1.56, 0.64, 1),
+    opacity 0.5s ease-out,
+    filter 0.5s ease-out;
+}
+
+.feature-jumping-box.jump-visible:hover {
+  transform: translateY(-6px) scale(1.015);
+  box-shadow: 
+    0 24px 50px -10px rgba(14, 165, 233, 0.25),
+    0 0 0 2px rgba(14, 165, 233, 0.4);
+  border-color: #0284C7;
+  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+}
+
+@media (max-width: 768px) {
+  .feature-stagger-row.row-left,
+  .feature-stagger-row.row-right {
+    justify-content: center;
+  }
+
+  .feature-jumping-box {
+    max-width: 100%;
+    padding: 24px 20px;
+  }
+
+  .feature-jumping-box.jump-hidden.jump-from-left,
+  .feature-jumping-box.jump-hidden.jump-from-right {
+    transform: translate3d(0, 45px, 0) scale(0.9);
+  }
 }
 
 .feature-card {
