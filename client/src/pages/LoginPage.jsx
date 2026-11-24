@@ -1,6 +1,17 @@
 import React, { useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
-import { Sparkles, ArrowRight, AlertCircle } from 'lucide-react';
+import {
+  Sparkles,
+  ArrowRight,
+  AlertCircle,
+  Mail,
+  Lock,
+  Eye,
+  EyeOff,
+  ShieldCheck,
+  Zap,
+  CheckCircle2
+} from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 
 const LoginPage = () => {
@@ -14,6 +25,7 @@ const LoginPage = () => {
     rememberMe: true
   });
 
+  const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
 
@@ -23,6 +35,15 @@ const LoginPage = () => {
       ...prev,
       [name]: type === 'checkbox' ? checked : value
     }));
+  };
+
+  const handleFillDemo = () => {
+    setFormData({
+      email: 'meena@trendythreads.in',
+      password: 'TrendyThreads2026!',
+      rememberMe: true
+    });
+    setErrorMessage('');
   };
 
   const handleSubmit = async (e) => {
@@ -54,7 +75,7 @@ const LoginPage = () => {
       <div className="auth-card">
         <div className="auth-header">
           <div className="auth-brand-badge">
-            <Sparkles size={14} />
+            <Sparkles size={13} />
             <span>Seller Operations Console</span>
           </div>
           <h1 className="auth-title">Log in to CommercePilot</h1>
@@ -62,6 +83,17 @@ const LoginPage = () => {
             Enter your credentials to access your autonomous store operations.
           </p>
         </div>
+
+        {/* Quick One-Click Demo Credentials Pill */}
+        <button
+          type="button"
+          className="auth-demo-pill"
+          onClick={handleFillDemo}
+          title="Instant autofill for Trendy Threads demo store"
+        >
+          <Sparkles size={14} className="sparkle-pulse" />
+          <span>One-Click Demo Fill: <strong>Meena (Trendy Threads)</strong></span>
+        </button>
 
         {errorMessage && (
           <div className="auth-alert-error" role="alert">
@@ -71,39 +103,56 @@ const LoginPage = () => {
         )}
 
         <form className="auth-form" onSubmit={handleSubmit}>
+          {/* Business Email */}
           <div className="form-group">
             <label className="form-label" htmlFor="email">Business Email</label>
-            <input
-              id="email"
-              name="email"
-              type="email"
-              className="form-input"
-              placeholder="merchant@yourbrand.com"
-              required
-              value={formData.email}
-              onChange={handleChange}
-            />
+            <div className="auth-input-wrap">
+              <Mail size={16} className="auth-input-icon" />
+              <input
+                id="email"
+                name="email"
+                type="email"
+                className="form-input"
+                placeholder="merchant@yourbrand.com"
+                required
+                value={formData.email}
+                onChange={handleChange}
+              />
+            </div>
           </div>
 
+          {/* Password */}
           <div className="form-group">
             <div className="form-label">
               <label htmlFor="password">Password</label>
-              <Link to="/forgot-password" style={{ fontSize: '12px', color: '#818CF8' }}>
+              <Link to="/forgot-password" style={{ fontSize: '12px', color: '#0284C7', textDecoration: 'none', fontWeight: 600 }}>
                 Forgot password?
               </Link>
             </div>
-            <input
-              id="password"
-              name="password"
-              type="password"
-              className="form-input"
-              placeholder="••••••••••••"
-              required
-              value={formData.password}
-              onChange={handleChange}
-            />
+            <div className="auth-input-wrap">
+              <Lock size={16} className="auth-input-icon" />
+              <input
+                id="password"
+                name="password"
+                type={showPassword ? 'text' : 'password'}
+                className="form-input"
+                placeholder="••••••••••••"
+                required
+                value={formData.password}
+                onChange={handleChange}
+              />
+              <button
+                type="button"
+                className="password-toggle-btn"
+                onClick={() => setShowPassword((prev) => !prev)}
+                aria-label={showPassword ? 'Hide password' : 'Show password'}
+              >
+                {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+              </button>
+            </div>
           </div>
 
+          {/* Remember Device Checkbox */}
           <label className="form-checkbox-row">
             <input
               type="checkbox"
@@ -115,10 +164,10 @@ const LoginPage = () => {
             <span>Remember this device for 30 days</span>
           </label>
 
+          {/* Submit Button */}
           <button
             type="submit"
-            className="btn btn-primary btn-lg"
-            style={{ width: '100%', marginTop: '8px' }}
+            className="btn-auth-submit"
             disabled={loading}
           >
             {loading ? 'Authenticating...' : 'Sign In to Console'}
@@ -131,6 +180,24 @@ const LoginPage = () => {
           <Link to="/register" className="auth-link">
             Register here
           </Link>
+        </div>
+      </div>
+
+      {/* Enterprise Security & Trust Badges */}
+      <div className="auth-trust-badges">
+        <div className="trust-badge-item">
+          <ShieldCheck size={14} />
+          <span>256-Bit Bank-Grade Encryption</span>
+        </div>
+        <span className="trust-sep">•</span>
+        <div className="trust-badge-item">
+          <Zap size={14} />
+          <span>Sub-Second Telemetry Sync</span>
+        </div>
+        <span className="trust-sep">•</span>
+        <div className="trust-badge-item">
+          <CheckCircle2 size={14} />
+          <span>SOC-2 Type II Certified</span>
         </div>
       </div>
     </div>
