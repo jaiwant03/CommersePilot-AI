@@ -4596,7 +4596,8 @@ body {
   flex-shrink: 0;
 }
 
-/* Animated Rupee Value Styling */
+/* Animated Counter & Rupee Value Styling */
+.animated-counter-value,
 .animated-rupee-value {
   display: inline-block;
   font-feature-settings: "tnum";
