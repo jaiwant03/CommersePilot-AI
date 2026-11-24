@@ -212,9 +212,9 @@ const seedTrendyThreads = async () => {
     const now = Date.now();
     const dayMs = 24 * 60 * 60 * 1000;
 
-    // Distribute 450 units sold across 30 days (15 units per day)
+    // Distribute 450 units sold across 30 days (15 units per day within 28 days)
     for (let day = 1; day <= 30; day++) {
-      const orderDate = new Date(now - day * dayMs);
+      const orderDate = new Date(now - (day * 0.9) * dayMs);
       historicalOrders.push({
         store: store._id,
         orderNumber: `ORD-HIST-${1000 + day}`,

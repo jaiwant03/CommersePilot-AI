@@ -122,7 +122,7 @@ const forecastingService = {
         daysOfStock = 999; // Stagnant / Infinite at 0 demand
         runwayCategory = 'SLOW_MOVING';
       } else {
-        daysOfStock = Number((availableStock / averageDailyDemand).toFixed(1));
+        daysOfStock = Number((availableStock / averageDailyDemand).toFixed(2));
         if (daysOfStock <= supplierLeadTime) {
           runwayCategory = 'CRITICAL_RUNWAY'; // Stockout will occur before lead-time delivery!
           criticalCount++;
