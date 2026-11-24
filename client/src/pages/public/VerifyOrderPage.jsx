@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useSearchParams, Link } from 'react-router-dom';
 import { CheckCircle2, XCircle, ShieldCheck, AlertTriangle, RefreshCw, ShoppingBag } from 'lucide-react';
 import workspaceService from '../../services/workspace.service';
+import AnimatedRupee from '../../components/AnimatedRupee';
 
 const VerifyOrderPage = () => {
   const [searchParams] = useSearchParams();
@@ -135,7 +136,7 @@ const VerifyOrderPage = () => {
           </div>
           <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '15px', paddingTop: '10px' }}>
             <span style={{ fontWeight: 600, color: 'var(--color-text-primary)' }}>Total Due at Delivery:</span>
-            <strong style={{ color: 'var(--color-success)', fontSize: '17px' }}>₹{(order.totalAmount || 0).toLocaleString('en-IN')}</strong>
+            <strong style={{ color: 'var(--color-success)', fontSize: '17px' }}><AnimatedRupee value={order.totalAmount || 0} /></strong>
           </div>
         </div>
 
