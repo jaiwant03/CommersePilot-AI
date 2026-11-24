@@ -95,9 +95,12 @@ const WorkspaceLayout = () => {
         <div className="sidebar-header">
           <Link to="/app/overview" className="sidebar-brand">
             <div className="logo-symbol">
-              <Sparkles size={18} />
+              <Sparkles size={17} />
             </div>
-            <span>CommercePilot</span>
+            <div className="brand-text-col">
+              <span className="brand-title">CommercePilot</span>
+              <span className="brand-tier-badge">AI PRO</span>
+            </div>
           </Link>
           <button
             className="topbar-btn mobile-sidebar-toggle"
@@ -151,11 +154,14 @@ const WorkspaceLayout = () => {
 
         <div className="sidebar-footer">
           <Link to="/" target="_blank" rel="noopener noreferrer" className="store-preview-link">
-            <span style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <span className="store-preview-left">
               <ExternalLink size={14} />
-              Marketing Site
+              <span>Marketing Site</span>
             </span>
-            <span style={{ fontSize: '11px', color: '#6366F1' }}>Live</span>
+            <span className="live-status-pill">
+              <span className="live-beacon-dot" />
+              Live
+            </span>
           </Link>
         </div>
       </aside>
