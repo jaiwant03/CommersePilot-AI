@@ -45,23 +45,30 @@ const HeroSection = () => {
               <span>AI-Powered Commerce Autopilot</span>
             </div>
 
-            {/* Main Rhyming Headline with Stylized Cyan Glowing Wave under "AI" */}
+            {/* Main Rhyming Headline with Line-by-Line Staggered Animation & Stylized Cyan Wave */}
             <h1 className="home-hero-title">
-              <span className="hero-word-blue">Sell</span> Without <span className="hero-word-blue">Stress</span>. <br />
-              <span className="hero-word-blue">Scale</span> With <span className="hero-word-blue">Success</span> <br />
-              with <span className="title-ai-wrapper hero-word-blue">
-                AI
-                <svg className="title-ai-wave" viewBox="0 0 130 26" fill="none" aria-hidden="true">
-                  <path d="M4 18 C30 22, 58 6, 84 13 C104 18, 118 4, 126 2 C124 7, 112 16, 94 18 C70 21, 48 25, 4 18 Z" fill="url(#waveGlowGrad)"/>
-                  <path d="M2 17 C28 21, 56 6, 82 12 C102 17, 116 3, 128 1" stroke="#38BDF8" strokeWidth="2.8" strokeLinecap="round"/>
-                  <defs>
-                    <linearGradient id="waveGlowGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-                      <stop offset="0%" stopColor="#38BDF8" stopOpacity="0.85"/>
-                      <stop offset="50%" stopColor="#0284C7" stopOpacity="0.75"/>
-                      <stop offset="100%" stopColor="#38BDF8" stopOpacity="0"/>
-                    </linearGradient>
-                  </defs>
-                </svg>
+              <span className="hero-title-line hero-line-1">
+                <span className="hero-word-blue">Sell</span> Without <span className="hero-word-blue">Stress</span>.
+              </span>
+              <span className="hero-title-line hero-line-2">
+                <span className="hero-word-blue">Scale</span> With <span className="hero-word-blue">Success</span>
+              </span>
+              <span className="hero-title-line hero-line-3">
+                with{' '}
+                <span className="title-ai-wrapper hero-word-blue">
+                  AI
+                  <svg className="title-ai-wave" viewBox="0 0 130 26" fill="none" aria-hidden="true">
+                    <path d="M4 18 C30 22, 58 6, 84 13 C104 18, 118 4, 126 2 C124 7, 112 16, 94 18 C70 21, 48 25, 4 18 Z" fill="url(#waveGlowGrad)"/>
+                    <path d="M2 17 C28 21, 56 6, 82 12 C102 17, 116 3, 128 1" stroke="#38BDF8" strokeWidth="2.8" strokeLinecap="round"/>
+                    <defs>
+                      <linearGradient id="waveGlowGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                        <stop offset="0%" stopColor="#38BDF8" stopOpacity="0.85"/>
+                        <stop offset="50%" stopColor="#0284C7" stopOpacity="0.75"/>
+                        <stop offset="100%" stopColor="#38BDF8" stopOpacity="0"/>
+                      </linearGradient>
+                    </defs>
+                  </svg>
+                </span>
               </span>
             </h1>
 

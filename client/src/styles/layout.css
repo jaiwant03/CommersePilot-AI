@@ -518,6 +518,51 @@ body {
   margin-bottom: 16px;
 }
 
+/* Staggered Line-by-Line Entrance Animation */
+.hero-title-line {
+  display: block;
+  opacity: 0;
+  animation-name: heroLineReveal;
+  animation-duration: 0.75s;
+  animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+  animation-fill-mode: forwards;
+  will-change: transform, opacity, filter;
+}
+
+.hero-line-1 {
+  animation-delay: 0.2s;
+}
+
+.hero-line-2 {
+  animation-delay: 1.2s;
+}
+
+.hero-line-3 {
+  animation-delay: 2.2s;
+}
+
+@keyframes heroLineReveal {
+  0% {
+    opacity: 0;
+    transform: translateY(22px);
+    filter: blur(4px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-title-line {
+    opacity: 1 !important;
+    transform: none !important;
+    filter: none !important;
+    animation: none !important;
+  }
+}
+
 .hero-word-blue {
   color: #0284C7;
   display: inline-block;
