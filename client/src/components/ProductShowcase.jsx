@@ -324,8 +324,8 @@ const ProductShowcase = () => {
                 </div>
               </div>
 
-              {/* Bottom-Right Corner Chip */}
-              <div className="corner-ai-chip chip-corner-bottom-right">
+              {/* Bottom-Left Corner Chip */}
+              <div className="corner-ai-chip chip-corner-bottom-left">
                 <div className="ai-chip-pulsar pulse-green" />
                 <span>Automated Dispatch: Active 24/7</span>
               </div>
@@ -405,7 +405,7 @@ const ProductShowcase = () => {
               </div>
 
               {/* Top-Right Corner Chip */}
-              <div className="corner-ai-chip chip-corner-top-left">
+              <div className="corner-ai-chip chip-corner-top-right">
                 <div className="ai-chip-pulsar pulse-cyan" />
                 <span>Multi-Store Velocity Sync</span>
               </div>
@@ -450,7 +450,7 @@ const ProductShowcase = () => {
               </div>
 
               {/* Bottom-Left Corner Chip */}
-              <div className="corner-ai-chip chip-corner-bottom-right">
+              <div className="corner-ai-chip chip-corner-bottom-left">
                 <div className="ai-chip-pulsar pulse-indigo" />
                 <span>PO #PO-1001: Ready to Sign</span>
               </div>
