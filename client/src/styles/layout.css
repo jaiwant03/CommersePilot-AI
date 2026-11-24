@@ -2722,17 +2722,18 @@ body {
 .prod-collage-canvas {
   position: relative;
   width: 100%;
-  max-width: 560px;
-  min-height: 520px;
+  max-width: 580px;
+  min-height: 480px;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
 .collage-shape-arch {
-  width: 380px;
-  height: 480px;
-  border-radius: 190px 190px 36px 36px;
+  width: 480px;
+  height: 410px;
+  max-width: 100%;
+  border-radius: 200px 200px 36px 36px;
   overflow: hidden;
   box-shadow: 0 30px 60px -15px rgba(79, 70, 229, 0.28), 0 0 0 4px #FFFFFF;
   position: relative;
