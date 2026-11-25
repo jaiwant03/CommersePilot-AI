@@ -1,3 +1,4 @@
+const mongoose = require('mongoose');
 const Order = require('../models/Order.model');
 const Customer = require('../models/Customer.model');
 const Product = require('../models/Product.model');
@@ -103,10 +104,14 @@ const createOrder = async (req, res, next) => {
       notes = ''
     } = req.body;
 
-    const custName = customer.fullName || customer.name || '';
-    const custPhone = customer.phone || '';
+    if (!customer) {
+      return res.status(400).json({ success: false, message: 'Customer information is required.' });
+    }
 
-    if (!customer || !custName || !custPhone) {
+    const custName = (customer.fullName || customer.name || '').trim();
+    const custPhone = (customer.phone || '').trim();
+
+    if (!custName || !custPhone) {
       return res.status(400).json({ success: false, message: 'Customer name and phone number are required.' });
     }
 
@@ -136,26 +141,36 @@ const createOrder = async (req, res, next) => {
     const formattedItems = [];
 
     for (const item of items) {
-      const quantity = Number(item.quantity) || 1;
-      const unitPrice = Number(item.unitPrice !== undefined ? item.unitPrice : item.price) || 0;
+      const quantity = Math.max(1, parseInt(item.quantity) || 1);
+      const unitPrice = Math.max(0, Number(item.unitPrice !== undefined ? item.unitPrice : item.price) || 0);
       const totalPrice = quantity * unitPrice;
       subtotal += totalPrice;
 
+      const rawProd = item.productId || item.product;
+      const validProdId = (rawProd && mongoose.Types.ObjectId.isValid(rawProd)) ? rawProd : null;
+      const itemTitle = (item.title || item.productTitle || '').trim() || 'Manual Order Item';
+      const itemSku = (item.sku || '').trim() || `SKU-${Date.now().toString().slice(-4)}`;
+
       formattedItems.push({
-        product: item.productId || item.product || null,
-        title: item.title || item.productTitle || 'Catalog Product',
-        sku: item.sku || 'SKU-ITEM',
+        product: validProdId,
+        title: itemTitle,
+        sku: itemSku,
         quantity,
         unitPrice,
         totalPrice
       });
     }
 
-    const totalAmount = subtotal + Number(shippingFee) - Number(discount);
+    const totalAmount = Math.max(0, subtotal + Number(shippingFee) - Number(discount));
 
-    // 2. Generate sequential order number
+    // 2. Generate sequential order number with collision protection
     const orderCount = await Order.countDocuments({ store: storeId });
-    const orderNumber = `CP-${1000 + orderCount + 1}`;
+    let nextNum = 1000 + orderCount + 1;
+    let orderNumber = `CP-${nextNum}`;
+    while (await Order.exists({ store: storeId, orderNumber })) {
+      nextNum += 1;
+      orderNumber = `CP-${nextNum}`;
+    }
 
     // 3. Upsert Customer record
     let customerDoc = await Customer.findOne({ store: storeId, phone: custPhone.trim() });
@@ -168,8 +183,8 @@ const createOrder = async (req, res, next) => {
         address: normalizedAddress
       });
     }
-    customerDoc.ordersCount += 1;
-    customerDoc.totalSpent += totalAmount;
+    customerDoc.ordersCount = (customerDoc.ordersCount || 0) + 1;
+    customerDoc.totalSpent = (customerDoc.totalSpent || 0) + totalAmount;
     await customerDoc.save();
 
     // 4. Calculate COD risk score based on order value, customer history, and missing address components

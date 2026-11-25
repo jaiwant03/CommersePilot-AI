@@ -13,10 +13,30 @@ import {
   ShieldCheck,
   CheckCircle,
   Truck,
-  IndianRupee
+  IndianRupee,
+  CheckCircle2,
+  AlertCircle,
+  Sparkles
 } from 'lucide-react';
 import workspaceService from '../../services/workspace.service';
 import AnimatedRupee from '../../components/AnimatedRupee';
+
+const INITIAL_ORDER_STATE = {
+  customer: {
+    name: '',
+    email: '',
+    phone: '',
+    address: '',
+    city: '',
+    state: '',
+    postalCode: ''
+  },
+  paymentMethod: 'COD',
+  items: [
+    { product: '', productTitle: '', sku: '', quantity: 1, price: '' }
+  ],
+  notes: ''
+};
 
 const OrdersPage = () => {
   const [orders, setOrders] = useState([]);
@@ -31,23 +51,11 @@ const OrdersPage = () => {
   const [showDetailsModal, setShowDetailsModal] = useState(false);
   const [selectedOrder, setSelectedOrder] = useState(null);
 
-  // New Order Form state
-  const [newOrder, setNewOrder] = useState({
-    customer: {
-      name: '',
-      email: '',
-      phone: '',
-      address: '',
-      city: '',
-      state: '',
-      postalCode: ''
-    },
-    paymentMethod: 'COD',
-    items: [
-      { productTitle: '', sku: '', quantity: 1, price: 0 }
-    ],
-    notes: ''
-  });
+  // New Order Form state & feedback
+  const [newOrder, setNewOrder] = useState(INITIAL_ORDER_STATE);
+  const [addOrderError, setAddOrderError] = useState('');
+  const [isSubmittingOrder, setIsSubmittingOrder] = useState(false);
+  const [orderSuccessBanner, setOrderSuccessBanner] = useState('');
 
   // Edit Order Status state
   const [editStatus, setEditStatus] = useState({
@@ -166,63 +174,191 @@ const OrdersPage = () => {
     }
   };
 
-  // Add Item to New Order Form
-  const handleAddItem = () => {
+  // Customer Field Handler
+  const handleCustomerChange = (field, value) => {
     setNewOrder((prev) => ({
       ...prev,
-      items: [...prev.items, { productTitle: '', sku: '', quantity: 1, price: 0 }]
+      customer: {
+        ...prev.customer,
+        [field]: value
+      }
+    }));
+    if (addOrderError) setAddOrderError('');
+  };
+
+  // Item Field Change Handler (Immutable)
+  const handleItemFieldChange = (index, field, value) => {
+    setNewOrder((prev) => ({
+      ...prev,
+      items: prev.items.map((it, i) => {
+        if (i !== index) return it;
+        return { ...it, [field]: value };
+      })
+    }));
+    if (addOrderError) setAddOrderError('');
+  };
+
+  // Select Catalog Product into Line Item
+  const handleSelectCatalogProduct = (index, productId) => {
+    if (!productId) {
+      setNewOrder((prev) => ({
+        ...prev,
+        items: prev.items.map((it, i) => (i === index ? { ...it, product: '' } : it))
+      }));
+      return;
+    }
+    const prod = products.find((p) => p._id === productId);
+    if (!prod) return;
+
+    setNewOrder((prev) => ({
+      ...prev,
+      items: prev.items.map((it, i) => {
+        if (i !== index) return it;
+        return {
+          product: prod._id,
+          productTitle: prod.title || '',
+          sku: prod.sku || '',
+          quantity: it.quantity || 1,
+          price: prod.price !== undefined ? prod.price : ''
+        };
+      })
+    }));
+    if (addOrderError) setAddOrderError('');
+  };
+
+  // Add Item Line
+  const handleAddLineItem = () => {
+    setNewOrder((prev) => ({
+      ...prev,
+      items: [...prev.items, { product: '', productTitle: '', sku: '', quantity: 1, price: '' }]
     }));
   };
 
-  // Remove Item
-  const handleRemoveItem = (index) => {
-    if (newOrder.items.length === 1) return;
+  // Remove Item Line
+  const handleRemoveLineItem = (index) => {
+    if (newOrder.items.length <= 1) return;
     setNewOrder((prev) => ({
       ...prev,
       items: prev.items.filter((_, i) => i !== index)
     }));
   };
 
-  // Select existing product into item line
-  const handleSelectProduct = (index, productId) => {
-    const prod = products.find((p) => p._id === productId);
-    if (!prod) return;
-
-    const updated = [...newOrder.items];
-    updated[index] = {
-      product: prod._id,
-      productTitle: prod.title,
-      sku: prod.sku || '',
-      quantity: 1,
-      price: prod.price || 0
-    };
-    setNewOrder((prev) => ({ ...prev, items: updated }));
+  // 1-Click Demo Customer & Order Autofill
+  const handleFillDemoOrder = () => {
+    const demoProd = products[0] || { _id: null, title: "Women's Black Kurti", sku: 'TT-KUR-BLK', price: 1299 };
+    setNewOrder({
+      customer: {
+        name: 'Pooja Sundaram',
+        email: 'pooja.sundaram@gmail.com',
+        phone: '9845012345',
+        address: '42, Avinashi Road, Near Lakshmi Mills',
+        city: 'Coimbatore',
+        state: 'Tamil Nadu',
+        postalCode: '641018'
+      },
+      paymentMethod: 'COD',
+      items: [
+        {
+          product: demoProd._id || '',
+          productTitle: demoProd.title,
+          sku: demoProd.sku || 'TT-KUR-BLK',
+          quantity: 1,
+          price: demoProd.price || 1299
+        }
+      ],
+      notes: 'Customer confirmed availability via phone call.'
+    });
+    setAddOrderError('');
   };
 
-  // Create Order Submit
+  // Create Order Submit with Full Validation & Feedback
   const handleCreateOrder = async (e) => {
     e.preventDefault();
+    setAddOrderError('');
+
+    // 1. Validate Customer Information
+    const { customer, items, paymentMethod, notes } = newOrder;
+    if (!customer.name.trim()) {
+      setAddOrderError('Please enter the customer full name.');
+      return;
+    }
+    if (!customer.phone.trim() || customer.phone.trim().length < 7) {
+      setAddOrderError('Please enter a valid phone number (at least 7 digits).');
+      return;
+    }
+    if (!customer.address.trim()) {
+      setAddOrderError('Please enter the delivery street address & landmark.');
+      return;
+    }
+    if (!customer.city.trim() || !customer.state.trim() || !customer.postalCode.trim()) {
+      setAddOrderError('City, State, and Postal Code (PIN) are required for delivery validation.');
+      return;
+    }
+
+    if (!items || items.length === 0) {
+      setAddOrderError('Please add at least one line item to the order.');
+      return;
+    }
+
+    // 2. Validate Line Items
+    for (let i = 0; i < items.length; i++) {
+      const it = items[i];
+      if (!it.productTitle?.trim() && !it.product) {
+        setAddOrderError(`Item #${i + 1} must have a product title or catalog selection.`);
+        return;
+      }
+      const q = parseInt(it.quantity);
+      if (isNaN(q) || q < 1) {
+        setAddOrderError(`Item #${i + 1} must have a quantity of at least 1.`);
+        return;
+      }
+      const p = parseFloat(it.price);
+      if (isNaN(p) || p < 0) {
+        setAddOrderError(`Item #${i + 1} must have a valid price (>= 0).`);
+        return;
+      }
+    }
+
     try {
-      // Calculate total
-      const total = newOrder.items.reduce((sum, it) => sum + (Number(it.price) * Number(it.quantity)), 0);
+      setIsSubmittingOrder(true);
+      const formattedItems = items.map((it) => ({
+        product: it.product || undefined,
+        productTitle: it.productTitle?.trim() || 'Catalog Item',
+        sku: it.sku?.trim() || `SKU-${Date.now().toString().slice(-4)}`,
+        quantity: parseInt(it.quantity) || 1,
+        price: parseFloat(it.price) || 0
+      }));
+
+      const total = formattedItems.reduce((sum, it) => sum + (it.price * it.quantity), 0);
+
       const payload = {
-        ...newOrder,
-        totalAmount: total,
-        subtotal: total
+        customer: {
+          name: customer.name.trim(),
+          email: customer.email.trim(),
+          phone: customer.phone.trim(),
+          address: customer.address.trim(),
+          city: customer.city.trim(),
+          state: customer.state.trim(),
+          postalCode: customer.postalCode.trim()
+        },
+        paymentMethod,
+        items: formattedItems,
+        notes: notes?.trim() || '',
+        subtotal: total,
+        totalAmount: total
       };
 
-      await workspaceService.createOrder(payload);
+      const res = await workspaceService.createOrder(payload);
       setShowAddModal(false);
-      // Reset form
-      setNewOrder({
-        customer: { name: '', email: '', phone: '', address: '', city: '', state: '', postalCode: '' },
-        paymentMethod: 'COD',
-        items: [{ productTitle: '', sku: '', quantity: 1, price: 0 }],
-        notes: ''
-      });
+      setNewOrder(INITIAL_ORDER_STATE);
+      setOrderSuccessBanner(`Order #${res.order?.orderNumber || 'created'} placed successfully! COD risk assessed and delivery manifest generated.`);
+      setTimeout(() => setOrderSuccessBanner(''), 6000);
       await fetchOrders();
     } catch (err) {
-      alert(err.message || 'Failed to create order');
+      const msg = err.response?.data?.message || err.message || 'Failed to place order. Please verify input fields.';
+      setAddOrderError(msg);
+    } finally {
+      setIsSubmittingOrder(false);
     }
   };
 
@@ -239,12 +375,33 @@ const OrdersPage = () => {
             <RefreshCw size={15} className={loading ? 'spinning' : ''} />
             <span>Refresh</span>
           </button>
-          <button onClick={() => setShowAddModal(true)} className="btn btn-primary">
+          <button onClick={() => { setShowAddModal(true); setAddOrderError(''); }} className="btn btn-primary">
             <Plus size={16} />
             <span>Create Order</span>
           </button>
         </div>
       </div>
+
+      {/* Success Notification Banner */}
+      {orderSuccessBanner && (
+        <div style={{
+          padding: '12px 18px',
+          background: 'rgba(16, 185, 129, 0.08)',
+          border: '1px solid rgba(16, 185, 129, 0.25)',
+          borderRadius: '12px',
+          marginBottom: '20px',
+          display: 'flex',
+          alignItems: 'center',
+          gap: '12px',
+          color: '#059669',
+          fontSize: '13px',
+          fontWeight: 650,
+          boxShadow: '0 2px 8px rgba(16, 185, 129, 0.06)'
+        }}>
+          <CheckCircle2 size={18} style={{ flexShrink: 0 }} />
+          <span>{orderSuccessBanner}</span>
+        </div>
+      )}
 
       {/* Filter and Search Bar */}
       <div className="table-controls-bar">
@@ -636,9 +793,20 @@ const OrdersPage = () => {
       {/* Modal: Create Order */}
       {showAddModal && (
         <div className="modal-overlay" onClick={() => setShowAddModal(false)}>
-          <div className="modal-dialog" onClick={(e) => e.stopPropagation()} style={{ maxWidth: '680px' }}>
+          <div className="modal-dialog" onClick={(e) => e.stopPropagation()} style={{ maxWidth: '720px' }}>
             <div className="modal-header">
-              <h3 className="modal-title">Create Manual / In-Store Order</h3>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                <h3 className="modal-title">Create Manual / In-Store Order</h3>
+                <button
+                  type="button"
+                  className="demo-quickfill-btn"
+                  onClick={handleFillDemoOrder}
+                  title="Auto-fill sample customer & item for fast testing"
+                >
+                  <Sparkles size={12} />
+                  <span>1-Click Demo Fill</span>
+                </button>
+              </div>
               <button
                 className="topbar-btn"
                 onClick={() => setShowAddModal(false)}
@@ -650,8 +818,27 @@ const OrdersPage = () => {
 
             <form onSubmit={handleCreateOrder}>
               <div className="modal-body">
+                {addOrderError && (
+                  <div style={{
+                    padding: '10px 14px',
+                    background: 'rgba(239, 68, 68, 0.08)',
+                    border: '1px solid rgba(239, 68, 68, 0.25)',
+                    borderRadius: '10px',
+                    color: '#DC2626',
+                    fontSize: '12.5px',
+                    fontWeight: 650,
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '8px',
+                    marginBottom: '16px'
+                  }}>
+                    <AlertCircle size={15} style={{ flexShrink: 0 }} />
+                    <span>{addOrderError}</span>
+                  </div>
+                )}
+
                 {/* Customer Details */}
-                <div style={{ fontWeight: 600, fontSize: '13px', color: 'var(--color-text-primary)', marginBottom: '8px' }}>
+                <div style={{ fontWeight: 700, fontSize: '13px', color: '#0F172A', marginBottom: '8px' }}>
                   Customer Information
                 </div>
                 <div className="form-grid-2">
@@ -663,10 +850,7 @@ const OrdersPage = () => {
                       required
                       placeholder="e.g. Rahul Sharma"
                       value={newOrder.customer.name}
-                      onChange={(e) => setNewOrder({
-                        ...newOrder,
-                        customer: { ...newOrder.customer, name: e.target.value }
-                      })}
+                      onChange={(e) => handleCustomerChange('name', e.target.value)}
                     />
                   </div>
                   <div className="workspace-form-group">
@@ -677,10 +861,7 @@ const OrdersPage = () => {
                       required
                       placeholder="e.g. 9876543210"
                       value={newOrder.customer.phone}
-                      onChange={(e) => setNewOrder({
-                        ...newOrder,
-                        customer: { ...newOrder.customer, phone: e.target.value }
-                      })}
+                      onChange={(e) => handleCustomerChange('phone', e.target.value)}
                     />
                   </div>
                 </div>
@@ -693,10 +874,7 @@ const OrdersPage = () => {
                       className="workspace-input"
                       placeholder="e.g. rahul@example.com"
                       value={newOrder.customer.email}
-                      onChange={(e) => setNewOrder({
-                        ...newOrder,
-                        customer: { ...newOrder.customer, email: e.target.value }
-                      })}
+                      onChange={(e) => handleCustomerChange('email', e.target.value)}
                     />
                   </div>
                   <div className="workspace-form-group">
@@ -704,7 +882,7 @@ const OrdersPage = () => {
                     <select
                       className="workspace-select"
                       value={newOrder.paymentMethod}
-                      onChange={(e) => setNewOrder({ ...newOrder, paymentMethod: e.target.value })}
+                      onChange={(e) => setNewOrder((prev) => ({ ...prev, paymentMethod: e.target.value }))}
                     >
                       <option value="COD">Cash on Delivery (COD)</option>
                       <option value="PREPAID">Prepaid (UPI / Card / NetBanking)</option>
@@ -720,10 +898,7 @@ const OrdersPage = () => {
                     required
                     placeholder="e.g. 104, Horizon Heights, MG Road"
                     value={newOrder.customer.address}
-                    onChange={(e) => setNewOrder({
-                      ...newOrder,
-                      customer: { ...newOrder.customer, address: e.target.value }
-                    })}
+                    onChange={(e) => handleCustomerChange('address', e.target.value)}
                   />
                 </div>
 
@@ -734,12 +909,9 @@ const OrdersPage = () => {
                       type="text"
                       className="workspace-input"
                       required
-                      placeholder="e.g. Mumbai"
+                      placeholder="e.g. Coimbatore"
                       value={newOrder.customer.city}
-                      onChange={(e) => setNewOrder({
-                        ...newOrder,
-                        customer: { ...newOrder.customer, city: e.target.value }
-                      })}
+                      onChange={(e) => handleCustomerChange('city', e.target.value)}
                     />
                   </div>
                   <div className="workspace-form-group">
@@ -748,12 +920,9 @@ const OrdersPage = () => {
                       type="text"
                       className="workspace-input"
                       required
-                      placeholder="e.g. Maharashtra"
+                      placeholder="e.g. Tamil Nadu"
                       value={newOrder.customer.state}
-                      onChange={(e) => setNewOrder({
-                        ...newOrder,
-                        customer: { ...newOrder.customer, state: e.target.value }
-                      })}
+                      onChange={(e) => handleCustomerChange('state', e.target.value)}
                     />
                   </div>
                   <div className="workspace-form-group">
@@ -762,123 +931,150 @@ const OrdersPage = () => {
                       type="text"
                       className="workspace-input"
                       required
-                      placeholder="e.g. 400001"
+                      placeholder="e.g. 641001"
                       value={newOrder.customer.postalCode}
-                      onChange={(e) => setNewOrder({
-                        ...newOrder,
-                        customer: { ...newOrder.customer, postalCode: e.target.value }
-                      })}
+                      onChange={(e) => handleCustomerChange('postalCode', e.target.value)}
                     />
                   </div>
                 </div>
 
                 {/* Items Selection */}
-                <div style={{ marginTop: '16px', marginBottom: '8px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                  <div style={{ fontWeight: 600, fontSize: '13px', color: 'var(--color-text-primary)' }}>
-                    Order Items
+                <div style={{ marginTop: '16px', marginBottom: '10px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                  <div style={{ fontWeight: 700, fontSize: '13px', color: '#0F172A' }}>
+                    Order Line Items
                   </div>
                   <button
                     type="button"
-                    onClick={handleAddItem}
+                    onClick={handleAddLineItem}
                     className="btn btn-secondary"
-                    style={{ fontSize: '11px', padding: '4px 8px' }}
+                    style={{ fontSize: '11.5px', padding: '4px 10px' }}
                   >
-                    + Add Item
+                    + Add Line Item
                   </button>
                 </div>
 
-                {newOrder.items.map((it, idx) => (
-                  <div
-                    key={idx}
-                    style={{
-                      display: 'grid',
-                      gridTemplateColumns: '1.4fr 1fr 70px 90px 32px',
-                      gap: '8px',
-                      alignItems: 'center',
-                      marginBottom: '8px'
-                    }}
-                  >
-                    {products.length > 0 ? (
-                      <select
-                        className="workspace-select"
-                        value={it.product || ''}
-                        onChange={(e) => handleSelectProduct(idx, e.target.value)}
-                      >
-                        <option value="">Select Catalog Product...</option>
-                        {products.map((p) => (
-                          <option key={p._id} value={p._id}>
-                            {p.title} (₹{p.price})
-                          </option>
-                        ))}
-                      </select>
-                    ) : (
-                      <input
-                        type="text"
-                        className="workspace-input"
-                        placeholder="Item Title"
-                        required
-                        value={it.productTitle}
-                        onChange={(e) => {
-                          const updated = [...newOrder.items];
-                          updated[idx].productTitle = e.target.value;
-                          setNewOrder({ ...newOrder, items: updated });
-                        }}
-                      />
-                    )}
+                {newOrder.items.map((it, idx) => {
+                  const lineTotal = (Number(it.quantity) || 0) * (Number(it.price) || 0);
+                  return (
+                    <div key={idx} className="order-item-input-card">
+                      <div className="order-item-header">
+                        <span className="order-item-num">Item #{idx + 1}</span>
+                        {products.length > 0 && (
+                          <select
+                            className="workspace-select item-catalog-select"
+                            value={it.product || ''}
+                            onChange={(e) => handleSelectCatalogProduct(idx, e.target.value)}
+                          >
+                            <option value="">⚡ Autofill from Catalog Product...</option>
+                            {products.map((p) => (
+                              <option key={p._id} value={p._id}>
+                                {p.title} (₹{p.price})
+                              </option>
+                            ))}
+                          </select>
+                        )}
+                        {newOrder.items.length > 1 && (
+                          <button
+                            type="button"
+                            onClick={() => handleRemoveLineItem(idx)}
+                            className="item-remove-btn"
+                            title="Remove item"
+                          >
+                            <Trash2 size={13} />
+                          </button>
+                        )}
+                      </div>
 
-                    <input
-                      type="text"
-                      className="workspace-input"
-                      placeholder="SKU"
-                      value={it.sku}
-                      onChange={(e) => {
-                        const updated = [...newOrder.items];
-                        updated[idx].sku = e.target.value;
-                        setNewOrder({ ...newOrder, items: updated });
-                      }}
-                    />
+                      <div className="form-grid-4">
+                        <div className="workspace-form-group" style={{ marginBottom: 0 }}>
+                          <label className="workspace-label">Item Title *</label>
+                          <input
+                            type="text"
+                            className="workspace-input"
+                            required
+                            placeholder="e.g. Women's Black Kurti"
+                            value={it.productTitle}
+                            onChange={(e) => handleItemFieldChange(idx, 'productTitle', e.target.value)}
+                          />
+                        </div>
 
-                    <input
-                      type="number"
-                      className="workspace-input"
-                      placeholder="Qty"
-                      min={1}
-                      required
-                      value={it.quantity}
-                      onChange={(e) => {
-                        const updated = [...newOrder.items];
-                        updated[idx].quantity = Math.max(1, parseInt(e.target.value) || 1);
-                        setNewOrder({ ...newOrder, items: updated });
-                      }}
-                    />
+                        <div className="workspace-form-group" style={{ marginBottom: 0 }}>
+                          <label className="workspace-label">SKU</label>
+                          <input
+                            type="text"
+                            className="workspace-input"
+                            placeholder="e.g. TT-KUR-BLK"
+                            value={it.sku}
+                            onChange={(e) => handleItemFieldChange(idx, 'sku', e.target.value)}
+                          />
+                        </div>
 
-                    <input
-                      type="number"
-                      className="workspace-input"
-                      placeholder="Price"
-                      min={0}
-                      required
-                      value={it.price}
-                      onChange={(e) => {
-                        const updated = [...newOrder.items];
-                        updated[idx].price = parseFloat(e.target.value) || 0;
-                        setNewOrder({ ...newOrder, items: updated });
-                      }}
-                    />
+                        <div className="workspace-form-group" style={{ marginBottom: 0 }}>
+                          <label className="workspace-label">Qty *</label>
+                          <input
+                            type="number"
+                            className="workspace-input"
+                            min={1}
+                            required
+                            value={it.quantity}
+                            onChange={(e) => handleItemFieldChange(idx, 'quantity', e.target.value)}
+                          />
+                        </div>
 
-                    {newOrder.items.length > 1 && (
-                      <button
-                        type="button"
-                        onClick={() => handleRemoveItem(idx)}
-                        className="topbar-btn"
-                        style={{ width: '32px', height: '32px', color: '#EF4444' }}
-                        title="Remove line item"
-                      >
-                        <X size={14} />
-                      </button>
-                    )}
+                        <div className="workspace-form-group" style={{ marginBottom: 0 }}>
+                          <label className="workspace-label">Unit Price (₹) *</label>
+                          <input
+                            type="number"
+                            className="workspace-input"
+                            min={0}
+                            step="any"
+                            required
+                            placeholder="0"
+                            value={it.price}
+                            onChange={(e) => handleItemFieldChange(idx, 'price', e.target.value)}
+                          />
+                        </div>
+
+                        <div className="order-item-total-badge">
+                          <span className="total-label">Total</span>
+                          <span className="total-val">₹{lineTotal.toLocaleString('en-IN')}</span>
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
+
+                {/* Notes */}
+                <div className="workspace-form-group" style={{ marginTop: '12px', marginBottom: 0 }}>
+                  <label className="workspace-label">Order Notes / Instructions</label>
+                  <input
+                    type="text"
+                    className="workspace-input"
+                    placeholder="e.g. Urgent festival dispatch; customer confirmed via call"
+                    value={newOrder.notes}
+                    onChange={(e) => setNewOrder((prev) => ({ ...prev, notes: e.target.value }))}
+                  />
+                </div>
+
+                {/* Live Order Summary Box */}
+                <div className="order-summary-box">
+                  <div className="order-summary-left">
+                    <div className="summary-stat">
+                      <span className="stat-label">Items:</span>
+                      <span className="stat-val">{newOrder.items.length}</span>
+                    </div>
+                    <div className="summary-stat">
+                      <span className="stat-label">Payment:</span>
+                      <span className="stat-val badge">{newOrder.paymentMethod}</span>
+                    </div>
                   </div>
-                ))}
+                  <div className="order-summary-right">
+                    <span className="grand-total-label">Grand Total:</span>
+                    <span className="grand-total-val">
+                      ₹{newOrder.items.reduce((s, it) => s + ((Number(it.quantity) || 0) * (Number(it.price) || 0)), 0).toLocaleString('en-IN')}
+                    </span>
+                  </div>
+                </div>
               </div>
 
               <div className="modal-footer">
@@ -886,11 +1082,13 @@ const OrdersPage = () => {
                   type="button"
                   onClick={() => setShowAddModal(false)}
                   className="btn btn-secondary"
+                  disabled={isSubmittingOrder}
                 >
                   Cancel
                 </button>
-                <button type="submit" className="btn btn-primary">
-                  Save & Place Order
+                <button type="submit" className="btn btn-primary" disabled={isSubmittingOrder}>
+                  {isSubmittingOrder ? <RefreshCw size={15} className="spinning" /> : <Plus size={15} />}
+                  <span>{isSubmittingOrder ? 'Placing Order...' : 'Save & Place Order'}</span>
                 </button>
               </div>
             </form>
