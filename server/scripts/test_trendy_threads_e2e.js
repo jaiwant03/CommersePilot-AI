@@ -73,7 +73,7 @@ const runTrendyThreadsE2ETest = async () => {
           email: 'ananya.deshmukh@gmail.com',
           phone: '9876543210',
           address: {
-            street: 'Flat 402, Ramanujam Apartment, Cross Cut Road',
+            street: 'Cross Cut Road, Near Lakshmi Mills, Gandhipuram',
             city: 'Coimbatore',
             state: 'Tamil Nadu',
             pincode: '641012'
@@ -102,6 +102,7 @@ const runTrendyThreadsE2ETest = async () => {
       if (!orderTT10245.customer) orderTT10245.customer = {};
       orderTT10245.customer.fullName = 'Ananya Deshmukh';
       if (!orderTT10245.customer.address) orderTT10245.customer.address = {};
+      orderTT10245.customer.address.street = 'Cross Cut Road, Near Lakshmi Mills, Gandhipuram';
       orderTT10245.customer.address.city = 'Coimbatore';
       orderTT10245.reviewStatus = 'PENDING';
       orderTT10245.orderStatus = 'PENDING';
