@@ -4,6 +4,7 @@ const config = require('../config/env');
 const Product = require('../models/Product.model');
 const Order = require('../models/Order.model');
 const Store = require('../models/Store.model');
+const User = require('../models/User.model');
 const PurchaseOrder = require('../models/PurchaseOrder.model');
 const AutomationLog = require('../models/AutomationLog.model');
 const VerificationToken = require('../models/VerificationToken.model');
@@ -19,15 +20,24 @@ const inventoryAutomationService = {
   /**
    * Run Inventory Intelligence & Restock Analysis
    */
-  analyzeInventory: async (storeId) => {
+  analyzeInventory: async (storeId, options = {}) => {
     const startTime = Date.now();
     const idempotencyKey = `inv-analysis-${storeId}-${Date.now()}`;
 
-    // 1. Fetch Store profile and preferences
+    // 1. Fetch Store profile and owner
     const store = await Store.findById(storeId);
     if (!store) {
       throw new Error(`Store ${storeId} not found`);
     }
+    const ownerUser = store.owner ? await User.findById(store.owner).select('email').lean() : null;
+    const recipientEmail = (
+      options.recipientEmail ||
+      store.settings?.alertEmail ||
+      store.details?.supportEmail ||
+      ownerUser?.email ||
+      config.smtp.user ||
+      ''
+    ).trim();
 
     // 2. Fetch all products for the store
     const products = await Product.find({ store: storeId });
@@ -152,6 +162,7 @@ const inventoryAutomationService = {
 
     let poDraftDoc = null;
     let emailSent = false;
+    let emailError = null;
     let tokenDoc = null;
 
     // 6. Generate Supplier Purchase Order Draft if restocking is needed
@@ -164,7 +175,7 @@ const inventoryAutomationService = {
         store: store._id,
         poNumber,
         supplierName: 'Surat Handloom & Apparel Mills',
-        supplierEmail: 'orders@surattextiles.example.com',
+        supplierEmail: store.details?.supportEmail || recipientEmail || 'orders@surattextiles.example.com',
         items: restockCandidates,
         totalEstimatedCost,
         status: 'DRAFT_PENDING_APPROVAL',
@@ -189,18 +200,19 @@ const inventoryAutomationService = {
       const approvalUrl = `${config.clientUrl}/approve-po?token=${rawToken}&action=approve`;
       const rejectUrl = `${config.clientUrl}/approve-po?token=${rawToken}&action=reject`;
 
-      const recipientEmail = store.settings?.alertEmail || store.details?.supportEmail || 'owner@chiccouture.in';
-
       // 7. Email seller for approval (supplier is NOT contacted yet!)
-      const emailRes = await emailService.sendSupplierPurchaseOrderApprovalEmail({
-        store,
-        sellerEmail: recipientEmail,
-        poDraft: poDraftDoc,
-        approvalUrl,
-        rejectUrl
-      });
+      if (recipientEmail) {
+        const emailRes = await emailService.sendSupplierPurchaseOrderApprovalEmail({
+          store,
+          sellerEmail: recipientEmail,
+          poDraft: poDraftDoc,
+          approvalUrl,
+          rejectUrl
+        });
 
-      emailSent = emailRes.success;
+        emailSent = Boolean(emailRes.success);
+        emailError = emailRes.error || emailRes.reason || null;
+      }
     }
 
     const durationMs = Date.now() - startTime;
@@ -223,7 +235,8 @@ const inventoryAutomationService = {
       durationMs,
       emailSent,
       emailType: emailSent ? 'SUPPLIER_PO_APPROVAL_REQUEST' : 'NONE',
-      emailRecipient: store.settings?.alertEmail || null
+      emailRecipient: recipientEmail || null,
+      errorMessage: emailError
     });
 
     return {
@@ -233,6 +246,9 @@ const inventoryAutomationService = {
       restockCandidatesCount: restockCandidates.length,
       poDraft: poDraftDoc,
       log: logDoc,
+      emailSent,
+      emailRecipient: recipientEmail || null,
+      emailError,
       executionMode
     };
   },
