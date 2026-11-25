@@ -7,7 +7,7 @@ const startServer = async () => {
     // Attempt Database connection
     await connectDB();
 
-    const server = app.listen(config.port, () => {
+    const server = app.listen(config.port, '0.0.0.0', () => {
       console.log(`
 =====================================================
 🚀 CommercePilot AI Server Running
