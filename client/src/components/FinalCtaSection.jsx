@@ -50,7 +50,7 @@ const FinalCtaSection = () => {
 
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '32px' }}>
           <Link 
-            to="/signup" 
+            to="/login" 
             className="modelled-btn-cta" 
             style={{ 
               background: '#38BDF8', 
