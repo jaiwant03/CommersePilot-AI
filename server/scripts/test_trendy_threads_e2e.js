@@ -82,7 +82,7 @@ const runTrendyThreadsE2ETest = async () => {
         items: [
           {
             title: "Women's Designer Kurti",
-            sku: 'TT-KUR-BLK',
+            sku: 'TT-ANANYA-KUR',
             quantity: 1,
             unitPrice: 2500,
             totalPrice: 2500
