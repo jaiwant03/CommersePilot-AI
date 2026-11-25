@@ -193,15 +193,28 @@ const approvePurchaseOrder = async (req, res, next) => {
       return res.status(404).json({ success: false, message: 'Purchase order not found.' });
     }
 
+    if (req.body?.supplierEmail) po.supplierEmail = req.body.supplierEmail.trim();
+    if (req.body?.supplierName) po.supplierName = req.body.supplierName.trim();
+
+    const store = await Store.findById(storeId);
+    const targetEmail = (
+      req.body?.supplierEmail ||
+      (po.supplierEmail && !po.supplierEmail.endsWith('.example.com') ? po.supplierEmail : '') ||
+      store?.settings?.alertEmail ||
+      store?.details?.supportEmail ||
+      req.user?.email ||
+      po.supplierEmail
+    ).trim();
+
     po.status = 'APPROVED';
     po.approvedBy = req.user._id;
     po.approvedAt = new Date();
 
     // Dispatch Restock Request Email to Supplier
-    const store = await Store.findById(storeId);
     const emailRes = await emailService.dispatchEmail({
-      to: po.supplierEmail || 'orders@surattextiles.example.com',
+      to: targetEmail,
       subject: `Official Purchase Order #${po.poNumber} from ${store.name || 'Merchant'}`,
+      senderName: store.name || 'CommercePilot AI',
       html: `
         <div style="font-family: sans-serif; padding: 24px; background: #0F172A; color: #E2E8F0; border-radius: 8px;">
           <h2 style="color: #38BDF8; margin-top: 0;">Official Purchase Order: #${po.poNumber}</h2>
@@ -240,9 +253,10 @@ const approvePurchaseOrder = async (req, res, next) => {
 
     return res.status(200).json({
       success: true,
-      message: `Purchase Order #${po.poNumber} approved and dispatched to ${po.supplierName}.`,
+      message: `Purchase Order #${po.poNumber} approved and dispatched to ${targetEmail}.`,
       purchaseOrder: po,
-      emailSent: emailRes.success
+      emailSent: Boolean(emailRes.success),
+      emailRecipient: targetEmail
     });
   } catch (error) {
     next(error);

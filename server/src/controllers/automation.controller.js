@@ -35,7 +35,21 @@ const getAutomationLogs = async (req, res, next) => {
     ]);
 
     // If no logs exist yet, synthesize initial recent telemetry so empty state looks informative
-    let automations = logs;
+    let automations = logs.map((logDoc) => {
+      const l = logDoc.toObject ? logDoc.toObject() : logDoc;
+      if (!l.actionSummary) {
+        if (l.workflowName === 'ORDER_ANALYSIS_VERIFICATION') {
+          l.actionSummary = `Risk Score ${l.responsePayload?.riskScore ?? '—'}/100 (${l.responsePayload?.riskLevel || 'LOW'}) — ${l.emailSent ? `Email (${l.emailType}) dispatched` : 'Processed automatically'}`;
+        } else if (l.workflowName === 'INVENTORY_INTELLIGENCE') {
+          l.actionSummary = `Scanned ${l.responsePayload?.analyzedSkus ?? 0} SKUs; ${l.responsePayload?.restockCandidatesCount ?? 0} low-stock${l.responsePayload?.poNumber ? ` (PO #${l.responsePayload.poNumber})` : ''}`;
+        } else if (l.workflowName === 'DELIVERY_RECOVERY_NDR') {
+          l.actionSummary = `NDR recovery ${l.emailSent ? 'email link dispatched to buyer' : 'logged'} (${l.responsePayload?.ndrAttribution || 'COURIER_NDR'})`;
+        } else if (l.workflowName === 'DAILY_BUSINESS_REPORT') {
+          l.actionSummary = l.responsePayload?.aiSummary ? l.responsePayload.aiSummary.slice(0, 120) + '...' : 'Daily AI executive briefing generated';
+        }
+      }
+      return l;
+    });
     if (logs.length === 0) {
       const [flaggedOrders, ndrDeliveries] = await Promise.all([
         Order.find({ store: storeId, needsVerification: true }).sort({ createdAt: -1 }).limit(5),
@@ -143,6 +157,7 @@ const getWorkflowStatuses = async (req, res, next) => {
 const triggerOrderAnalysis = async (req, res, next) => {
   try {
     let { orderId } = req.params;
+    const recipientEmail = req.body?.email || req.query?.email || '';
     if (!orderId || orderId === 'sample-order') {
       const recentOrder = await Order.findOne({ store: req.store._id }).sort({ createdAt: -1 });
       if (!recentOrder) {
@@ -150,7 +165,7 @@ const triggerOrderAnalysis = async (req, res, next) => {
       }
       orderId = recentOrder._id;
     }
-    const result = await orderAutomationService.analyzeOrder(orderId, req.store._id);
+    const result = await orderAutomationService.analyzeOrder(orderId, req.store._id, { recipientEmail });
     return res.status(200).json(result);
   } catch (error) {
     next(error);
@@ -159,7 +174,8 @@ const triggerOrderAnalysis = async (req, res, next) => {
 
 const triggerInventoryAnalysis = async (req, res, next) => {
   try {
-    const result = await inventoryAutomationService.analyzeInventory(req.store._id);
+    const recipientEmail = req.body?.email || req.query?.email || '';
+    const result = await inventoryAutomationService.analyzeInventory(req.store._id, { recipientEmail });
     return res.status(200).json(result);
   } catch (error) {
     next(error);
@@ -169,6 +185,7 @@ const triggerInventoryAnalysis = async (req, res, next) => {
 const triggerDeliveryRecovery = async (req, res, next) => {
   try {
     let { deliveryId } = req.params;
+    const email = req.body?.email || req.query?.email || '';
     if (!deliveryId || deliveryId === 'sample-delivery') {
       const recentDel = await Delivery.findOne({ store: req.store._id }).sort({ updatedAt: -1 });
       if (!recentDel) {
@@ -176,7 +193,7 @@ const triggerDeliveryRecovery = async (req, res, next) => {
       }
       deliveryId = recentDel._id;
     }
-    const result = await deliveryAutomationService.handleFailedDelivery(deliveryId, req.store._id);
+    const result = await deliveryAutomationService.handleFailedDelivery(deliveryId, req.store._id, { email });
     return res.status(200).json(result);
   } catch (error) {
     next(error);
@@ -185,7 +202,8 @@ const triggerDeliveryRecovery = async (req, res, next) => {
 
 const triggerDailyReport = async (req, res, next) => {
   try {
-    const result = await reportAutomationService.generateDailyReport(req.store._id);
+    const recipientEmail = req.body?.email || req.query?.email || '';
+    const result = await reportAutomationService.generateDailyReport(req.store._id, true, { recipientEmail });
     return res.status(200).json(result);
   } catch (error) {
     next(error);
