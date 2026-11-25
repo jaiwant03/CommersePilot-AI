@@ -112,42 +112,42 @@ const AutomationsPage = () => {
   const getWorkflowBadge = (wf) => {
     if (!wf) {
       return (
-        <span className="status-indicator-badge not_configured">
+        <span className="status-indicator-badge native_active">
           <span className="status-dot-pulse" />
-          <span>Checking...</span>
+          <span>Native AI Active</span>
         </span>
       );
     }
-    switch (wf.status) {
-      case 'CONNECTED':
-        return (
-          <span className="status-indicator-badge connected">
-            <span className="status-dot-pulse" />
-            <span>Connected</span>
-          </span>
-        );
-      case 'RUNNING':
-        return (
-          <span className="status-indicator-badge running">
-            <RefreshCw size={11} className="spinning" />
-            <span>Running</span>
-          </span>
-        );
-      case 'FAILED':
-        return (
-          <span className="status-indicator-badge failed">
-            <span className="status-dot-pulse" />
-            <span>Failed</span>
-          </span>
-        );
-      default:
-        return (
-          <span className="status-indicator-badge not_configured">
-            <span className="status-dot-pulse" />
-            <span>Not Configured</span>
-          </span>
-        );
+    if (wf.isConfigured || wf.status === 'CONNECTED') {
+      return (
+        <span className="status-indicator-badge connected" title="External n8n Webhook Stream Active">
+          <span className="status-dot-pulse" />
+          <span>Live n8n</span>
+        </span>
+      );
     }
+    if (wf.status === 'RUNNING') {
+      return (
+        <span className="status-indicator-badge running">
+          <RefreshCw size={11} className="spinning" />
+          <span>Running</span>
+        </span>
+      );
+    }
+    if (wf.status === 'FAILED') {
+      return (
+        <span className="status-indicator-badge failed">
+          <span className="status-dot-pulse" />
+          <span>Failed</span>
+        </span>
+      );
+    }
+    return (
+      <span className="status-indicator-badge native_active" title="CommercePilot Built-in AI Automation Engine Active">
+        <span className="status-dot-pulse" />
+        <span>Native AI Active</span>
+      </span>
+    );
   };
 
   const getIconForWorkflow = (name) => {
@@ -278,13 +278,13 @@ const AutomationsPage = () => {
           <div>
             <div className="workflow-meta-box">
               <div className="workflow-meta-row">
-                <span className="workflow-meta-label">Webhook:</span>
-                <span className="workflow-meta-value">POST /order-analysis</span>
+                <span className="workflow-meta-label">Trigger:</span>
+                <span className="workflow-meta-value" title="POST /order-analysis">POST /order-analysis</span>
               </div>
               <div className="workflow-meta-row">
-                <span className="workflow-meta-label">Mode:</span>
-                <span className={`mode-badge ${statuses?.orderVerification?.isConfigured ? 'live' : 'demo'}`}>
-                  {statuses?.orderVerification?.isConfigured ? 'Live n8n' : 'Simulated Demo'}
+                <span className="workflow-meta-label">Engine:</span>
+                <span className={`mode-badge ${statuses?.orderVerification?.isConfigured ? 'live' : 'native'}`}>
+                  {statuses?.orderVerification?.isConfigured ? 'Live n8n' : 'Native AI'}
                 </span>
               </div>
               <div className="workflow-meta-row">
@@ -336,18 +336,18 @@ const AutomationsPage = () => {
           <div>
             <div className="workflow-meta-box">
               <div className="workflow-meta-row">
-                <span className="workflow-meta-label">Webhook:</span>
-                <span className="workflow-meta-value">POST /inventory-analysis</span>
+                <span className="workflow-meta-label">Trigger:</span>
+                <span className="workflow-meta-value" title="POST /inventory-analysis">POST /inventory-scan</span>
               </div>
               <div className="workflow-meta-row">
-                <span className="workflow-meta-label">Mode:</span>
-                <span className={`mode-badge ${statuses?.inventoryIntelligence?.isConfigured ? 'live' : 'demo'}`}>
-                  {statuses?.inventoryIntelligence?.isConfigured ? 'Live n8n' : 'Simulated Demo'}
+                <span className="workflow-meta-label">Engine:</span>
+                <span className={`mode-badge ${statuses?.inventoryIntelligence?.isConfigured ? 'live' : 'native'}`}>
+                  {statuses?.inventoryIntelligence?.isConfigured ? 'Live n8n' : 'Native AI'}
                 </span>
               </div>
               <div className="workflow-meta-row">
                 <span className="workflow-meta-label">Channel:</span>
-                <span className="workflow-meta-value" style={{ color: '#D97706' }}>Merchant Approval</span>
+                <span className="workflow-meta-value" style={{ color: '#D97706' }}>Merchant PO</span>
               </div>
             </div>
             <button
@@ -394,18 +394,18 @@ const AutomationsPage = () => {
           <div>
             <div className="workflow-meta-box">
               <div className="workflow-meta-row">
-                <span className="workflow-meta-label">Webhook:</span>
-                <span className="workflow-meta-value">POST /delivery-recovery</span>
+                <span className="workflow-meta-label">Trigger:</span>
+                <span className="workflow-meta-value" title="POST /delivery-recovery">POST /delivery-ndr</span>
               </div>
               <div className="workflow-meta-row">
-                <span className="workflow-meta-label">Mode:</span>
-                <span className={`mode-badge ${statuses?.deliveryRecovery?.isConfigured ? 'live' : 'demo'}`}>
-                  {statuses?.deliveryRecovery?.isConfigured ? 'Live n8n' : 'Simulated Demo'}
+                <span className="workflow-meta-label">Engine:</span>
+                <span className={`mode-badge ${statuses?.deliveryRecovery?.isConfigured ? 'live' : 'native'}`}>
+                  {statuses?.deliveryRecovery?.isConfigured ? 'Live n8n' : 'Native AI'}
                 </span>
               </div>
               <div className="workflow-meta-row">
                 <span className="workflow-meta-label">Channel:</span>
-                <span className="workflow-meta-value" style={{ color: '#0284C7' }}>Interactive Email</span>
+                <span className="workflow-meta-value" style={{ color: '#0284C7' }}>Buyer Email</span>
               </div>
             </div>
             <button
@@ -453,12 +453,12 @@ const AutomationsPage = () => {
             <div className="workflow-meta-box">
               <div className="workflow-meta-row">
                 <span className="workflow-meta-label">Schedule:</span>
-                <span className="workflow-meta-value">Daily @ 09:00 AM IST</span>
+                <span className="workflow-meta-value" title="Daily @ 09:00 AM IST">09:00 AM IST</span>
               </div>
               <div className="workflow-meta-row">
-                <span className="workflow-meta-label">Mode:</span>
-                <span className={`mode-badge ${statuses?.dailyReport?.isConfigured ? 'live' : 'demo'}`}>
-                  {statuses?.dailyReport?.isConfigured ? 'Live n8n' : 'Simulated Demo'}
+                <span className="workflow-meta-label">Engine:</span>
+                <span className={`mode-badge ${statuses?.dailyReport?.isConfigured ? 'live' : 'native'}`}>
+                  {statuses?.dailyReport?.isConfigured ? 'Live n8n' : 'Native AI'}
                 </span>
               </div>
               <div className="workflow-meta-row">
