@@ -17,5 +17,6 @@ router.post('/purchase-orders/:id/approve', inventoryController.approvePurchaseO
 router.put('/purchase-orders/:id', inventoryController.updatePurchaseOrder);
 router.patch('/purchase-orders/:id', inventoryController.updatePurchaseOrder);
 router.post('/purchase-orders/:id/reject', inventoryController.rejectPurchaseOrder);
+router.post('/purchase-orders/:id/receive', inventoryController.receivePurchaseOrder);
 
 module.exports = router;

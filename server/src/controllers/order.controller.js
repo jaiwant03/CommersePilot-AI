@@ -6,6 +6,66 @@ const Delivery = require('../models/Delivery.model');
 const InventoryMovement = require('../models/InventoryMovement.model');
 
 /**
+ * Safely replenish inventory for an order (preventing duplicate restock)
+ */
+const restockOrderItems = async (order, reason, storeId) => {
+  if (order.isRestocked) return;
+  for (const item of order.items) {
+    if (item.product) {
+      const prod = await Product.findOne({ _id: item.product, store: storeId });
+      if (prod) {
+        const previousStock = prod.stockQuantity;
+        prod.stockQuantity = previousStock + item.quantity;
+        await prod.save();
+
+        await InventoryMovement.create({
+          store: storeId,
+          product: prod._id,
+          sku: prod.sku,
+          type: 'RETURN_RESTOCK',
+          quantityChanged: item.quantity,
+          previousStock,
+          newStock: prod.stockQuantity,
+          reason: reason || `Restocked for Order #${order.orderNumber}`,
+          referenceOrder: order._id
+        });
+      }
+    }
+  }
+  order.isRestocked = true;
+};
+
+/**
+ * Re-deduct inventory if a previously cancelled order is reactivated
+ */
+const deductOrderItems = async (order, reason, storeId) => {
+  if (!order.isRestocked) return;
+  for (const item of order.items) {
+    if (item.product) {
+      const prod = await Product.findOne({ _id: item.product, store: storeId });
+      if (prod) {
+        const previousStock = prod.stockQuantity;
+        prod.stockQuantity = Math.max(0, previousStock - item.quantity);
+        await prod.save();
+
+        await InventoryMovement.create({
+          store: storeId,
+          product: prod._id,
+          sku: prod.sku,
+          type: 'ORDER_DEDUCTION',
+          quantityChanged: -item.quantity,
+          previousStock,
+          newStock: prod.stockQuantity,
+          reason: reason || `Re-deducted for reactivated Order #${order.orderNumber}`,
+          referenceOrder: order._id
+        });
+      }
+    }
+  }
+  order.isRestocked = false;
+};
+
+/**
  * Get paginated orders with status & payment filters
  */
 const getOrders = async (req, res, next) => {
@@ -317,11 +377,25 @@ const updateOrder = async (req, res, next) => {
     const { orderStatus, notes, address, needsVerification, paymentStatus } = req.body;
 
     if (orderStatus && orderStatus !== order.orderStatus) {
+      const prevStatus = order.orderStatus;
       order.orderStatus = orderStatus;
       order.history.push({
         status: orderStatus,
         note: `Status updated to ${orderStatus} by merchant`
       });
+
+      // Stock synchronization on cancellation or reactivation
+      if (orderStatus === 'CANCELLED' && prevStatus !== 'CANCELLED') {
+        await restockOrderItems(order, `Cancelled by merchant: Order #${order.orderNumber}`, storeId);
+        if (order.delivery) {
+          await Delivery.findByIdAndUpdate(order.delivery, {
+            status: 'RTO',
+            $push: { trackingEvents: { status: 'RTO', message: 'Order status changed to CANCELLED by merchant' } }
+          });
+        }
+      } else if (prevStatus === 'CANCELLED' && orderStatus !== 'CANCELLED') {
+        await deductOrderItems(order, `Reactivated Order #${order.orderNumber} from CANCELLED to ${orderStatus}`, storeId);
+      }
 
       // Synchronize with delivery if dispatched
       if (orderStatus === 'DISPATCHED' && order.delivery) {
@@ -371,7 +445,7 @@ const updateOrder = async (req, res, next) => {
 };
 
 /**
- * Cancel or delete order
+ * Cancel or delete order with inventory restock and delivery sync
  */
 const deleteOrder = async (req, res, next) => {
   try {
@@ -382,9 +456,19 @@ const deleteOrder = async (req, res, next) => {
       return res.status(404).json({ success: false, message: 'Order not found.' });
     }
 
-    order.orderStatus = 'CANCELLED';
-    order.history.push({ status: 'CANCELLED', note: 'Order cancelled by merchant' });
-    await order.save();
+    if (order.orderStatus !== 'CANCELLED') {
+      order.orderStatus = 'CANCELLED';
+      order.history.push({ status: 'CANCELLED', note: 'Order cancelled by merchant' });
+      await restockOrderItems(order, `Cancelled by merchant: Order #${order.orderNumber}`, storeId);
+
+      if (order.delivery) {
+        await Delivery.findByIdAndUpdate(order.delivery, {
+          status: 'RTO',
+          $push: { trackingEvents: { status: 'RTO', message: 'Order cancelled by merchant' } }
+        });
+      }
+      await order.save();
+    }
 
     return res.status(200).json({
       success: true,
@@ -405,6 +489,10 @@ const approveOrder = async (req, res, next) => {
 
     if (!order) {
       return res.status(404).json({ success: false, message: 'Order not found.' });
+    }
+
+    if (order.orderStatus === 'CANCELLED' && order.isRestocked) {
+      await deductOrderItems(order, `Approved reactivated Order #${order.orderNumber}`, storeId);
     }
 
     order.orderStatus = 'CONFIRMED';

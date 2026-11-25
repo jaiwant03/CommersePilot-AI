@@ -194,10 +194,25 @@ const deliveryAutomationService = {
       timestamp: new Date()
     });
 
-    // Mark delivery status back to pending/in-transit for reattempt
+    // Mark delivery status back to out for delivery with confirmed response
+    delivery.customerResponse = 'CONFIRMED';
+    delivery.recoveryStatus = 'RECOVERED';
     delivery.status = 'OUT_FOR_DELIVERY';
     delivery.ndrReason = `Buyer confirmed slot: ${preferredDate} (${preferredSlot})`;
     await delivery.save();
+
+    // Update parent order status and history
+    if (delivery.order) {
+      const orderDoc = await Order.findById(delivery.order._id || delivery.order);
+      if (orderDoc) {
+        orderDoc.orderStatus = 'DISPATCHED';
+        orderDoc.history.push({
+          status: 'DISPATCHED',
+          note: `Buyer confirmed redelivery slot (${preferredDate}, ${preferredSlot}) via NDR recovery link`
+        });
+        await orderDoc.save();
+      }
+    }
 
     tokenDoc.isUsed = true;
     tokenDoc.respondedAt = new Date();

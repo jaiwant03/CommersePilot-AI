@@ -142,7 +142,14 @@ const getWorkflowStatuses = async (req, res, next) => {
  */
 const triggerOrderAnalysis = async (req, res, next) => {
   try {
-    const { orderId } = req.params;
+    let { orderId } = req.params;
+    if (!orderId || orderId === 'sample-order') {
+      const recentOrder = await Order.findOne({ store: req.store._id }).sort({ createdAt: -1 });
+      if (!recentOrder) {
+        return res.status(400).json({ success: false, message: 'No orders found in store to evaluate.' });
+      }
+      orderId = recentOrder._id;
+    }
     const result = await orderAutomationService.analyzeOrder(orderId, req.store._id);
     return res.status(200).json(result);
   } catch (error) {
@@ -161,7 +168,14 @@ const triggerInventoryAnalysis = async (req, res, next) => {
 
 const triggerDeliveryRecovery = async (req, res, next) => {
   try {
-    const { deliveryId } = req.params;
+    let { deliveryId } = req.params;
+    if (!deliveryId || deliveryId === 'sample-delivery') {
+      const recentDel = await Delivery.findOne({ store: req.store._id }).sort({ updatedAt: -1 });
+      if (!recentDel) {
+        return res.status(400).json({ success: false, message: 'No delivery records found in store to test recovery.' });
+      }
+      deliveryId = recentDel._id;
+    }
     const result = await deliveryAutomationService.handleFailedDelivery(deliveryId, req.store._id);
     return res.status(200).json(result);
   } catch (error) {

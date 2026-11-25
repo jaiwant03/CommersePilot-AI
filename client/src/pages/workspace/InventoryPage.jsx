@@ -146,6 +146,16 @@ const InventoryPage = () => {
     }
   };
 
+  const handleReceivePO = async (poId) => {
+    try {
+      await workspaceService.receivePurchaseOrder(poId);
+      await fetchPOs();
+      alert('Goods received! Inventory quantities have been updated in your catalog.');
+    } catch (err) {
+      alert(err.message || 'Failed to receive purchase order');
+    }
+  };
+
   useEffect(() => {
     if (activeTab === 'products') {
       fetchProducts();
@@ -695,7 +705,7 @@ const InventoryPage = () => {
                           <div style={{ fontSize: '12px' }}>
                             {(po.items || []).map((it, idx) => (
                               <div key={idx}>
-                                {it.title || it.sku} x <strong>{it.quantity} units</strong> (₹{it.unitCost}/unit)
+                                {it.title || it.sku} x <strong>{it.reorderQuantity || it.quantity} units</strong> (₹{it.unitCost}/unit)
                               </div>
                             ))}
                           </div>
@@ -711,8 +721,8 @@ const InventoryPage = () => {
                             borderRadius: '4px',
                             fontSize: '11px',
                             fontWeight: 700,
-                            background: isApproved ? 'rgba(16, 185, 129, 0.15)' : 'rgba(234, 179, 8, 0.15)',
-                            color: isApproved ? '#16A34A' : '#D97706'
+                            background: po.status === 'RECEIVED' ? 'rgba(16, 185, 129, 0.25)' : isApproved ? 'rgba(16, 185, 129, 0.15)' : 'rgba(234, 179, 8, 0.15)',
+                            color: po.status === 'RECEIVED' ? '#059669' : isApproved ? '#16A34A' : '#D97706'
                           }}>
                             {po.status || 'DRAFT'}
                           </span>
@@ -735,10 +745,24 @@ const InventoryPage = () => {
                                 ✕ Reject
                               </button>
                             </div>
-                          ) : (
-                            <span style={{ fontSize: '12px', color: '#16A34A', fontWeight: 600 }}>
-                              ✓ Dispatched to Supplier
+                          ) : po.status === 'RECEIVED' ? (
+                            <span style={{ fontSize: '12px', color: '#059669', fontWeight: 600 }}>
+                              ✓ Received &amp; Restocked
                             </span>
+                          ) : (
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                              <span style={{ fontSize: '12px', color: '#16A34A', fontWeight: 600 }}>
+                                ✓ Dispatched
+                              </span>
+                              <button
+                                onClick={() => handleReceivePO(po._id)}
+                                className="btn"
+                                style={{ background: '#0284C7', color: '#fff', border: 'none', padding: '5px 8px', fontSize: '11px', fontWeight: 600, borderRadius: '5px', cursor: 'pointer' }}
+                                title="Click when shipment arrives to automatically add stock to catalog"
+                              >
+                                📦 Mark Received
+                              </button>
+                            </div>
                           )}
                         </td>
                       </tr>

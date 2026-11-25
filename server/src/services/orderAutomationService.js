@@ -3,6 +3,8 @@ const crypto = require('crypto');
 const config = require('../config/env');
 const Order = require('../models/Order.model');
 const Customer = require('../models/Customer.model');
+const Product = require('../models/Product.model');
+const InventoryMovement = require('../models/InventoryMovement.model');
 const Store = require('../models/Store.model');
 const AutomationLog = require('../models/AutomationLog.model');
 const VerificationToken = require('../models/VerificationToken.model');
@@ -328,6 +330,34 @@ const orderAutomationService = {
         status: 'CANCELLED',
         note: 'Customer opted to cancel order via email verification link.'
       });
+
+      // Replenish product stock if not already restocked
+      if (!order.isRestocked) {
+        for (const item of order.items) {
+          if (item.product) {
+            const prod = await Product.findOne({ _id: item.product, store: tokenDoc.store });
+            if (prod) {
+              const previousStock = prod.stockQuantity;
+              prod.stockQuantity = previousStock + item.quantity;
+              await prod.save();
+
+              await InventoryMovement.create({
+                store: tokenDoc.store,
+                product: prod._id,
+                sku: prod.sku,
+                type: 'RETURN_RESTOCK',
+                quantityChanged: item.quantity,
+                previousStock,
+                newStock: prod.stockQuantity,
+                reason: `Customer cancelled Order #${order.orderNumber} via email confirmation link`,
+                referenceOrder: order._id
+              });
+            }
+          }
+        }
+        order.isRestocked = true;
+      }
+
       await order.save();
 
       tokenDoc.isUsed = true;
@@ -355,6 +385,7 @@ const orderAutomationService = {
     // Default: Customer Confirmed Order
     order.orderStatus = 'CONFIRMED';
     order.needsVerification = false;
+    order.reviewStatus = 'APPROVED';
     order.history.push({
       status: 'CONFIRMED',
       note: 'Buyer confirmed commitment via secure email verification link.'

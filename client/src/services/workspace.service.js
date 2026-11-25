@@ -170,6 +170,11 @@ const workspaceService = {
     return res.data;
   },
 
+  receivePurchaseOrder: async (id) => {
+    const res = await api.post(`/inventory/purchase-orders/${id}/receive`);
+    return res.data;
+  },
+
   // Analytics & Demand Forecasting
   getAnalytics: async (params = {}) => {
     const res = await api.get('/analytics', { params });

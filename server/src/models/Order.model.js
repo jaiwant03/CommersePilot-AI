@@ -107,6 +107,10 @@ const orderSchema = new mongoose.Schema(
       type: String,
       default: ''
     },
+    isRestocked: {
+      type: Boolean,
+      default: false
+    },
     delivery: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Delivery'

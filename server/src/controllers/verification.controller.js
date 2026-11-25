@@ -1,5 +1,7 @@
 const VerificationToken = require('../models/VerificationToken.model');
 const Order = require('../models/Order.model');
+const Product = require('../models/Product.model');
+const InventoryMovement = require('../models/InventoryMovement.model');
 const Delivery = require('../models/Delivery.model');
 const PurchaseOrder = require('../models/PurchaseOrder.model');
 const Store = require('../models/Store.model');
@@ -80,6 +82,41 @@ const confirmOrder = async (req, res, next) => {
         status: 'CANCELLED',
         note: 'Customer opted to cancel order via email verification link.'
       });
+
+      // Replenish product stock if not already restocked
+      if (!order.isRestocked) {
+        for (const item of order.items) {
+          if (item.product) {
+            const prod = await Product.findOne({ _id: item.product, store: tokenDoc.store });
+            if (prod) {
+              const previousStock = prod.stockQuantity;
+              prod.stockQuantity = previousStock + item.quantity;
+              await prod.save();
+
+              await InventoryMovement.create({
+                store: tokenDoc.store,
+                product: prod._id,
+                sku: prod.sku,
+                type: 'RETURN_RESTOCK',
+                quantityChanged: item.quantity,
+                previousStock,
+                newStock: prod.stockQuantity,
+                reason: `Customer cancelled Order #${order.orderNumber} via verification link`,
+                referenceOrder: order._id
+              });
+            }
+          }
+        }
+        order.isRestocked = true;
+      }
+
+      if (order.delivery) {
+        await Delivery.findByIdAndUpdate(order.delivery, {
+          status: 'RTO',
+          $push: { trackingEvents: { status: 'RTO', message: 'Cancelled by customer via verification link' } }
+        });
+      }
+
       await order.save();
 
       tokenDoc.isUsed = true;
@@ -108,6 +145,7 @@ const confirmOrder = async (req, res, next) => {
     // Default: Customer Confirmed Order
     order.orderStatus = 'CONFIRMED';
     order.needsVerification = false;
+    order.reviewStatus = 'APPROVED';
     order.history.push({
       status: 'CONFIRMED',
       note: 'Buyer confirmed commitment via secure email verification link.'

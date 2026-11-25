@@ -85,11 +85,18 @@ const getDeliveryById = async (req, res, next) => {
 const simulateDeliveryEvent = async (req, res, next) => {
   try {
     const storeId = req.store._id;
-    const { eventType, reason, location = 'City Sorting Hub' } = req.body;
+    let { eventType, reason, failureReason, description, location = 'City Sorting Hub' } = req.body;
 
     const delivery = await Delivery.findOne({ _id: req.params.id, store: storeId });
     if (!delivery) {
       return res.status(404).json({ success: false, message: 'Delivery record not found.' });
+    }
+
+    const effectiveReason = reason || failureReason || description || '';
+
+    // Normalize REATTEMPT to OUT_FOR_DELIVERY
+    if (eventType === 'REATTEMPT') {
+      eventType = 'OUT_FOR_DELIVERY';
     }
 
     const validEvents = ['PENDING', 'SHIPPED', 'OUT_FOR_DELIVERY', 'DELIVERED', 'FAILED', 'RTO'];
@@ -102,18 +109,20 @@ const simulateDeliveryEvent = async (req, res, next) => {
 
     delivery.status = eventType;
 
-    let eventMessage = `Status updated to ${eventType}`;
+    let eventMessage = description || `Status updated to ${eventType}`;
     if (eventType === 'OUT_FOR_DELIVERY') {
-      delivery.attemptsCount += 1;
-      eventMessage = `Courier executive out for delivery (Attempt #${delivery.attemptsCount})`;
+      delivery.attemptsCount = (delivery.attemptsCount || 0) + 1;
+      eventMessage = description || `Courier executive out for delivery (Attempt #${delivery.attemptsCount})`;
     } else if (eventType === 'FAILED') {
-      delivery.ndrReason = reason || 'Customer unavailable at delivery address; contact phone unanswered';
-      eventMessage = `Delivery Attempt Failed (NDR): ${delivery.ndrReason}`;
+      delivery.ndrReason = effectiveReason || 'Customer unavailable at delivery address; contact phone unanswered';
+      delivery.customerResponse = 'PENDING';
+      delivery.recoveryStatus = 'PENDING';
+      eventMessage = description || `Delivery Attempt Failed (NDR): ${delivery.ndrReason}`;
     } else if (eventType === 'DELIVERED') {
-      eventMessage = 'Shipment successfully delivered to recipient at doorstep';
+      eventMessage = description || 'Shipment successfully delivered to recipient at doorstep';
     } else if (eventType === 'RTO') {
-      delivery.ndrReason = reason || 'Return to Origin initiated: Multiple failed delivery attempts';
-      eventMessage = `RTO in transit back to merchant warehouse: ${delivery.ndrReason}`;
+      delivery.ndrReason = effectiveReason || 'Return to Origin initiated: Multiple failed delivery attempts';
+      eventMessage = description || `RTO in transit back to merchant warehouse: ${delivery.ndrReason}`;
     }
 
     delivery.trackingEvents.push({
@@ -150,28 +159,31 @@ const simulateDeliveryEvent = async (req, res, next) => {
         order.orderStatus = 'CANCELLED';
         order.history.push({ status: 'CANCELLED', note: 'Returned to origin (RTO)' });
 
-        // Restock inventory on RTO
-        for (const item of order.items) {
-          if (item.product) {
-            const prod = await Product.findOne({ _id: item.product, store: storeId });
-            if (prod) {
-              const previousStock = prod.stockQuantity;
-              prod.stockQuantity += item.quantity;
-              await prod.save();
+        // Restock inventory on RTO if not already restocked
+        if (!order.isRestocked) {
+          for (const item of order.items) {
+            if (item.product) {
+              const prod = await Product.findOne({ _id: item.product, store: storeId });
+              if (prod) {
+                const previousStock = prod.stockQuantity;
+                prod.stockQuantity += item.quantity;
+                await prod.save();
 
-              await InventoryMovement.create({
-                store: storeId,
-                product: prod._id,
-                sku: prod.sku,
-                type: 'RETURN_RESTOCK',
-                quantityChanged: item.quantity,
-                previousStock,
-                newStock: prod.stockQuantity,
-                reason: `Restocked after RTO for Order #${order.orderNumber}`,
-                referenceOrder: order._id
-              });
+                await InventoryMovement.create({
+                  store: storeId,
+                  product: prod._id,
+                  sku: prod.sku,
+                  type: 'RETURN_RESTOCK',
+                  quantityChanged: item.quantity,
+                  previousStock,
+                  newStock: prod.stockQuantity,
+                  reason: `Restocked after RTO for Order #${order.orderNumber}`,
+                  referenceOrder: order._id
+                });
+              }
             }
           }
+          order.isRestocked = true;
         }
       } else if (eventType === 'OUT_FOR_DELIVERY' || eventType === 'SHIPPED') {
         order.orderStatus = 'DISPATCHED';

@@ -46,7 +46,7 @@ const purchaseOrderSchema = new mongoose.Schema(
     },
     status: {
       type: String,
-      enum: ['DRAFT_PENDING_APPROVAL', 'APPROVED', 'SENT_TO_SUPPLIER', 'REJECTED'],
+      enum: ['DRAFT_PENDING_APPROVAL', 'APPROVED', 'SENT_TO_SUPPLIER', 'RECEIVED', 'REJECTED'],
       default: 'DRAFT_PENDING_APPROVAL',
       index: true
     },

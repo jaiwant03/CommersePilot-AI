@@ -310,6 +310,66 @@ const rejectPurchaseOrder = async (req, res, next) => {
   }
 };
 
+/**
+ * Mark Purchase Order as Received and automatically restock catalog inventory
+ */
+const receivePurchaseOrder = async (req, res, next) => {
+  try {
+    const storeId = req.store._id;
+    const po = await PurchaseOrder.findOne({ _id: req.params.id, store: storeId });
+
+    if (!po) {
+      return res.status(404).json({ success: false, message: 'Purchase order not found.' });
+    }
+
+    if (po.status === 'RECEIVED') {
+      return res.status(400).json({ success: false, message: 'Purchase order has already been received and restocked.' });
+    }
+
+    // Restock each product item in the PO
+    const restockedItems = [];
+    for (const it of po.items) {
+      const prod = await Product.findOne({ _id: it.product, store: storeId });
+      if (prod) {
+        const previousStock = prod.stockQuantity;
+        const qtyToAdd = it.reorderQuantity || it.quantity || 0;
+        prod.stockQuantity = previousStock + qtyToAdd;
+        await prod.save();
+
+        await InventoryMovement.create({
+          store: storeId,
+          product: prod._id,
+          sku: prod.sku,
+          type: 'STOCK_IN',
+          quantityChanged: qtyToAdd,
+          previousStock,
+          newStock: prod.stockQuantity,
+          reason: `Goods received from Purchase Order #${po.poNumber}`
+        });
+
+        restockedItems.push({
+          sku: prod.sku,
+          added: qtyToAdd,
+          newStock: prod.stockQuantity
+        });
+      }
+    }
+
+    po.status = 'RECEIVED';
+    po.notes = `${po.notes ? po.notes + ' | ' : ''}Received and restocked on ${new Date().toLocaleDateString('en-IN')}`;
+    await po.save();
+
+    return res.status(200).json({
+      success: true,
+      message: `Purchase order #${po.poNumber} received. Stock successfully replenished.`,
+      purchaseOrder: po,
+      restockedItems
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
 module.exports = {
   getInventoryOverview,
   adjustStock,
@@ -319,5 +379,6 @@ module.exports = {
   getPurchaseOrderById,
   approvePurchaseOrder,
   updatePurchaseOrder,
-  rejectPurchaseOrder
+  rejectPurchaseOrder,
+  receivePurchaseOrder
 };
