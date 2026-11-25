@@ -253,7 +253,12 @@ const runTrendyThreadsE2ETest = async () => {
           city: 'Coimbatore',
           state: 'Tamil Nadu',
           pincode: '641012'
-        }
+        },
+        trackingEvents: [
+          { status: 'MANIFESTED', location: 'Coimbatore Hub', message: 'Order manifested with Delhivery', timestamp: new Date(Date.now() - 48 * 3600 * 1000) },
+          { status: 'IN_TRANSIT', location: 'Gandhipuram DC', message: 'In transit to delivery hub', timestamp: new Date(Date.now() - 24 * 3600 * 1000) },
+          { status: 'FAILED', location: 'Customer Location', message: 'Delivery attempt failed: Customer unavailable', timestamp: new Date(Date.now() - 2 * 3600 * 1000) }
+        ]
       });
     } else {
       delivery.store = store._id;
@@ -264,6 +269,11 @@ const runTrendyThreadsE2ETest = async () => {
       delivery.attemptsCount = 1;
       delivery.ndrReason = 'Customer unavailable at delivery premises';
       delivery.whatsappMessage = expectedTemplate;
+      delivery.trackingEvents = [
+        { status: 'MANIFESTED', location: 'Coimbatore Hub', message: 'Order manifested with Delhivery', timestamp: new Date(Date.now() - 48 * 3600 * 1000) },
+        { status: 'IN_TRANSIT', location: 'Gandhipuram DC', message: 'In transit to delivery hub', timestamp: new Date(Date.now() - 24 * 3600 * 1000) },
+        { status: 'FAILED', location: 'Customer Location', message: 'Delivery attempt failed: Customer unavailable', timestamp: new Date(Date.now() - 2 * 3600 * 1000) }
+      ];
       await delivery.save();
     }
     assert(Boolean(delivery), 'Delivery shipment DEL-TT10245 found for order TT10245');
