@@ -151,9 +151,12 @@ const OrdersPage = () => {
     if (!selectedOrder) return;
 
     try {
-      await workspaceService.updateOrder(selectedOrder._id, editStatus);
+      const res = await workspaceService.updateOrder(selectedOrder._id, editStatus);
+      const updated = res.order || res.data?.order || { ...selectedOrder, ...editStatus };
+      setOrders((prev) => prev.map((o) => (o._id === selectedOrder._id ? { ...o, ...updated } : o)));
+      setSelectedOrder((prev) => (prev ? { ...prev, ...updated } : null));
       setShowDetailsModal(false);
-      await fetchOrders();
+      await fetchOrders(true);
     } catch (err) {
       alert(err.message || 'Failed to update order');
     }
