@@ -382,6 +382,7 @@ const sendSupplierPurchaseOrderEmail = async ({ store, supplierEmail, po }) => {
     to: supplierEmail,
     subject,
     html,
+    senderName: storeName,
     eventId: `po-supplier-dispatch-${po._id}`
   });
 };
