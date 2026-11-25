@@ -163,6 +163,7 @@ const runTrendyThreadsE2ETest = async () => {
         title: "Women's Black Kurti",
         sku: 'TT-KUR-BLK',
         price: 1299,
+        sellingPrice: 1299,
         costPrice: 450,
         stockQuantity: 25,
         category: 'Kurti'
