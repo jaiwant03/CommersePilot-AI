@@ -4,33 +4,90 @@ import authService from '../services/auth.service';
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(null);
-  const [store, setStore] = useState(null);
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
+  // Optimistically restore session from localStorage so refresh never flickers
+  const [user, setUser] = useState(() => {
+    try {
+      const saved = localStorage.getItem('cp_user');
+      return saved ? JSON.parse(saved) : null;
+    } catch {
+      return null;
+    }
+  });
+
+  const [store, setStore] = useState(() => {
+    try {
+      const saved = localStorage.getItem('cp_store');
+      return saved ? JSON.parse(saved) : null;
+    } catch {
+      return null;
+    }
+  });
+
+  const [isAuthenticated, setIsAuthenticated] = useState(() => {
+    return Boolean(localStorage.getItem('cp_token'));
+  });
+
+  const [isLoading, setIsLoading] = useState(() => {
+    // If no token exists at all, not loading - definitely unauthenticated
+    return Boolean(localStorage.getItem('cp_token'));
+  });
+
   const [authError, setAuthError] = useState(null);
 
-  // Check existing session on application boot via HTTP-only cookie
+  // Validate or synchronize session with backend on application boot
   useEffect(() => {
+    let isMounted = true;
+
     const checkAuthStatus = async () => {
+      const token = localStorage.getItem('cp_token');
+      if (!token) {
+        if (isMounted) {
+          setIsLoading(false);
+          setIsAuthenticated(false);
+          setUser(null);
+          setStore(null);
+        }
+        return;
+      }
+
       try {
         const data = await authService.getMe();
-        if (data?.user) {
+        if (isMounted && data?.user) {
           setUser(data.user);
           setStore(data.store);
           setIsAuthenticated(true);
+          try {
+            localStorage.setItem('cp_user', JSON.stringify(data.user));
+            if (data.store) localStorage.setItem('cp_store', JSON.stringify(data.store));
+          } catch (e) {
+            console.warn('Failed to cache user session:', e);
+          }
         }
       } catch (err) {
-        // Not authenticated or session expired
-        setUser(null);
-        setStore(null);
-        setIsAuthenticated(false);
+        console.warn('Session verification notice:', err.message);
+        // Only clear credentials if server explicitly rejected auth with 401
+        if (err.status === 401 || err.response?.status === 401) {
+          if (isMounted) {
+            localStorage.removeItem('cp_token');
+            localStorage.removeItem('cp_user');
+            localStorage.removeItem('cp_store');
+            setUser(null);
+            setStore(null);
+            setIsAuthenticated(false);
+          }
+        }
       } finally {
-        setIsLoading(false);
+        if (isMounted) {
+          setIsLoading(false);
+        }
       }
     };
 
     checkAuthStatus();
+
+    return () => {
+      isMounted = false;
+    };
   }, []);
 
   // Register
@@ -42,6 +99,8 @@ export const AuthProvider = ({ children }) => {
       setUser(data.user);
       setStore(data.store);
       setIsAuthenticated(true);
+      if (data.user) localStorage.setItem('cp_user', JSON.stringify(data.user));
+      if (data.store) localStorage.setItem('cp_store', JSON.stringify(data.store));
       return data;
     } catch (err) {
       setAuthError(err.message || 'Registration failed');
@@ -60,6 +119,8 @@ export const AuthProvider = ({ children }) => {
       setUser(data.user);
       setStore(data.store);
       setIsAuthenticated(true);
+      if (data.user) localStorage.setItem('cp_user', JSON.stringify(data.user));
+      if (data.store) localStorage.setItem('cp_store', JSON.stringify(data.store));
       return data;
     } catch (err) {
       setAuthError(err.message || 'Invalid email or password');
@@ -77,6 +138,9 @@ export const AuthProvider = ({ children }) => {
     } catch (err) {
       console.warn('Logout error:', err.message);
     } finally {
+      localStorage.removeItem('cp_token');
+      localStorage.removeItem('cp_user');
+      localStorage.removeItem('cp_store');
       setUser(null);
       setStore(null);
       setIsAuthenticated(false);
