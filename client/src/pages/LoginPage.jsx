@@ -37,15 +37,6 @@ const LoginPage = () => {
     }));
   };
 
-  const handleFillDemo = () => {
-    setFormData({
-      email: 'meena@trendythreads.in',
-      password: 'TrendyThreads2026!',
-      rememberMe: true
-    });
-    setErrorMessage('');
-  };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     setErrorMessage('');
