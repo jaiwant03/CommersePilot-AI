@@ -235,14 +235,36 @@ const runTrendyThreadsE2ETest = async () => {
     // TEST 3: DELIVERY FAILURE (NDR) RECOVERY & WHATSAPP INTEGRATION
     // -------------------------------------------------------------------------
     console.log('\n--- TEST 3: Delivery Failure Recovery & WhatsApp NDR Flow ---');
-    let delivery = await Delivery.findOne({ store: store._id, awb: 'DEL-TT10245' });
-    if (delivery && delivery.status !== 'FAILED') {
+    let delivery = await Delivery.findOne({ awb: 'DEL-TT10245' });
+    const expectedTemplate = `Hello! Your Trendy Threads order TT10245 could not be delivered because you were unavailable. Would you like us to arrange another delivery attempt? Reply YES to request redelivery or contact our support team.`;
+    if (!delivery) {
+      delivery = await Delivery.create({
+        store: store._id,
+        order: orderTT10245._id,
+        awb: 'DEL-TT10245',
+        courier: 'Delhivery',
+        status: 'FAILED',
+        recoveryStatus: 'PENDING',
+        customerResponse: 'PENDING',
+        attemptsCount: 1,
+        ndrReason: 'Customer unavailable at delivery premises',
+        whatsappMessage: expectedTemplate,
+        destination: {
+          city: 'Coimbatore',
+          state: 'Tamil Nadu',
+          pincode: '641012'
+        }
+      });
+    } else {
+      delivery.store = store._id;
+      delivery.order = orderTT10245._id;
       delivery.status = 'FAILED';
       delivery.recoveryStatus = 'PENDING';
       delivery.customerResponse = 'PENDING';
       delivery.attemptsCount = 1;
+      delivery.ndrReason = 'Customer unavailable at delivery premises';
+      delivery.whatsappMessage = expectedTemplate;
       await delivery.save();
-      delivery = await Delivery.findOne({ store: store._id, awb: 'DEL-TT10245' });
     }
     assert(Boolean(delivery), 'Delivery shipment DEL-TT10245 found for order TT10245');
     assert(delivery.status === 'FAILED', 'Delivery status is FAILED (NDR attempt failed)');
