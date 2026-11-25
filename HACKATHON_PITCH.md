@@ -81,18 +81,7 @@ Carrier and messaging integrations depend on the deployment and configured webho
 
 ## 5. Explaining the supplied screenshots
 
-### Screenshot 1 — CommercePilot workspace sidebar
-
-This is the navigation for the authenticated merchant workspace:
-
-- **Core Operations:** Overview, Orders, Inventory, and Deliveries.
-- **Intelligence & Tools:** Analytics, AI Assistant, Automations, and Store Settings.
-- **Groq badge:** identifies the AI-powered assistant area.
-- **Marketing Site / Live:** takes the merchant back to the public product website.
-
-**What to say:** “The workspace is organized around the merchant’s operating loop: see the business, manage orders and stock, follow deliveries, then use analytics and automation to decide what to do next.”
-
-### Screenshot 2 — public website navigation
+### Screenshot 1 — public website navigation
 
 This is the public-facing product website navigation:
 
@@ -104,7 +93,18 @@ This is the public-facing product website navigation:
 
 The blue underline indicates the active section. On the landing page these links navigate to sections of the page; the public site also has product, feature, workflow, and pricing pages.
 
-**What to say:** “The public site explains the value before signup; after login, the merchant moves into the operational workspace shown in the first screenshot.”
+**What to say:** “The public site explains the value before signup; after login, the merchant moves into the operational workspace shown in the next screenshot.”
+
+### Screenshot 2 — CommercePilot workspace sidebar
+
+This is the navigation for the authenticated merchant workspace:
+
+- **Core Operations:** Overview, Orders, Inventory, and Deliveries.
+- **Intelligence & Tools:** Analytics, AI Assistant, Automations, and Store Settings.
+- **Groq badge:** identifies the AI-powered assistant area.
+- **Marketing Site / Live:** takes the merchant back to the public product website.
+
+**What to say:** “The workspace is organized around the merchant’s operating loop: see the business, manage orders and stock, follow deliveries, then use analytics and automation to decide what to do next.”
 
 ## 6. Product experience from first visit to daily use
 
@@ -204,14 +204,14 @@ Do not claim results until measured. Track:
 | Time | Screen / action | Presenter narration |
 |---|---|---|
 | **0:00–0:35** | Open on the public Home page. | “Growing an ecommerce brand is not just about getting orders. Teams also need to catch risky COD orders, replenish stock in time, and respond when delivery fails. Today that work is split across tools. CommercePilot AI brings those operational decisions into one place.” |
-| **0:35–1:00** | Point to the public navigation in screenshot 2: Home, Product, Features, How It Works, Pricing. | “This is the public product experience. A merchant can understand the product, explore its capabilities, see how the workflow fits together, and review the proposed plans before entering the workspace.” |
+| **0:35–1:00** | Point to the public navigation in screenshot 1: Home, Product, Features, How It Works, Pricing. | “This is the public product experience. A merchant can understand the product, explore its capabilities, see how the workflow fits together, and review the proposed plans before entering the workspace.” |
 | **1:00–1:30** | Sign in and open **Overview**. | “The Overview gives the merchant a starting point: order and revenue indicators, verification needs, low-stock signals, delivery issues, recent orders, and inventory alerts. Instead of asking ‘where do I look first?’, the team can start with the exceptions.” |
 | **1:30–2:05** | Open **Orders** and select a representative COD order. | “For COD, CommercePilot applies explainable checks such as basket value, address completeness, phone format, and available customer history. The point is not to reject customers automatically; it is to identify orders that may deserve confirmation before dispatch.” |
 | **2:05–2:40** | Open **Inventory** and show stock or forecast details. | “For inventory, the system uses recent sales and current stock to estimate daily demand, stock runway, and reorder points. Here the merchant can see which products need attention and review replenishment actions. These are transparent calculations, and confidence improves as store history grows.” |
 | **2:40–3:10** | Open **Deliveries** and show an exception or recovery view. | “When a delivery exception is recorded, the recovery workflow can prompt timely follow-up and a customer rescheduling action. The workflow can run through configured webhooks, or be demonstrated in simulation mode.” |
 | **3:10–3:45** | Open **Analytics** and show the revenue, orders, payment, or delivery charts. | “Analytics connect daily operations to business performance: order trends, payment mix, delivery outcomes, and product economics. This helps the merchant move from a raw activity list to a clearer view of where attention is needed.” |
 | **3:45–4:25** | Open **AI Assistant** and ask: “Which products should I reorder?” or “Which orders need verification?” | “The copilot accepts a natural-language question, then grounds its response in the authenticated store’s data and the platform’s calculations. It is designed to explain operational context—not fabricate numbers. Here it turns a question into a practical next step.” |
-| **4:25–4:45** | Briefly open **Automations** and identify the remaining sidebar destinations in screenshot 1. | “Automations exposes the workflow triggers and execution history. The rest of the sidebar keeps core operations—Overview, Orders, Inventory, Deliveries—separate from intelligence tools—Analytics, AI Assistant, Automations—and Store Settings.” |
+| **4:25–4:45** | Briefly open **Automations** and identify the remaining sidebar destinations in screenshot 2. | “Automations exposes the workflow triggers and execution history. The rest of the sidebar keeps core operations—Overview, Orders, Inventory, Deliveries—separate from intelligence tools—Analytics, AI Assistant, Automations—and Store Settings.” |
 | **4:45–5:00** | Return to Overview or the product Home page. | “CommercePilot AI helps a lean ecommerce team see risk earlier and act with more context. Our next step is to pilot with merchants and measure fewer preventable failures, faster recovery, and less manual operational work. Thank you.” |
 
 **Total: 5:00.** If the demo runs long, skip the public Product page and show only the two supplied navigation screenshots, then spend the saved time on the live workspace.
