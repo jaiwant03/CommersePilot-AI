@@ -24,90 +24,19 @@ For a lean D2C team, routine operations can become fragmented:
 
 CommercePilot AI is designed for Indian and other COD-heavy ecommerce operations, especially early-stage and growing direct-to-consumer brands. It focuses on the operational work between receiving an order and successfully fulfilling it.
 
-## 4. What the product does
-
-### Order intelligence
-
-- Shows and manages store orders in a dedicated workspace.
-- Applies explainable COD risk heuristics using signals such as order value, address completeness, phone format, and available customer history.
-- Surfaces orders that may need confirmation or merchant review before dispatch.
-- Supports verification workflows using secure, expiring email action links where email is configured.
-
-**Pitch it as:** “We help merchants review risk before they pay the cost of a failed shipment.”
-
-### Inventory planning
-
-- Tracks products, stock, categories, movements, and purchase orders.
-- Calculates average daily demand, estimated days of stock, reorder points, and suggested replenishment quantities.
-- Highlights low-stock and critical-runway products.
-- Supports purchase-order drafting and merchant approval workflows.
-
-Forecasts are deterministic projections based on available sales and stock data—not a claim of deep-learning prediction. Recommendations become more useful as a store accumulates history.
-
-**Pitch it as:** “We turn stock data into a clear answer to ‘what should I reorder, and how urgent is it?’”
-
-### Delivery exception management
-
-- Provides a workspace for delivery records and delivery-related actions.
-- Supports recovery workflow hooks for failed delivery events and customer follow-up.
-- Offers customer action pages for rescheduling delivery when the configured workflow sends the relevant secure link.
-
-Carrier and messaging integrations depend on the deployment and configured webhooks; do not present an unconfigured integration as live.
-
-**Pitch it as:** “A failed attempt should trigger a next step—not disappear into a spreadsheet.”
-
-### Analytics
-
-- Summarizes orders, revenue, payment mix, delivery outcomes, and product performance.
-- Separates gross revenue from estimated costs and profit views where the underlying records provide the data.
-- Presents time-range views and operational breakdowns to help merchants understand what is changing.
-
-**Pitch it as:** “The dashboard connects operational activity to the business outcome behind it.”
-
-### Data-grounded AI operations copilot
-
-- Accepts natural-language questions about store operations.
-- Uses store records and deterministic calculations to provide context for questions about verification, stock risks, reorders, delivery failures, and performance.
-- Uses Groq for AI-generated explanations when configured, with guardrails and fallback responses in the service.
-
-**Pitch it as:** “The AI explains what is happening in your store; it is not asked to invent the store’s numbers.”
-
-### Workflow automation
-
-- Exposes operational workflow triggers for order analysis, inventory intelligence, delivery recovery, and daily reporting.
-- Can dispatch to n8n webhooks when configured.
-- Supports a demo/simulation mode so workflows can be demonstrated without a live n8n connection.
-- Uses email workflows and expiring action tokens where SMTP is configured.
-
-## 5. Explaining the supplied screenshots
-
-### Screenshot 1 — public website navigation
-
-Use these links to explain the public product experience in the same left-to-right order shown in the screenshot:
-
-- **Home:** the product promise and entry point.
-- **Product:** interactive product walkthrough and capability examples.
-- **Features:** a deeper explanation of the capabilities.
-- **How It Works:** the operational workflow from data to action.
-- **Pricing:** the proposed subscription tiers.
-
-The blue underline indicates the active section. On the landing page these links navigate to sections of the page; the public site also has product, feature, workflow, and pricing pages.
-
 #### 1. Home — introduce the problem and promise
 
-Explain that small ecommerce teams often manage order risk, inventory, and delivery issues across separate tools. CommercePilot AI brings those signals into one operations workspace.
+small ecommerce teams often manage order risk, inventory, and delivery issues across separate tools. CommercePilot AI brings those signals into one operations workspace.
 
 **Say:** “CommercePilot AI helps online sellers catch operational problems earlier—before a risky order ships, stock runs out, or a delivery exception becomes a lost sale.”
 
 #### 2. Product — show what the platform brings together
 
-Use the product walkthrough to introduce its key use cases: COD order review, inventory runway, delivery recovery, and the AI operations copilot. Emphasize that the product connects insights to follow-up actions rather than stopping at charts.
+COD order review, inventory runway, delivery recovery, and the AI operations copilot. Emphasize that the product connects insights to follow-up actions rather than stopping at charts.
 
 **Say:** “This is one place to understand what needs attention and move from an operational signal to a practical next step.”
 
 #### 3. Features — explain the capabilities
-
-Walk through the feature groups in plain language:
 
 - Explainable COD risk checks that can flag orders for confirmation.
 - Demand and stock-runway calculations that help prioritize replenishment.
@@ -118,7 +47,7 @@ Walk through the feature groups in plain language:
 
 #### 4. How It Works — connect the steps
 
-Describe the flow: store and order data enters the platform; rules and calculations identify risk or urgency; the merchant reviews a recommended action; and configured workflows can route the follow-up through email or n8n. Be clear that external integrations require configuration.
+this can store and order data enters the platform; rules and calculations identify risk or urgency; the merchant reviews a recommended action; and configured workflows can route the follow-up through email or n8n. 
 
 **Say:** “CommercePilot turns store data into an explainable signal, then gives the team a clear action path—with automation available when the relevant integration is configured.”
 
