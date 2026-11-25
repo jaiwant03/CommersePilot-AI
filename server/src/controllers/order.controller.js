@@ -4,6 +4,7 @@ const Customer = require('../models/Customer.model');
 const Product = require('../models/Product.model');
 const Delivery = require('../models/Delivery.model');
 const InventoryMovement = require('../models/InventoryMovement.model');
+const emailService = require('../services/emailService');
 
 /**
  * Safely replenish inventory for an order (preventing duplicate restock)
@@ -233,15 +234,18 @@ const createOrder = async (req, res, next) => {
     }
 
     // 3. Upsert Customer record
+    const inputEmail = customer.email ? customer.email.trim().toLowerCase() : '';
     let customerDoc = await Customer.findOne({ store: storeId, phone: custPhone.trim() });
     if (!customerDoc) {
       customerDoc = new Customer({
         store: storeId,
         fullName: custName.trim(),
-        email: customer.email ? customer.email.trim() : '',
+        email: inputEmail,
         phone: custPhone.trim(),
         address: normalizedAddress
       });
+    } else if (inputEmail && customerDoc.email !== inputEmail) {
+      customerDoc.email = inputEmail;
     }
     customerDoc.ordersCount = (customerDoc.ordersCount || 0) + 1;
     customerDoc.totalSpent = (customerDoc.totalSpent || 0) + totalAmount;
@@ -341,10 +345,11 @@ const createOrder = async (req, res, next) => {
       }
     }
 
-    // 8. Trigger Automated Order Risk Evaluation Workflow
+    // 8. Trigger Automated Order Risk Evaluation & Email Workflow
+    let automationResult = null;
     try {
       const orderAutomationService = require('../services/orderAutomationService');
-      await orderAutomationService.analyzeOrder(order._id, storeId);
+      automationResult = await orderAutomationService.analyzeOrder(order._id, storeId);
     } catch (autoErr) {
       console.warn(`[Order Controller] Automated order analysis warning:`, autoErr.message);
     }
@@ -355,7 +360,11 @@ const createOrder = async (req, res, next) => {
     return res.status(201).json({
       success: true,
       message: 'Order created successfully.',
-      order: updatedOrder || order
+      order: updatedOrder || order,
+      emailSent: Boolean(automationResult?.emailSent),
+      emailType: automationResult?.emailType || 'NONE',
+      emailRecipient: automationResult?.emailRecipient || null,
+      emailError: automationResult?.emailError || null
     });
   } catch (error) {
     next(error);
@@ -374,7 +383,24 @@ const updateOrder = async (req, res, next) => {
       return res.status(404).json({ success: false, message: 'Order not found.' });
     }
 
-    const { orderStatus, notes, address, needsVerification, paymentStatus } = req.body;
+    const { orderStatus, notes, address, needsVerification, paymentStatus, customerEmail, email } = req.body;
+    const incomingEmail = (customerEmail !== undefined ? customerEmail : email);
+    let emailSent = false;
+    let emailRecipient = null;
+
+    if (incomingEmail !== undefined) {
+      const cleanEmail = String(incomingEmail).trim().toLowerCase();
+      if (cleanEmail !== (order.customer?.email || '')) {
+        order.customer.email = cleanEmail;
+        if (order.customer?.id) {
+          await Customer.findByIdAndUpdate(order.customer.id, { email: cleanEmail });
+        }
+        order.history.push({
+          status: order.orderStatus,
+          note: cleanEmail ? `Customer email updated to ${cleanEmail}` : 'Customer email cleared'
+        });
+      }
+    }
 
     if (orderStatus && orderStatus !== order.orderStatus) {
       const prevStatus = order.orderStatus;
@@ -403,6 +429,19 @@ const updateOrder = async (req, res, next) => {
           status: 'SHIPPED',
           $push: { trackingEvents: { status: 'SHIPPED', message: 'Package handed over to courier' } }
         });
+      }
+
+      // Notify customer if they have an email configured
+      if (order.customer?.email) {
+        const emailRes = await emailService.sendOrderStatusEmail({
+          order,
+          customer: order.customer,
+          store: req.store,
+          status: orderStatus,
+          note: notes
+        });
+        emailSent = Boolean(emailRes?.success);
+        emailRecipient = order.customer.email;
       }
     }
 
@@ -437,7 +476,9 @@ const updateOrder = async (req, res, next) => {
     return res.status(200).json({
       success: true,
       message: 'Order updated successfully.',
-      order
+      order,
+      emailSent,
+      emailRecipient
     });
   } catch (error) {
     next(error);
@@ -456,6 +497,7 @@ const deleteOrder = async (req, res, next) => {
       return res.status(404).json({ success: false, message: 'Order not found.' });
     }
 
+    let emailSent = false;
     if (order.orderStatus !== 'CANCELLED') {
       order.orderStatus = 'CANCELLED';
       order.history.push({ status: 'CANCELLED', note: 'Order cancelled by merchant' });
@@ -468,11 +510,24 @@ const deleteOrder = async (req, res, next) => {
         });
       }
       await order.save();
+
+      if (order.customer?.email) {
+        const emailRes = await emailService.sendOrderStatusEmail({
+          order,
+          customer: order.customer,
+          store: req.store,
+          status: 'CANCELLED',
+          note: 'Order cancelled by merchant.'
+        });
+        emailSent = Boolean(emailRes?.success);
+      }
     }
 
     return res.status(200).json({
       success: true,
-      message: 'Order cancelled successfully.'
+      message: 'Order cancelled successfully.',
+      emailSent,
+      emailRecipient: order.customer?.email || null
     });
   } catch (error) {
     next(error);
@@ -505,10 +560,22 @@ const approveOrder = async (req, res, next) => {
 
     await order.save();
 
+    let emailSent = false;
+    if (order.customer?.email) {
+      const emailRes = await emailService.sendOrderConfirmationEmail({
+        order,
+        customer: order.customer,
+        store: req.store
+      });
+      emailSent = Boolean(emailRes?.success);
+    }
+
     return res.status(200).json({
       success: true,
       message: `Order #${order.orderNumber} approved successfully.`,
-      order
+      order,
+      emailSent,
+      emailRecipient: order.customer?.email || null
     });
   } catch (error) {
     next(error);
@@ -527,9 +594,24 @@ const requestConfirmation = async (req, res, next) => {
       return res.status(404).json({ success: false, message: 'Order not found.' });
     }
 
+    // Allow optional email override in request body
+    const overrideEmail = (req.body?.email || '').trim().toLowerCase();
+    if (overrideEmail) {
+      order.customer.email = overrideEmail;
+      if (order.customer?.id) {
+        await Customer.findByIdAndUpdate(order.customer.id, { email: overrideEmail });
+      }
+    }
+
+    if (!order.customer?.email) {
+      return res.status(400).json({
+        success: false,
+        message: 'No customer email address on this order. Please enter customer email first.'
+      });
+    }
+
     const crypto = require('crypto');
     const VerificationToken = require('../models/VerificationToken.model');
-    const emailService = require('../services/emailService');
     const config = require('../config/env');
 
     const rawToken = crypto.randomBytes(32).toString('hex');
@@ -540,14 +622,14 @@ const requestConfirmation = async (req, res, next) => {
       order: order._id,
       metadata: {
         orderNumber: order.orderNumber,
-        customerEmail: order.customer?.email,
+        customerEmail: order.customer.email,
         riskScore: order.riskScore || 65
       },
       expiresAt: new Date(Date.now() + 24 * 60 * 60 * 1000)
     });
 
     const verificationUrl = `${config.clientUrl}/verify-order?token=${rawToken}`;
-    await emailService.sendCodVerificationEmail({
+    const emailRes = await emailService.sendCodVerificationEmail({
       order,
       customer: order.customer,
       store: { name: req.store.name || 'CommercePilot Store' },
@@ -560,16 +642,23 @@ const requestConfirmation = async (req, res, next) => {
     order.reviewStatus = 'CONFIRMATION_REQUESTED';
     order.history.push({
       status: 'ON_HOLD',
-      note: `1-Click verification dispatched to buyer (${order.customer?.email || 'customer'}) by merchant`
+      note: emailRes.success
+        ? `1-Click verification email dispatched to ${order.customer.email} by merchant`
+        : `1-Click verification token created (email delivery issue: ${emailRes.error || emailRes.reason})`
     });
 
     await order.save();
 
     return res.status(200).json({
       success: true,
-      message: `Customer confirmation link dispatched for Order #${order.orderNumber}.`,
+      message: emailRes.success
+        ? `Customer confirmation link dispatched to ${order.customer.email} for Order #${order.orderNumber}.`
+        : `Verification link generated for Order #${order.orderNumber}, but email dispatch encountered an error: ${emailRes.error || emailRes.reason}`,
       order,
-      verificationUrl
+      verificationUrl,
+      emailSent: Boolean(emailRes?.success),
+      emailRecipient: order.customer.email,
+      emailError: emailRes?.error || null
     });
   } catch (error) {
     next(error);
