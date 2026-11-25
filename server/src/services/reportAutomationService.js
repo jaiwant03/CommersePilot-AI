@@ -4,6 +4,7 @@ const Order = require('../models/Order.model');
 const Product = require('../models/Product.model');
 const Delivery = require('../models/Delivery.model');
 const Store = require('../models/Store.model');
+const User = require('../models/User.model');
 const AutomationLog = require('../models/AutomationLog.model');
 const emailService = require('./emailService');
 const { generateGroqCompletion } = require('./groq.service');
@@ -18,7 +19,7 @@ const reportAutomationService = {
   /**
    * Run Daily AI Business Summary Workflow
    */
-  generateDailyReport: async (storeId, force = false) => {
+  generateDailyReport: async (storeId, force = false, options = {}) => {
     const startTime = Date.now();
     const todayStr = new Date().toISOString().split('T')[0];
     const idempotencyKey = force 
@@ -36,6 +37,7 @@ const reportAutomationService = {
           aiSummary: existingLog.responsePayload?.aiSummary || 'Daily briefing previously generated for today.',
           executiveSummary: existingLog.responsePayload?.aiSummary || 'Daily briefing previously generated for today.',
           emailSent: existingLog.emailSent,
+          emailRecipient: existingLog.emailRecipient || null,
           log: existingLog,
           executionMode: existingLog.executionMode,
           isCached: true
@@ -43,13 +45,21 @@ const reportAutomationService = {
       }
     }
 
-    // 1. Fetch Store Profile
+    // 1. Fetch Store Profile & Owner Email
     const store = await Store.findById(storeId);
     if (!store) {
       throw new Error(`Store ${storeId} not found`);
     }
 
-    const sellerEmail = store.settings?.alertEmail || store.details?.supportEmail || 'owner@chiccouture.in';
+    const ownerUser = store.owner ? await User.findById(store.owner).select('email').lean() : null;
+    const sellerEmail = (
+      options.recipientEmail ||
+      store.settings?.alertEmail ||
+      store.details?.supportEmail ||
+      ownerUser?.email ||
+      config.smtp.user ||
+      ''
+    ).trim();
 
     // 2. Aggregate Today's / Recent Store Data
     const oneDayAgo = new Date(Date.now() - 24 * 60 * 60 * 1000);
@@ -169,7 +179,9 @@ Structure response as:
       metrics: reportTelemetry,
       aiSummary,
       executiveSummary: aiSummary,
-      emailSent: emailResult.success,
+      emailSent: Boolean(emailResult.success),
+      emailRecipient: sellerEmail || null,
+      emailError: emailResult.error || emailResult.reason || null,
       log: logDoc,
       executionMode
     };
