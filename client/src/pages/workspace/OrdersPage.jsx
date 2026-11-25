@@ -420,7 +420,10 @@ const OrdersPage = () => {
       setTimeout(() => setOrderSuccessBanner(''), 6000);
       await fetchOrders(true);
     } catch (err) {
-      const msg = err.response?.data?.message || err.message || 'Failed to place order. Please verify input fields.';
+      const msg = err.response?.data?.message
+        || err.data?.message
+        || err.message
+        || 'Failed to place order. Please verify input fields.';
       setAddOrderError(msg);
     } finally {
       setIsSubmittingOrder(false);

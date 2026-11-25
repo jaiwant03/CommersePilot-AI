@@ -345,27 +345,28 @@ const createOrder = async (req, res, next) => {
       }
     }
 
-    // 8. Trigger Automated Order Risk Evaluation & Email Workflow
-    let automationResult = null;
-    try {
+    // 8. Run risk analysis and email delivery asynchronously.
+    // The order is already committed, so slow AI/webhook/email providers must
+    // not keep the placement request open or cause a duplicate submission.
+    const orderId = order._id;
+    setImmediate(() => {
       const orderAutomationService = require('../services/orderAutomationService');
-      automationResult = await orderAutomationService.analyzeOrder(order._id, storeId);
-    } catch (autoErr) {
-      console.warn(`[Order Controller] Automated order analysis warning:`, autoErr.message);
-    }
+      orderAutomationService.analyzeOrder(orderId, storeId).catch((autoErr) => {
+        console.warn(`[Order Controller] Automated order analysis warning:`, autoErr.message);
+      });
+    });
 
-    // Re-fetch updated order document
-    const updatedOrder = await Order.findById(order._id);
+    const updatedOrder = await Order.findById(orderId);
 
     return res.status(201).json({
       success: true,
       message: 'Order created successfully.',
       order: updatedOrder || order,
-      emailSent: Boolean(automationResult?.emailSent),
-      emailIsDemoMode: Boolean(automationResult?.emailIsDemoMode),
-      emailType: automationResult?.emailType || 'NONE',
-      emailRecipient: automationResult?.emailRecipient || null,
-      emailError: automationResult?.emailError || null
+      emailSent: false,
+      emailIsDemoMode: false,
+      emailType: 'PENDING',
+      emailRecipient: customer.email ? customer.email.trim() : null,
+      emailError: null
     });
   } catch (error) {
     next(error);
