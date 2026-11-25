@@ -229,6 +229,7 @@ const orderAutomationService = {
     order.notes = result.aiExplanation || order.notes;
 
     let emailSent = false;
+    let emailIsDemoMode = false;
     let emailType = 'NONE';
     let emailError = null;
     let verificationTokenDoc = null;
@@ -266,6 +267,7 @@ const orderAutomationService = {
           token: rawToken
         });
         emailSent = Boolean(emailResult?.success);
+        emailIsDemoMode = Boolean(emailResult?.isDemoMode);
         emailType = 'COD_VERIFICATION_LINK';
         emailError = emailResult?.error || emailResult?.reason || null;
       }
@@ -287,6 +289,7 @@ const orderAutomationService = {
           store: storeContext
         });
         emailSent = Boolean(emailResult?.success);
+        emailIsDemoMode = Boolean(emailResult?.isDemoMode);
         emailType = 'ORDER_CONFIRMATION';
         emailError = emailResult?.error || emailResult?.reason || null;
       }
@@ -316,6 +319,7 @@ const orderAutomationService = {
       responsePayload: result,
       durationMs,
       emailSent,
+      emailIsDemoMode,
       emailType,
       emailRecipient: recipientEmail || null,
       errorMessage: emailError

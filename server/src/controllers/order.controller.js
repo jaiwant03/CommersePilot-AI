@@ -362,6 +362,7 @@ const createOrder = async (req, res, next) => {
       message: 'Order created successfully.',
       order: updatedOrder || order,
       emailSent: Boolean(automationResult?.emailSent),
+      emailIsDemoMode: Boolean(automationResult?.emailIsDemoMode),
       emailType: automationResult?.emailType || 'NONE',
       emailRecipient: automationResult?.emailRecipient || null,
       emailError: automationResult?.emailError || null

@@ -55,7 +55,7 @@ const OrdersPage = () => {
   const [newOrder, setNewOrder] = useState(INITIAL_ORDER_STATE);
   const [addOrderError, setAddOrderError] = useState('');
   const [isSubmittingOrder, setIsSubmittingOrder] = useState(false);
-  const [orderSuccessBanner, setOrderSuccessBanner] = useState('');
+  const [orderSuccessBanner, setOrderSuccessBanner] = useState(null);
 
   // Edit Order Status state
   const [editStatus, setEditStatus] = useState({
@@ -390,6 +390,11 @@ const OrdersPage = () => {
       setNewOrder(INITIAL_ORDER_STATE);
 
       const createdOrder = res.order || res.data?.order;
+      const emailSent = Boolean(res.emailSent ?? res.data?.emailSent);
+      const emailIsDemoMode = Boolean(res.emailIsDemoMode ?? res.data?.emailIsDemoMode);
+      const emailRecipient = res.emailRecipient || res.data?.emailRecipient || customer.email.trim();
+      const emailError = res.emailError || res.data?.emailError;
+      const emailType = res.emailType || res.data?.emailType;
       if (createdOrder) {
         // Real-Time: Immediately prepend newly placed order to UI state
         setOrders((prev) => [createdOrder, ...prev.filter((o) => o._id !== createdOrder._id)]);
@@ -397,7 +402,21 @@ const OrdersPage = () => {
         window.dispatchEvent(new CustomEvent('cp:order_created', { detail: createdOrder }));
       }
 
-      setOrderSuccessBanner(`Order #${createdOrder?.orderNumber || 'created'} placed successfully! COD risk assessed and delivery manifest generated.`);
+      let bannerMessage = `Order #${createdOrder?.orderNumber || 'created'} placed successfully! COD risk assessed and delivery manifest generated.`;
+      let bannerType = 'success';
+      if (customer.email.trim()) {
+        if (emailSent && emailIsDemoMode) {
+          bannerMessage += ` Email was simulated for ${emailRecipient}; no real email was sent. Check SMTP configuration to enable delivery.`;
+          bannerType = 'warning';
+        } else if (emailSent) {
+          const label = emailType === 'COD_VERIFICATION_LINK' ? 'COD verification email' : 'Order confirmation email';
+          bannerMessage += ` ${label} sent to ${emailRecipient}.`;
+        } else {
+          bannerMessage += ` Email could not be sent to ${emailRecipient}${emailError ? `: ${emailError}` : '. Check SMTP status and server logs.'}`;
+          bannerType = 'warning';
+        }
+      }
+      setOrderSuccessBanner({ message: bannerMessage, type: bannerType });
       setTimeout(() => setOrderSuccessBanner(''), 6000);
       await fetchOrders(true);
     } catch (err) {
@@ -432,20 +451,22 @@ const OrdersPage = () => {
       {orderSuccessBanner && (
         <div style={{
           padding: '12px 18px',
-          background: 'rgba(16, 185, 129, 0.08)',
-          border: '1px solid rgba(16, 185, 129, 0.25)',
+          background: orderSuccessBanner.type === 'warning' ? 'rgba(245, 158, 11, 0.08)' : 'rgba(16, 185, 129, 0.08)',
+          border: orderSuccessBanner.type === 'warning' ? '1px solid rgba(245, 158, 11, 0.25)' : '1px solid rgba(16, 185, 129, 0.25)',
           borderRadius: '12px',
           marginBottom: '20px',
           display: 'flex',
           alignItems: 'center',
           gap: '12px',
-          color: '#059669',
+          color: orderSuccessBanner.type === 'warning' ? '#B45309' : '#059669',
           fontSize: '13px',
           fontWeight: 650,
-          boxShadow: '0 2px 8px rgba(16, 185, 129, 0.06)'
+          boxShadow: orderSuccessBanner.type === 'warning' ? '0 2px 8px rgba(245, 158, 11, 0.06)' : '0 2px 8px rgba(16, 185, 129, 0.06)'
         }}>
-          <CheckCircle2 size={18} style={{ flexShrink: 0 }} />
-          <span>{orderSuccessBanner}</span>
+          {orderSuccessBanner.type === 'warning'
+            ? <AlertCircle size={18} style={{ flexShrink: 0 }} />
+            : <CheckCircle2 size={18} style={{ flexShrink: 0 }} />}
+          <span>{orderSuccessBanner.message}</span>
         </div>
       )}
 
