@@ -47,8 +47,8 @@ const SettingsPage = () => {
     try {
       setLoading(true);
       const res = await workspaceService.getSettings();
-      if (res.data?.store) {
-        const s = res.data.store;
+      const s = res.store || res.data?.store;
+      if (s) {
         setFormData({
           name: s.name || '',
           category: s.category || 'Apparel & Fashion',

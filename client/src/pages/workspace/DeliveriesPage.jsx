@@ -48,7 +48,7 @@ const DeliveriesPage = () => {
       if (searchTerm.trim()) params.search = searchTerm.trim();
 
       const res = await workspaceService.getDeliveries(params);
-      setDeliveries(res.data?.deliveries || []);
+      setDeliveries(res.deliveries || res.data?.deliveries || []);
     } catch (err) {
       console.error('Failed to load deliveries:', err);
     } finally {

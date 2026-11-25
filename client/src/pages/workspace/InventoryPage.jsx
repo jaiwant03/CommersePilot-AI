@@ -83,7 +83,7 @@ const InventoryPage = () => {
       if (lowStockOnly) params.lowStock = 'true';
 
       const res = await workspaceService.getProducts(params);
-      setProducts(res.data?.products || []);
+      setProducts(res.products || res.data?.products || []);
     } catch (err) {
       console.error('Failed to fetch products:', err);
     } finally {
@@ -95,7 +95,7 @@ const InventoryPage = () => {
     try {
       setLoadingMovements(true);
       const res = await workspaceService.getInventoryMovements();
-      setMovements(res.data?.movements || []);
+      setMovements(res.movements || res.data?.movements || []);
     } catch (err) {
       console.error('Failed to load inventory movements:', err);
     } finally {

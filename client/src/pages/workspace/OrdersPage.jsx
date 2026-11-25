@@ -64,27 +64,29 @@ const OrdersPage = () => {
     notes: ''
   });
 
-  const fetchOrders = async () => {
+  const fetchOrders = async (silent = false) => {
     try {
-      setLoading(true);
+      if (!silent) setLoading(true);
       const params = {};
       if (statusFilter !== 'ALL') params.status = statusFilter;
       if (paymentFilter !== 'ALL') params.paymentMethod = paymentFilter;
       if (searchTerm.trim()) params.search = searchTerm.trim();
 
       const res = await workspaceService.getOrders(params);
-      setOrders(res.data?.orders || []);
+      const ordersList = res.orders || res.data?.orders || [];
+      setOrders(ordersList);
     } catch (err) {
       console.error('Failed to fetch orders:', err);
     } finally {
-      setLoading(false);
+      if (!silent) setLoading(false);
     }
   };
 
   const fetchProductsForPicker = async () => {
     try {
       const res = await workspaceService.getProducts();
-      setProducts(res.data?.products || []);
+      const productsList = res.products || res.data?.products || [];
+      setProducts(productsList);
     } catch (err) {
       console.warn('Could not load products for picker:', err);
     }
@@ -93,6 +95,38 @@ const OrdersPage = () => {
   useEffect(() => {
     fetchOrders();
     fetchProductsForPicker();
+
+    // Real-Time auto-sync interval (every 5 seconds when tab is active)
+    const interval = setInterval(() => {
+      if (document.visibilityState === 'visible' && !isSubmittingOrder) {
+        fetchOrders(true);
+      }
+    }, 5000);
+
+    // Re-sync immediately on window focus or tab visibility
+    const handleVisibility = () => {
+      if (document.visibilityState === 'visible') {
+        fetchOrders(true);
+      }
+    };
+    window.addEventListener('visibilitychange', handleVisibility);
+    window.addEventListener('focus', handleVisibility);
+
+    // Real-Time order creation broadcast listener
+    const handleOrderCreatedEvent = (e) => {
+      if (e.detail) {
+        setOrders((prev) => [e.detail, ...prev.filter((o) => o._id !== e.detail._id)]);
+      }
+      fetchOrders(true);
+    };
+    window.addEventListener('cp:order_created', handleOrderCreatedEvent);
+
+    return () => {
+      clearInterval(interval);
+      window.removeEventListener('visibilitychange', handleVisibility);
+      window.removeEventListener('focus', handleVisibility);
+      window.removeEventListener('cp:order_created', handleOrderCreatedEvent);
+    };
   }, [statusFilter, paymentFilter]);
 
   const handleSearchSubmit = (e) => {
@@ -351,9 +385,18 @@ const OrdersPage = () => {
       const res = await workspaceService.createOrder(payload);
       setShowAddModal(false);
       setNewOrder(INITIAL_ORDER_STATE);
-      setOrderSuccessBanner(`Order #${res.order?.orderNumber || 'created'} placed successfully! COD risk assessed and delivery manifest generated.`);
+
+      const createdOrder = res.order || res.data?.order;
+      if (createdOrder) {
+        // Real-Time: Immediately prepend newly placed order to UI state
+        setOrders((prev) => [createdOrder, ...prev.filter((o) => o._id !== createdOrder._id)]);
+        // Real-Time: Broadcast event to other open tabs and components
+        window.dispatchEvent(new CustomEvent('cp:order_created', { detail: createdOrder }));
+      }
+
+      setOrderSuccessBanner(`Order #${createdOrder?.orderNumber || 'created'} placed successfully! COD risk assessed and delivery manifest generated.`);
       setTimeout(() => setOrderSuccessBanner(''), 6000);
-      await fetchOrders();
+      await fetchOrders(true);
     } catch (err) {
       const msg = err.response?.data?.message || err.message || 'Failed to place order. Please verify input fields.';
       setAddOrderError(msg);
@@ -484,9 +527,12 @@ const OrdersPage = () => {
                 </tr>
               ) : (
                 orders.map((ord) => {
-                  const isHighRisk = ord.codRiskScore >= 60;
-                  const isMedRisk = ord.codRiskScore >= 35 && ord.codRiskScore < 60;
+                  const riskVal = ord.codRiskScore ?? ord.riskScore ?? 15;
+                  const isHighRisk = riskVal >= 60;
+                  const isMedRisk = riskVal >= 35 && riskVal < 60;
                   const itemCount = ord.items?.reduce((sum, it) => sum + (it.quantity || 1), 0) || 1;
+                  const custName = ord.customer?.fullName || ord.customer?.name || 'Walk-in Customer';
+                  const custPhone = ord.customer?.phone || ord.customer?.email || 'No contact';
 
                   return (
                     <tr key={ord._id}>
@@ -506,10 +552,10 @@ const OrdersPage = () => {
                       </td>
                       <td>
                         <div style={{ fontWeight: 600, color: 'var(--color-text-primary)' }}>
-                          {ord.customer?.name || 'Walk-in Customer'}
+                          {custName}
                         </div>
                         <div style={{ fontSize: '11px', color: 'var(--color-text-faint)' }}>
-                          {ord.customer?.phone || ord.customer?.email || 'No contact'}
+                          {custPhone}
                         </div>
                       </td>
                       <td>
@@ -534,7 +580,7 @@ const OrdersPage = () => {
                         {ord.paymentMethod === 'COD' ? (
                           <div>
                             <span className={`risk-indicator ${isHighRisk ? 'high' : isMedRisk ? 'medium' : 'low'}`}>
-                              {ord.codRiskScore}/100 {isHighRisk ? 'HIGH' : isMedRisk ? 'MED' : 'LOW'}
+                              {riskVal}/100 {isHighRisk ? 'HIGH' : isMedRisk ? 'MED' : 'LOW'}
                             </span>
                           </div>
                         ) : (
@@ -597,12 +643,16 @@ const OrdersPage = () => {
                   Customer & Shipping Address
                 </div>
                 <div style={{ fontSize: '13px', color: 'var(--color-text-secondary)' }}>
-                  <strong>{selectedOrder.customer?.name}</strong> • {selectedOrder.customer?.phone} • {selectedOrder.customer?.email}
+                  <strong>{selectedOrder.customer?.fullName || selectedOrder.customer?.name || 'Customer'}</strong> • {selectedOrder.customer?.phone || 'No phone'} • {selectedOrder.customer?.email || 'No email'}
                 </div>
                 <div style={{ fontSize: '12px', color: 'var(--color-text-muted)', marginTop: '4px' }}>
-                  {selectedOrder.shippingAddress?.address || selectedOrder.customer?.address},{' '}
-                  {selectedOrder.shippingAddress?.city || selectedOrder.customer?.city},{' '}
-                  {selectedOrder.shippingAddress?.state || selectedOrder.customer?.state} - {selectedOrder.shippingAddress?.postalCode || selectedOrder.customer?.postalCode}
+                  {(() => {
+                    const addr = selectedOrder.customer?.address || selectedOrder.shippingAddress;
+                    if (typeof addr === 'object' && addr !== null) {
+                      return `${addr.street || addr.address || ''}, ${addr.city || ''}, ${addr.state || ''} - ${addr.pincode || addr.postalCode || ''}`;
+                    }
+                    return `${selectedOrder.customer?.address || 'Standard Address'}, ${selectedOrder.customer?.city || ''}, ${selectedOrder.customer?.state || ''} - ${selectedOrder.customer?.postalCode || ''}`;
+                  })()}
                 </div>
               </div>
 
@@ -711,11 +761,11 @@ const OrdersPage = () => {
                     <tbody>
                       {selectedOrder.items?.map((it, idx) => (
                         <tr key={idx} style={{ borderTop: '1px solid var(--border-subtle)' }}>
-                          <td style={{ padding: '8px 12px' }}>{it.productTitle || 'Product SKU'}</td>
+                          <td style={{ padding: '8px 12px' }}>{it.title || it.productTitle || 'Product SKU'}</td>
                           <td style={{ padding: '8px 12px', color: 'var(--color-text-faint)' }}>{it.sku || '-'}</td>
                           <td style={{ padding: '8px 12px' }}>{it.quantity}</td>
                           <td style={{ padding: '8px 12px', textAlign: 'right', fontWeight: 600 }}>
-                            <AnimatedRupee value={it.price * it.quantity} />
+                            <AnimatedRupee value={it.totalPrice || ((it.unitPrice || it.price) * it.quantity) || 0} />
                           </td>
                         </tr>
                       ))}
