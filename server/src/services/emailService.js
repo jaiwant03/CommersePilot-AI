@@ -211,6 +211,7 @@ const sendCodVerificationEmail = async ({ order, customer, store, verificationUr
     to: customerEmail,
     subject,
     html,
+    senderName: storeName,
     eventId: `cod-verify-${order._id}`
   });
 };
@@ -257,6 +258,7 @@ const sendDeliveryRecoveryEmail = async ({ delivery, order, customer, store, res
     to: customerEmail,
     subject,
     html,
+    senderName: storeName,
     eventId: `ndr-recovery-${delivery._id}-${delivery.attemptsCount || 1}`
   });
 };
@@ -315,6 +317,7 @@ const sendSupplierPurchaseOrderApprovalEmail = async ({ store, sellerEmail, poDr
     to: sellerEmail,
     subject,
     html,
+    senderName: storeName,
     eventId: `po-approval-${poDraft._id}`
   });
 };
