@@ -176,6 +176,32 @@ const runTrendyThreadsE2ETest = async () => {
     assert(Boolean(blackKurti), 'Women\'s Black Kurti (TT-KUR-BLK) catalog SKU found');
     assert(blackKurti.stockQuantity === 25, `Current available stock verified at 25 units (Found: ${blackKurti.stockQuantity})`);
 
+    // Ensure historical baseline demand (450 units / 30 days = 15 ADD)
+    await Order.deleteMany({ store: store._id, orderNumber: /^ORD-HIST/ });
+    await Order.create({
+      orderNumber: 'ORD-HIST-1001',
+      store: store._id,
+      customer: {
+        fullName: 'Wholesale Buyer',
+        phone: '9845012345',
+        address: { street: 'Wholesale Market', city: 'Coimbatore', state: 'Tamil Nadu', pincode: '641001' }
+      },
+      items: [{
+        product: blackKurti._id,
+        title: "Women's Black Kurti",
+        sku: 'TT-KUR-BLK',
+        quantity: 450,
+        unitPrice: 1299,
+        totalPrice: 1299 * 450
+      }],
+      subtotal: 1299 * 450,
+      totalAmount: 1299 * 450,
+      paymentMethod: 'PREPAID',
+      paymentStatus: 'PAID',
+      orderStatus: 'DELIVERED',
+      createdAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000)
+    });
+
     // Run moving-average demand forecast for trailing 30 days
     const forecastResult = await forecastingService.forecastStoreDemand(store._id, 30);
     assert(Boolean(forecastResult.forecasts), 'Forecast calculation executed across catalog');
