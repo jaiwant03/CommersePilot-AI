@@ -17,7 +17,7 @@ const API_BASE_URL = getApiBaseUrl();
  */
 const api = axios.create({
   baseURL: API_BASE_URL,
-  timeout: 15000,
+  timeout: 35000, // 35s to comfortably accommodate cloud cold starts
   withCredentials: true, // Crucial for HTTP-only cookie exchange
   headers: {
     'Content-Type': 'application/json',
