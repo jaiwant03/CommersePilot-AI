@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import AnimatedCounter from './AnimatedCounter';
 import { 
   Sparkles, 
@@ -13,12 +13,13 @@ import {
 } from 'lucide-react';
 
 const HeroSection = () => {
+  const navigate = useNavigate();
   const [email, setEmail] = useState('');
 
   const handleFormSubmit = (e) => {
     e.preventDefault();
     if (email) {
-      window.location.href = `/signup?email=${encodeURIComponent(email)}`;
+      navigate(`/login?email=${encodeURIComponent(email)}`);
     }
   };
 

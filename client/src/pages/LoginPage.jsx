@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link, useNavigate, useLocation } from 'react-router-dom';
+import { Link, useNavigate, useLocation, useSearchParams } from 'react-router-dom';
 import {
   Sparkles,
   ArrowRight,
@@ -17,10 +17,11 @@ import { useAuth } from '../context/AuthContext';
 const LoginPage = () => {
   const navigate = useNavigate();
   const location = useLocation();
+  const [searchParams] = useSearchParams();
   const { login } = useAuth();
 
   const [formData, setFormData] = useState({
-    email: '',
+    email: searchParams.get('email') || '',
     password: '',
     rememberMe: true
   });
