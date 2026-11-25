@@ -166,11 +166,11 @@ const AutomationsPage = () => {
   };
 
   return (
-    <div>
+    <div className="automation-page">
       {/* Title & Actions */}
       <div className="page-title-row">
         <div className="page-title-heading">
-          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+          <div className="automation-heading-row" style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
             <h1>Workflow Automation Engine</h1>
             <span className="status-badge badge-purple" style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
               <Cpu size={12} /> n8n & Groq Hybrid
