@@ -34,90 +34,104 @@ import AnalyticsPage from './pages/workspace/AnalyticsPage';
 import AssistantPage from './pages/workspace/AssistantPage';
 import AutomationsPage from './pages/workspace/AutomationsPage';
 import SettingsPage from './pages/workspace/SettingsPage';
+import LoadingScreen from './components/LoadingScreen';
+import { useAuth } from './context/AuthContext';
+
+function AppContent() {
+  const { isLoading } = useAuth();
+
+  if (isLoading) {
+    return <LoadingScreen message="Launching CommercePilot AI operations..." />;
+  }
+
+  return (
+    <Routes>
+      {/* Authenticated Seller Workspace Layout */}
+      <Route
+        path="/app"
+        element={
+          <ProtectedRoute>
+            <WorkspaceLayout />
+          </ProtectedRoute>
+        }
+      >
+        <Route index element={<Navigate to="/app/overview" replace />} />
+        <Route path="overview" element={<OverviewPage />} />
+        <Route path="orders" element={<OrdersPage />} />
+        <Route path="inventory" element={<InventoryPage />} />
+        <Route path="deliveries" element={<DeliveriesPage />} />
+        <Route path="analytics" element={<AnalyticsPage />} />
+        <Route path="assistant" element={<AssistantPage />} />
+        <Route path="automations" element={<AutomationsPage />} />
+        <Route path="settings" element={<SettingsPage />} />
+      </Route>
+
+      {/* Public Marketing & Auth Pages Shell */}
+      <Route path="/" element={<MainLayout />}>
+        {/* Public Marketing Pages */}
+        <Route index element={<HomePage />} />
+        <Route path="product" element={<ProductPage />} />
+        <Route path="features" element={<FeaturesPage />} />
+        <Route path="how-it-works" element={<HowItWorksPage />} />
+        <Route path="pricing" element={<PricingPage />} />
+
+        {/* Public Authentication Pages (Redirect if already authenticated) */}
+        <Route
+          path="register"
+          element={
+            <PublicOnlyRoute>
+              <RegisterPage />
+            </PublicOnlyRoute>
+          }
+        />
+        <Route
+          path="signup"
+          element={
+            <PublicOnlyRoute>
+              <RegisterPage />
+            </PublicOnlyRoute>
+          }
+        />
+        <Route
+          path="login"
+          element={
+            <PublicOnlyRoute>
+              <LoginPage />
+            </PublicOnlyRoute>
+          }
+        />
+        <Route path="forgot-password" element={<ForgotPasswordPage />} />
+        <Route path="reset-password" element={<ResetPasswordPage />} />
+        <Route path="verify-email" element={<VerifyEmailPage />} />
+
+        {/* Secure Expiring Action Token Endpoints */}
+        <Route path="verify-order" element={<VerifyOrderPage />} />
+        <Route path="reschedule-delivery" element={<RescheduleDeliveryPage />} />
+        <Route path="approve-po" element={<ApprovePoPage />} />
+
+        {/* Protected Seller Onboarding */}
+        <Route
+          path="onboarding"
+          element={
+            <ProtectedRoute>
+              <OnboardingPage />
+            </ProtectedRoute>
+          }
+        />
+
+        {/* 404 Catch-All */}
+        <Route path="*" element={<NotFoundPage />} />
+      </Route>
+    </Routes>
+  );
+}
 
 function App() {
   return (
     <AppProvider>
       <AuthProvider>
         <BrowserRouter>
-          <Routes>
-            {/* Authenticated Seller Workspace Layout */}
-            <Route
-              path="/app"
-              element={
-                <ProtectedRoute>
-                  <WorkspaceLayout />
-                </ProtectedRoute>
-              }
-            >
-              <Route index element={<Navigate to="/app/overview" replace />} />
-              <Route path="overview" element={<OverviewPage />} />
-              <Route path="orders" element={<OrdersPage />} />
-              <Route path="inventory" element={<InventoryPage />} />
-              <Route path="deliveries" element={<DeliveriesPage />} />
-              <Route path="analytics" element={<AnalyticsPage />} />
-              <Route path="assistant" element={<AssistantPage />} />
-              <Route path="automations" element={<AutomationsPage />} />
-              <Route path="settings" element={<SettingsPage />} />
-            </Route>
-
-            {/* Public Marketing & Auth Pages Shell */}
-            <Route path="/" element={<MainLayout />}>
-              {/* Public Marketing Pages */}
-              <Route index element={<HomePage />} />
-              <Route path="product" element={<ProductPage />} />
-              <Route path="features" element={<FeaturesPage />} />
-              <Route path="how-it-works" element={<HowItWorksPage />} />
-              <Route path="pricing" element={<PricingPage />} />
-
-              {/* Public Authentication Pages (Redirect if already authenticated) */}
-              <Route
-                path="register"
-                element={
-                  <PublicOnlyRoute>
-                    <RegisterPage />
-                  </PublicOnlyRoute>
-                }
-              />
-              <Route
-                path="signup"
-                element={
-                  <PublicOnlyRoute>
-                    <RegisterPage />
-                  </PublicOnlyRoute>
-                }
-              />
-              <Route
-                path="login"
-                element={
-                  <PublicOnlyRoute>
-                    <LoginPage />
-                  </PublicOnlyRoute>
-                }
-              />
-              <Route path="forgot-password" element={<ForgotPasswordPage />} />
-              <Route path="reset-password" element={<ResetPasswordPage />} />
-              <Route path="verify-email" element={<VerifyEmailPage />} />
-
-              {/* Secure Expiring Action Token Endpoints */}
-              <Route path="verify-order" element={<VerifyOrderPage />} />
-              <Route path="reschedule-delivery" element={<RescheduleDeliveryPage />} />
-              <Route path="approve-po" element={<ApprovePoPage />} />
-
-              {/* Protected Seller Onboarding */}
-              <Route
-                path="onboarding"
-                element={
-                  <ProtectedRoute>
-                    <OnboardingPage />
-                  </ProtectedRoute>
-                }
-              />
-
-              {/* 404 Catch-All */}
-              <Route path="*" element={<NotFoundPage />} />
-            </Route>
-          </Routes>
+          <AppContent />
         </BrowserRouter>
       </AuthProvider>
     </AppProvider>
