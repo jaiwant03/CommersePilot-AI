@@ -67,18 +67,22 @@ const CustomTooltip = ({ active, payload, label }) => {
         boxShadow: 'var(--shadow-md)',
         fontSize: '12px'
       }}>
-        <div style={{ fontWeight: 700, color: 'var(--color-text-primary)', marginBottom: '6px' }}>{label}</div>
-        {payload.map((entry, index) => (
-          <div key={`item-${index}`} style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '3px' }}>
-            <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: entry.color }} />
-            <span style={{ color: 'var(--color-text-muted)' }}>{entry.name}:</span>
-            <span style={{ fontWeight: 600, color: 'var(--color-text-primary)' }}>
-              {entry.name.includes('₹') || entry.name.toLowerCase().includes('revenue') || entry.name.toLowerCase().includes('profit')
-                ? `₹${Number(entry.value).toLocaleString('en-IN')}`
-                : entry.value}
-            </span>
-          </div>
-        ))}
+        {label && <div style={{ fontWeight: 700, color: 'var(--color-text-primary)', marginBottom: '6px' }}>{label}</div>}
+        {payload.map((entry, index) => {
+          const entryName = String(entry?.name || 'Value');
+          const isCurrency = entryName.includes('₹') || entryName.toLowerCase().includes('revenue') || entryName.toLowerCase().includes('profit') || entryName.toLowerCase().includes('cost');
+          const displayVal = isCurrency && !isNaN(Number(entry?.value))
+            ? `₹${Number(entry.value).toLocaleString('en-IN')}`
+            : (entry?.value ?? '0');
+
+          return (
+            <div key={`item-${index}`} style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '3px' }}>
+              <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: entry?.color || '#6366F1' }} />
+              <span style={{ color: 'var(--color-text-muted)' }}>{entryName}:</span>
+              <span style={{ fontWeight: 600, color: 'var(--color-text-primary)' }}>{displayVal}</span>
+            </div>
+          );
+        })}
       </div>
     );
   }
@@ -105,6 +109,16 @@ const AnalyticsPage = () => {
   useEffect(() => {
     fetchAnalytics();
   }, [fetchAnalytics]);
+
+  if (loading && !data) {
+    return (
+      <div style={{ textAlign: 'center', padding: '80px 0', color: 'var(--color-text-muted)' }}>
+        <RefreshCw size={32} className="spinning" style={{ margin: '0 auto 16px', display: 'block', color: 'var(--color-primary)' }} />
+        <p style={{ fontWeight: 600, fontSize: '14px', color: 'var(--color-text-primary)', marginBottom: '4px' }}>Loading real-time business intelligence...</p>
+        <span style={{ fontSize: '12px' }}>Aggregating store telemetry, margin ratios, and demand models from MongoDB</span>
+      </div>
+    );
+  }
 
   const {
     dateRange = {},

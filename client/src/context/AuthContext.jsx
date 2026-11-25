@@ -36,23 +36,25 @@ export const AuthProvider = ({ children }) => {
 
   // Validate or synchronize session with backend on application boot
   useEffect(() => {
-    let isMounted = true;
+    // Safety fallback: Never keep the UI stuck in loading state for > 3.5 seconds
+    const safetyTimer = setTimeout(() => {
+      setIsLoading(false);
+    }, 3500);
 
     const checkAuthStatus = async () => {
       const token = localStorage.getItem('cp_token');
       if (!token) {
-        if (isMounted) {
-          setIsLoading(false);
-          setIsAuthenticated(false);
-          setUser(null);
-          setStore(null);
-        }
+        clearTimeout(safetyTimer);
+        setIsLoading(false);
+        setIsAuthenticated(false);
+        setUser(null);
+        setStore(null);
         return;
       }
 
       try {
         const data = await authService.getMe();
-        if (isMounted && data?.user) {
+        if (data?.user) {
           setUser(data.user);
           setStore(data.store);
           setIsAuthenticated(true);
@@ -67,26 +69,23 @@ export const AuthProvider = ({ children }) => {
         console.warn('Session verification notice:', err.message);
         // Only clear credentials if server explicitly rejected auth with 401
         if (err.status === 401 || err.response?.status === 401) {
-          if (isMounted) {
-            localStorage.removeItem('cp_token');
-            localStorage.removeItem('cp_user');
-            localStorage.removeItem('cp_store');
-            setUser(null);
-            setStore(null);
-            setIsAuthenticated(false);
-          }
+          localStorage.removeItem('cp_token');
+          localStorage.removeItem('cp_user');
+          localStorage.removeItem('cp_store');
+          setUser(null);
+          setStore(null);
+          setIsAuthenticated(false);
         }
       } finally {
-        if (isMounted) {
-          setIsLoading(false);
-        }
+        clearTimeout(safetyTimer);
+        setIsLoading(false);
       }
     };
 
     checkAuthStatus();
 
     return () => {
-      isMounted = false;
+      clearTimeout(safetyTimer);
     };
   }, []);
 
