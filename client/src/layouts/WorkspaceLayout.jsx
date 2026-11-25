@@ -67,7 +67,7 @@ const WorkspaceLayout = () => {
   const handleLogout = async () => {
     try {
       await logout();
-      navigate('/login');
+      navigate('/');
     } catch (err) {
       console.error('Logout error:', err);
     }
