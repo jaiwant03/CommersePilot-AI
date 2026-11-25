@@ -319,7 +319,6 @@ const orderAutomationService = {
       responsePayload: result,
       durationMs,
       emailSent,
-      emailIsDemoMode,
       emailType,
       emailRecipient: recipientEmail || null,
       errorMessage: emailError
@@ -336,6 +335,7 @@ const orderAutomationService = {
       log: logDoc,
       verificationToken: verificationTokenDoc ? verificationTokenDoc.token : null,
       emailSent,
+      emailIsDemoMode,
       emailType,
       emailRecipient: recipientEmail || null,
       emailError,
