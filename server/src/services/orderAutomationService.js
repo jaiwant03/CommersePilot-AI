@@ -229,10 +229,15 @@ const orderAutomationService = {
     order.notes = result.aiExplanation || order.notes;
 
     let emailSent = false;
+    let emailType = 'NONE';
+    let emailError = null;
     let verificationTokenDoc = null;
 
-    // 6. If Confirmation Needed: Dispatch Secure Email Link
-    if (result.decision === 'REQUEST_CONFIRMATION' || result.requiresEmailConfirmation) {
+    const autoVerifyEnabled = store?.settings?.autoEmailVerification !== false;
+    const storeContext = store || { name: 'CommercePilot Store' };
+
+    // 6. If Confirmation Needed: Dispatch Secure Email Link (otherwise send Order Confirmation Email)
+    if ((result.decision === 'REQUEST_CONFIRMATION' || result.requiresEmailConfirmation) && autoVerifyEnabled) {
       order.orderStatus = 'ON_HOLD';
       order.needsVerification = true;
 
@@ -244,7 +249,7 @@ const orderAutomationService = {
         order: order._id,
         metadata: {
           orderNumber: order.orderNumber,
-          customerEmail: order.customer?.email,
+          customerEmail: recipientEmail,
           riskScore: result.riskScore
         },
         expiresAt: new Date(Date.now() + 24 * 60 * 60 * 1000) // 24 hours
@@ -252,25 +257,45 @@ const orderAutomationService = {
 
       const verificationUrl = `${config.clientUrl}/verify-order?token=${rawToken}`;
 
-      const emailResult = await emailService.sendCodVerificationEmail({
-        order,
-        customer: order.customer,
-        store: { name: 'CommercePilot Store' },
-        verificationUrl,
-        token: rawToken
-      });
+      if (recipientEmail) {
+        const emailResult = await emailService.sendCodVerificationEmail({
+          order,
+          customer: { ...(order.customer?.toObject?.() || order.customer), email: recipientEmail },
+          store: storeContext,
+          verificationUrl,
+          token: rawToken
+        });
+        emailSent = Boolean(emailResult?.success);
+        emailType = 'COD_VERIFICATION_LINK';
+        emailError = emailResult?.error || emailResult?.reason || null;
+      }
 
-      emailSent = emailResult.success;
       order.history.push({
         status: 'ON_HOLD',
-        note: `High COD risk (${result.riskScore}/100). Verification email link dispatched to ${order.customer?.email || 'buyer'}.`
+        note: recipientEmail
+          ? `High COD risk (${result.riskScore}/100). Verification email link ${emailSent ? 'dispatched' : 'queued'} to ${recipientEmail}.`
+          : `High COD risk (${result.riskScore}/100). Held for manual verification (no customer email).`
       });
     } else {
       order.orderStatus = 'CONFIRMED';
       order.needsVerification = false;
+
+      if (recipientEmail) {
+        const emailResult = await emailService.sendOrderConfirmationEmail({
+          order,
+          customer: { ...(order.customer?.toObject?.() || order.customer), email: recipientEmail },
+          store: storeContext
+        });
+        emailSent = Boolean(emailResult?.success);
+        emailType = 'ORDER_CONFIRMATION';
+        emailError = emailResult?.error || emailResult?.reason || null;
+      }
+
       order.history.push({
         status: 'CONFIRMED',
-        note: `COD risk assessed as ${result.riskLevel} (${result.riskScore}/100). Order approved to pack.`
+        note: recipientEmail && emailSent
+          ? `Order confirmed (${result.riskLevel} risk). Confirmation email dispatched to ${recipientEmail}.`
+          : `COD risk assessed as ${result.riskLevel} (${result.riskScore}/100). Order approved to pack.`
       });
     }
 
@@ -291,8 +316,9 @@ const orderAutomationService = {
       responsePayload: result,
       durationMs,
       emailSent,
-      emailType: emailSent ? 'COD_VERIFICATION_LINK' : 'NONE',
-      emailRecipient: order.customer?.email || null
+      emailType,
+      emailRecipient: recipientEmail || null,
+      errorMessage: emailError
     });
 
     return {
@@ -305,6 +331,10 @@ const orderAutomationService = {
       aiAnalysis: { summary: result.aiExplanation },
       log: logDoc,
       verificationToken: verificationTokenDoc ? verificationTokenDoc.token : null,
+      emailSent,
+      emailType,
+      emailRecipient: recipientEmail || null,
+      emailError,
       executionMode
     };
   },
@@ -333,6 +363,8 @@ const orderAutomationService = {
     }
 
     const store = await Store.findById(tokenDoc.store);
+    const ownerUser = store?.owner ? await User.findById(store.owner).select('email').lean() : null;
+    const resolvedSellerEmail = store?.settings?.alertEmail || store?.details?.supportEmail || ownerUser?.email || config.smtp.user;
 
     if (action.toLowerCase() === 'cancel') {
       order.orderStatus = 'CANCELLED';
@@ -375,12 +407,12 @@ const orderAutomationService = {
       tokenDoc.responseValue = 'CANCELLED_BY_CUSTOMER';
       await tokenDoc.save();
 
-      const sellerEmail = store?.settings?.alertEmail || store?.details?.supportEmail;
-      if (sellerEmail) {
+      if (resolvedSellerEmail) {
         await emailService.dispatchEmail({
-          to: sellerEmail,
+          to: resolvedSellerEmail,
           subject: `Order #${order.orderNumber} Cancelled by Customer via Verification Link`,
           html: `<p>Customer <strong>${order.customer?.fullName}</strong> cancelled COD Order #${order.orderNumber}. Inventory hold released.</p>`,
+          senderName: store?.name || 'CommercePilot AI',
           eventId: `order-cancel-${order._id}`
         });
       }
@@ -407,10 +439,18 @@ const orderAutomationService = {
     tokenDoc.responseValue = 'CONFIRMED_BY_CUSTOMER';
     await tokenDoc.save();
 
-    const sellerEmail = store?.settings?.alertEmail || store?.details?.supportEmail;
-    if (sellerEmail) {
+    // Send confirmed order receipt to buyer if email exists
+    if (order.customer?.email) {
+      await emailService.sendOrderConfirmationEmail({
+        order,
+        customer: order.customer,
+        store: store || { name: 'CommercePilot Store' }
+      });
+    }
+
+    if (resolvedSellerEmail) {
       await emailService.dispatchEmail({
-        to: sellerEmail,
+        to: resolvedSellerEmail,
         subject: `✓ Order #${order.orderNumber} Confirmed by Customer (Ready to Pack)`,
         html: `
           <div style="font-family: sans-serif; padding: 20px; background: #0F172A; color: #E2E8F0; border-radius: 8px;">
@@ -419,6 +459,7 @@ const orderAutomationService = {
             <p>Verification status cleared. The parcel is now ready for packaging and courier pickup.</p>
           </div>
         `,
+        senderName: store?.name || 'CommercePilot AI',
         eventId: `order-confirm-seller-${order._id}`
       });
     }
