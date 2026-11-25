@@ -63,12 +63,49 @@ const runTrendyThreadsE2ETest = async () => {
     // -------------------------------------------------------------------------
     console.log('\n--- TEST 1: Smart COD Order Verification (Order TT10245) ---');
     // Reset order state for idempotency across repeated test runs
-    let orderTT10245 = await Order.findOne({ store: store._id, orderNumber: 'TT10245' });
-    if (orderTT10245 && orderTT10245.reviewStatus !== 'PENDING') {
+    let orderTT10245 = await Order.findOne({ orderNumber: 'TT10245' });
+    if (!orderTT10245) {
+      orderTT10245 = await Order.create({
+        orderNumber: 'TT10245',
+        store: store._id,
+        customer: {
+          fullName: 'Ananya Deshmukh',
+          email: 'ananya.deshmukh@gmail.com',
+          phone: '9876543210',
+          address: {
+            street: 'Flat 402, Ramanujam Apartment, Cross Cut Road',
+            city: 'Coimbatore',
+            state: 'Tamil Nadu',
+            pincode: '641012'
+          }
+        },
+        items: [
+          {
+            title: "Women's Designer Kurti",
+            sku: 'TT-KUR-BLK',
+            quantity: 1,
+            unitPrice: 2500,
+            totalPrice: 2500
+          }
+        ],
+        subtotal: 2500,
+        totalAmount: 2500,
+        paymentMethod: 'COD',
+        paymentStatus: 'PENDING',
+        orderStatus: 'PENDING',
+        reviewStatus: 'PENDING'
+      });
+    } else {
+      orderTT10245.store = store._id;
+      orderTT10245.totalAmount = 2500;
+      orderTT10245.paymentMethod = 'COD';
+      if (!orderTT10245.customer) orderTT10245.customer = {};
+      orderTT10245.customer.fullName = 'Ananya Deshmukh';
+      if (!orderTT10245.customer.address) orderTT10245.customer.address = {};
+      orderTT10245.customer.address.city = 'Coimbatore';
       orderTT10245.reviewStatus = 'PENDING';
       orderTT10245.orderStatus = 'PENDING';
       await orderTT10245.save();
-      orderTT10245 = await Order.findOne({ store: store._id, orderNumber: 'TT10245' });
     }
     assert(Boolean(orderTT10245), 'Target high-risk COD Order TT10245 found in store');
     assert(orderTT10245.totalAmount === 2500, 'Order amount matches ₹2,500');
