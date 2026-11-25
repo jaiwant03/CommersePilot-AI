@@ -14,6 +14,7 @@ router.get('/forecast', inventoryController.getDemandForecast);
 router.get('/purchase-orders', inventoryController.getPurchaseOrders);
 router.get('/purchase-orders/:id', inventoryController.getPurchaseOrderById);
 router.post('/purchase-orders/:id/approve', inventoryController.approvePurchaseOrder);
+router.put('/purchase-orders/:id', inventoryController.updatePurchaseOrder);
 router.patch('/purchase-orders/:id', inventoryController.updatePurchaseOrder);
 router.post('/purchase-orders/:id/reject', inventoryController.rejectPurchaseOrder);
 
