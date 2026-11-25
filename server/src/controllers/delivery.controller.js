@@ -2,6 +2,7 @@ const Delivery = require('../models/Delivery.model');
 const Order = require('../models/Order.model');
 const Product = require('../models/Product.model');
 const InventoryMovement = require('../models/InventoryMovement.model');
+const emailService = require('../services/emailService');
 
 /**
  * Get paginated deliveries with search and status filtering
@@ -134,7 +135,9 @@ const simulateDeliveryEvent = async (req, res, next) => {
 
     await delivery.save();
 
-    // Synchronize parent Order status
+    // Synchronize parent Order status & dispatch buyer notifications
+    let emailSent = false;
+    let emailRecipient = null;
     const order = await Order.findOne({ _id: delivery.order, store: storeId });
     if (order) {
       if (eventType === 'DELIVERED') {
@@ -143,15 +146,26 @@ const simulateDeliveryEvent = async (req, res, next) => {
           order.paymentStatus = 'PAID';
         }
         order.history.push({ status: 'DELIVERED', note: 'Marked delivered via courier telemetry' });
+        await order.save();
+        if (order.customer?.email) {
+          const emailRes = await emailService.sendOrderStatusEmail({ order, customer: order.customer, store: req.store, status: 'DELIVERED' });
+          emailSent = Boolean(emailRes?.success);
+          emailRecipient = order.customer.email;
+        }
       } else if (eventType === 'FAILED') {
         order.orderStatus = 'ON_HOLD';
         order.history.push({ status: 'ON_HOLD', note: `NDR event: ${delivery.ndrReason}` });
+        await order.save();
 
         // Trigger Automated NDR Delivery Recovery Workflow
         try {
           const deliveryAutomationService = require('../services/deliveryAutomationService');
-          deliveryAutomationService.handleFailedDelivery(delivery._id, storeId, { reason: delivery.ndrReason })
-            .catch(e => console.warn('[Delivery Controller] NDR auto recovery error:', e.message));
+          const ndrResult = await deliveryAutomationService.handleFailedDelivery(delivery._id, storeId, {
+            reason: delivery.ndrReason,
+            email: req.body.email
+          });
+          emailSent = Boolean(ndrResult?.emailSent);
+          emailRecipient = ndrResult?.emailRecipient || null;
         } catch (ndrErr) {
           console.warn('[Delivery Controller] Failed to trigger NDR automation service:', ndrErr.message);
         }
@@ -185,17 +199,29 @@ const simulateDeliveryEvent = async (req, res, next) => {
           }
           order.isRestocked = true;
         }
+        await order.save();
       } else if (eventType === 'OUT_FOR_DELIVERY' || eventType === 'SHIPPED') {
         order.orderStatus = 'DISPATCHED';
         order.history.push({ status: 'DISPATCHED', note: `Shipment marked ${eventType}` });
+        await order.save();
+        if (order.customer?.email) {
+          const emailRes = await emailService.sendOrderStatusEmail({ order, customer: order.customer, store: req.store, status: eventType });
+          emailSent = Boolean(emailRes?.success);
+          emailRecipient = order.customer.email;
+        }
+      } else {
+        await order.save();
       }
-      await order.save();
     }
+
+    const updatedDelivery = await Delivery.findById(delivery._id);
 
     return res.status(200).json({
       success: true,
       message: `Simulated event "${eventType}" recorded successfully.`,
-      delivery
+      delivery: updatedDelivery || delivery,
+      emailSent,
+      emailRecipient
     });
   } catch (error) {
     next(error);

@@ -3,7 +3,9 @@ const crypto = require('crypto');
 const config = require('../config/env');
 const Delivery = require('../models/Delivery.model');
 const Order = require('../models/Order.model');
+const Customer = require('../models/Customer.model');
 const Store = require('../models/Store.model');
+const User = require('../models/User.model');
 const AutomationLog = require('../models/AutomationLog.model');
 const VerificationToken = require('../models/VerificationToken.model');
 const emailService = require('./emailService');
@@ -91,6 +93,13 @@ const deliveryAutomationService = {
       };
     }
 
+    // Resolve customer email (explicit override -> order.customer.email -> Customer collection lookup)
+    let buyerEmail = (failureDetails.email || order?.customer?.email || '').trim();
+    if (!buyerEmail && order?.customer?.id) {
+      const custDoc = await Customer.findById(order.customer.id).select('email').lean();
+      buyerEmail = (custDoc?.email || '').trim();
+    }
+
     // 3. Generate secure, expiring reschedule token
     const rawToken = crypto.randomBytes(32).toString('hex');
     const tokenDoc = await VerificationToken.create({
@@ -103,7 +112,7 @@ const deliveryAutomationService = {
         awb: delivery.awb,
         courier: delivery.courier,
         orderNumber: order?.orderNumber,
-        customerEmail: order?.customer?.email
+        customerEmail: buyerEmail
       },
       expiresAt: new Date(Date.now() + 48 * 60 * 60 * 1000) // 48 hours
     });
@@ -111,19 +120,23 @@ const deliveryAutomationService = {
     const rescheduleUrl = `${config.clientUrl}/reschedule-delivery?token=${rawToken}`;
 
     // 4. Dispatch Email to Customer requesting reschedule / landmark
-    const emailRes = await emailService.sendDeliveryRecoveryEmail({
-      delivery,
-      order,
-      customer: order?.customer,
-      store,
-      rescheduleUrl
-    });
+    const emailRes = buyerEmail
+      ? await emailService.sendDeliveryRecoveryEmail({
+          delivery,
+          order,
+          customer: { ...(order?.customer?.toObject?.() || order?.customer), email: buyerEmail },
+          store,
+          rescheduleUrl
+        })
+      : { success: false, reason: 'No customer email provided' };
 
     // 5. Update Delivery Tracking Event (without falsely claiming courier has been contacted)
     delivery.trackingEvents.push({
       status: 'NDR_EMAIL_SENT',
       location: delivery.destination?.city || 'Local Hub',
-      message: `Automated recovery email dispatched to buyer (${order?.customer?.email || 'customer'}). Awaiting buyer slot confirmation.`,
+      message: emailRes.success
+        ? `Automated recovery email dispatched to buyer (${buyerEmail}). Awaiting buyer slot confirmation.`
+        : `NDR logged (${buyerEmail ? `email delivery warning: ${emailRes.error || emailRes.reason}` : 'no customer email available'}).`,
       timestamp: new Date()
     });
     await delivery.save();
@@ -143,9 +156,10 @@ const deliveryAutomationService = {
       requestPayload: payload,
       responsePayload: result,
       durationMs,
-      emailSent: emailRes.success,
-      emailType: 'DELIVERY_RECOVERY_LINK',
-      emailRecipient: order?.customer?.email || null
+      emailSent: Boolean(emailRes.success),
+      emailType: emailRes.success ? 'DELIVERY_RECOVERY_LINK' : 'NONE',
+      emailRecipient: buyerEmail || null,
+      errorMessage: emailRes.error || null
     });
 
     return {
@@ -154,6 +168,9 @@ const deliveryAutomationService = {
       action: result.recoveryAction,
       log: logDoc,
       rescheduleToken: tokenDoc.token,
+      emailSent: Boolean(emailRes.success),
+      emailRecipient: buyerEmail || null,
+      emailError: emailRes.error || emailRes.reason || null,
       executionMode
     };
   },
@@ -220,9 +237,10 @@ const deliveryAutomationService = {
     tokenDoc.metadata = { ...tokenDoc.metadata, preferredDate, preferredSlot, updatedAddress, landmark };
     await tokenDoc.save();
 
-    // Notify seller of buyer resolution
+    // Notify seller & buyer of resolution
     const store = await Store.findById(delivery.store);
-    const sellerEmail = store?.settings?.alertEmail || store?.details?.supportEmail;
+    const ownerUser = store?.owner ? await User.findById(store.owner).select('email').lean() : null;
+    const sellerEmail = store?.settings?.alertEmail || store?.details?.supportEmail || ownerUser?.email || config.smtp.user;
     if (sellerEmail) {
       await emailService.dispatchEmail({
         to: sellerEmail,
@@ -241,7 +259,18 @@ const deliveryAutomationService = {
             <p style="font-size: 12px; color: #94A3B8;">Status updated in CommercePilot AI operational workspace.</p>
           </div>
         `,
+        senderName: store?.name || 'CommercePilot AI',
         eventId: `seller-ndr-update-${delivery._id}`
+      });
+    }
+
+    if (delivery.order?.customer?.email) {
+      await emailService.sendOrderStatusEmail({
+        order: delivery.order,
+        customer: delivery.order.customer,
+        store,
+        status: 'OUT_FOR_DELIVERY',
+        note: `Your delivery re-attempt is scheduled for ${preferredDate} (${preferredSlot}).`
       });
     }
 
