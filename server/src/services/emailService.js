@@ -12,7 +12,7 @@ const getTransporter = () => {
   const { host, port, user, password } = config.smtp;
 
   if (host && user && password) {
-    transporter = nodemailer.createTransporter({
+    transporter = nodemailer.createTransport({
       host,
       port,
       secure: port === 465,

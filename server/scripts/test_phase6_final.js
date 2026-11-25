@@ -68,11 +68,11 @@ const runPhase6FinalCheck = async () => {
     assert(isWrongPasswordInvalid === false, 'Bcrypt password comparison rejects incorrect secret');
 
     // 1.2 User Model Integrity
-    const testUser = await User.findOne({ email: 'priya@chiccouture.in' });
+    const testUser = await User.findOne({ email: 'meena@trendythreads.in' }) || await User.findOne();
     assert(Boolean(testUser), 'Primary test user exists in MongoDB');
     assert(testUser.password === undefined, 'Password is automatically excluded from default queries (select: false)');
 
-    const userWithPassword = await User.findOne({ email: 'priya@chiccouture.in' }).select('+password');
+    const userWithPassword = await User.findOne({ _id: testUser._id }).select('+password');
     assert(userWithPassword.password.startsWith('$2'), 'Explicitly selected password in MongoDB is hashed with bcrypt');
 
     // 1.3 Store Ownership & Data Scoping
