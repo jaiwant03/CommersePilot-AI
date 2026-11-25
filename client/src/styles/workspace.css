@@ -2664,7 +2664,7 @@
 
 .workflow-card {
   background: #FFFFFF;
-  border: 1px solid rgba(226, 232, 240, 0.9);
+  border: 1px solid rgba(226, 232, 240, 0.95);
   border-radius: 20px;
   padding: 22px;
   display: flex;
@@ -2676,6 +2676,22 @@
   overflow: hidden;
 }
 
+.workflow-card.cod-card {
+  background: radial-gradient(circle at 15% 0%, rgba(99, 102, 241, 0.05) 0%, #FFFFFF 45%);
+}
+
+.workflow-card.inv-card {
+  background: radial-gradient(circle at 15% 0%, rgba(245, 158, 11, 0.05) 0%, #FFFFFF 45%);
+}
+
+.workflow-card.ndr-card {
+  background: radial-gradient(circle at 15% 0%, rgba(2, 132, 199, 0.05) 0%, #FFFFFF 45%);
+}
+
+.workflow-card.rep-card {
+  background: radial-gradient(circle at 15% 0%, rgba(16, 185, 129, 0.05) 0%, #FFFFFF 45%);
+}
+
 .workflow-card::before {
   content: '';
   position: absolute;
@@ -2683,27 +2699,30 @@
   left: 0;
   right: 0;
   height: 3.5px;
-  background: transparent;
-  transition: background 0.25s ease;
+  transition: height 0.25s ease, box-shadow 0.25s ease;
+}
+
+.workflow-card.cod-card::before {
+  background: linear-gradient(90deg, #6366F1, #818CF8);
+}
+.workflow-card.inv-card::before {
+  background: linear-gradient(90deg, #F59E0B, #FBBF24);
+}
+.workflow-card.ndr-card::before {
+  background: linear-gradient(90deg, #0284C7, #38BDF8);
+}
+.workflow-card.rep-card::before {
+  background: linear-gradient(90deg, #10B981, #34D399);
 }
 
 .workflow-card:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 16px 36px -6px rgba(15, 23, 42, 0.1), 0 0 0 1px rgba(99, 102, 241, 0.2);
-  border-color: rgba(99, 102, 241, 0.3);
+  transform: translateY(-4px);
+  box-shadow: 0 18px 38px -8px rgba(15, 23, 42, 0.12), 0 0 0 1px rgba(99, 102, 241, 0.25);
+  border-color: rgba(99, 102, 241, 0.35);
 }
 
-.workflow-card.cod-card:hover::before {
-  background: linear-gradient(90deg, #6366F1, #818CF8);
-}
-.workflow-card.inv-card:hover::before {
-  background: linear-gradient(90deg, #F59E0B, #FBBF24);
-}
-.workflow-card.ndr-card:hover::before {
-  background: linear-gradient(90deg, #0284C7, #38BDF8);
-}
-.workflow-card.rep-card:hover::before {
-  background: linear-gradient(90deg, #10B981, #34D399);
+.workflow-card:hover::before {
+  height: 5px;
 }
 
 .workflow-card-top {
@@ -2722,11 +2741,12 @@
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  transition: transform 0.2s ease;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
 }
 
 .workflow-card:hover .workflow-icon-box {
-  transform: scale(1.06);
+  transform: scale(1.08);
 }
 
 .workflow-title {
@@ -2770,8 +2790,10 @@
 
 .workflow-meta-label {
   color: #64748B;
-  font-weight: 550;
-  font-size: 11px;
+  font-weight: 650;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
 }
 
 .workflow-meta-value {
@@ -2792,18 +2814,18 @@
   font-weight: 650;
   border-radius: 12px;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
   border: 1px solid rgba(203, 213, 225, 0.85);
   background: #FFFFFF;
   color: #0F172A;
-  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.04);
 }
 
 .workflow-btn:hover:not(:disabled) {
   background: #0F172A;
   border-color: #0F172A;
   color: #FFFFFF;
-  box-shadow: 0 4px 14px rgba(15, 23, 42, 0.18);
+  box-shadow: 0 6px 18px rgba(15, 23, 42, 0.22);
   transform: translateY(-1px);
 }
 
@@ -2818,7 +2840,7 @@
   gap: 6px;
   padding: 3px 9px;
   border-radius: 999px;
-  font-size: 10.5px;
+  font-size: 10px;
   font-weight: 750;
   text-transform: uppercase;
   letter-spacing: 0.04em;
@@ -2853,6 +2875,7 @@
   height: 6px;
   border-radius: 50%;
   display: inline-block;
+  animation: pulse-ring 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
 
 .status-indicator-badge.connected .status-dot-pulse {
@@ -2881,8 +2904,8 @@
   gap: 4px;
   padding: 2.5px 8px;
   border-radius: 6px;
-  font-size: 10.5px;
-  font-weight: 700;
+  font-size: 10px;
+  font-weight: 750;
   text-transform: uppercase;
   letter-spacing: 0.03em;
 }
@@ -2918,26 +2941,6 @@
   background: #0F172A;
   border-color: #0F172A;
   color: #FFFFFF;
-}
-  align-items: center;
-  gap: 4px;
-  padding: 2px 7px;
-  border-radius: 6px;
-  font-size: 10px;
-  font-weight: 750;
-  letter-spacing: 0.03em;
-}
-
-.mode-badge.live {
-  background: rgba(2, 132, 199, 0.09);
-  color: #0284C7;
-  border: 1px solid rgba(2, 132, 199, 0.25);
-}
-
-.mode-badge.demo {
-  background: rgba(245, 158, 11, 0.09);
-  color: #B45309;
-  border: 1px solid rgba(245, 158, 11, 0.25);
 }
 
 /* Modal Overlay for Execution Inspection */
