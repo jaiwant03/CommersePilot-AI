@@ -11,6 +11,11 @@ const workspaceService = {
     return res.data;
   },
 
+  getNotifications: async () => {
+    const res = await api.get('/overview/notifications');
+    return res.data;
+  },
+
   seedDemoData: async (data = {}) => {
     const res = await api.post('/overview/seed-demo', data);
     return res.data;

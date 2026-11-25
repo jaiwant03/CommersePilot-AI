@@ -411,7 +411,111 @@ const seedDemoData = async (req, res, next) => {
   }
 };
 
+/**
+ * Real-time operational notifications for store alerts, high-risk COD orders, and critical stock
+ */
+const getStoreNotifications = async (req, res, next) => {
+  try {
+    const storeId = req.store._id;
+
+    // 1. Fetch high-risk / verification-needed orders
+    const urgentOrders = await Order.find({
+      store: storeId,
+      needsVerification: true,
+      orderStatus: { $in: ['PENDING', 'ON_HOLD'] }
+    })
+      .sort({ createdAt: -1 })
+      .limit(4)
+      .select('orderNumber customer totalAmount riskScore riskLevel createdAt');
+
+    // 2. Fetch low-stock products
+    const lowStockProds = await Product.find({
+      store: storeId,
+      $expr: { $lte: ['$stockQuantity', '$reorderThreshold'] }
+    })
+      .sort({ stockQuantity: 1 })
+      .limit(4)
+      .select('title sku stockQuantity reorderThreshold sellingPrice updatedAt createdAt');
+
+    // 3. Fetch failed deliveries (NDR)
+    const failedDeliveries = await Delivery.find({
+      store: storeId,
+      status: { $in: ['FAILED', 'RTO'] }
+    })
+      .sort({ updatedAt: -1 })
+      .limit(3)
+      .select('awb courier failureReason status updatedAt');
+
+    const notifications = [];
+
+    // Map urgent orders
+    urgentOrders.forEach((ord) => {
+      notifications.push({
+        id: `ord-${ord._id}`,
+        type: 'COD_RISK',
+        title: `High COD Risk Order #${ord.orderNumber}`,
+        message: `${ord.customer.fullName} • Score ${ord.riskScore}/100 • ₹${ord.totalAmount?.toLocaleString('en-IN')}`,
+        link: '/app/orders',
+        time: ord.createdAt,
+        priority: 'urgent',
+        read: false
+      });
+    });
+
+    // Map low stock products
+    lowStockProds.forEach((prod) => {
+      notifications.push({
+        id: `prod-${prod._id}`,
+        type: 'LOW_STOCK',
+        title: `Low Stock: ${prod.title}`,
+        message: `Only ${prod.stockQuantity} units left (Threshold: ${prod.reorderThreshold}) • SKU: ${prod.sku}`,
+        link: '/app/inventory',
+        time: prod.updatedAt || prod.createdAt || new Date(),
+        priority: 'warning',
+        read: false
+      });
+    });
+
+    // Map failed deliveries
+    failedDeliveries.forEach((del) => {
+      notifications.push({
+        id: `del-${del._id}`,
+        type: 'NDR_ALERT',
+        title: `NDR Attempt Failed (${del.courier})`,
+        message: `AWB #${del.awb} • Customer unreachable • WhatsApp recovery active`,
+        link: '/app/deliveries',
+        time: del.updatedAt || new Date(),
+        priority: 'urgent',
+        read: false
+      });
+    });
+
+    // System guard notification if few alerts
+    if (notifications.length === 0) {
+      notifications.push({
+        id: 'sys-guard',
+        type: 'SYSTEM',
+        title: 'Operations Guard Active',
+        message: 'All store telemetry normal. 0 high risk orders or inventory bottlenecks.',
+        link: '/app/overview',
+        time: new Date(),
+        priority: 'info',
+        read: true
+      });
+    }
+
+    return res.status(200).json({
+      success: true,
+      unreadCount: notifications.filter((n) => !n.read).length,
+      notifications
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
 module.exports = {
   getOverviewStats,
-  seedDemoData
+  seedDemoData,
+  getStoreNotifications
 };

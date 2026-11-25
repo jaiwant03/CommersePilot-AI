@@ -18,9 +18,13 @@ import {
   ExternalLink,
   ChevronRight,
   ShieldAlert,
-  CheckCircle2
+  CheckCircle2,
+  RefreshCw,
+  Clock,
+  AlertTriangle
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
+import workspaceService from '../services/workspace.service';
 
 const NAV_ITEMS = [
   { path: '/app/overview', label: 'Overview', icon: LayoutDashboard },
@@ -41,9 +45,86 @@ const WorkspaceLayout = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [profileOpen, setProfileOpen] = useState(false);
   const [notificationsOpen, setNotificationsOpen] = useState(false);
+  const [notifications, setNotifications] = useState([]);
+  const [unreadCount, setUnreadCount] = useState(0);
+  const [notificationTab, setNotificationTab] = useState('all');
+  const [loadingNotifications, setLoadingNotifications] = useState(false);
+  const [readNotificationIds, setReadNotificationIds] = useState(() => {
+    try {
+      return JSON.parse(localStorage.getItem('cp_read_notifications') || '[]');
+    } catch {
+      return [];
+    }
+  });
 
   const profileRef = useRef(null);
   const notificationsRef = useRef(null);
+
+  const fetchNotifications = async () => {
+    try {
+      setLoadingNotifications(true);
+      const res = await workspaceService.getNotifications();
+      if (res?.notifications) {
+        setNotifications(res.notifications);
+        const unread = res.notifications.filter(
+          (n) => !n.read && !readNotificationIds.includes(n.id)
+        ).length;
+        setUnreadCount(unread);
+      }
+    } catch (err) {
+      console.warn('Could not load notifications:', err.message);
+    } finally {
+      setLoadingNotifications(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchNotifications();
+    const interval = setInterval(fetchNotifications, 60000);
+    return () => clearInterval(interval);
+  }, [readNotificationIds.length]);
+
+  const handleMarkAllRead = () => {
+    const allIds = notifications.map((n) => n.id);
+    const updated = Array.from(new Set([...readNotificationIds, ...allIds]));
+    setReadNotificationIds(updated);
+    try {
+      localStorage.setItem('cp_read_notifications', JSON.stringify(updated));
+    } catch {}
+    setUnreadCount(0);
+  };
+
+  const handleNotificationClick = (item) => {
+    if (!readNotificationIds.includes(item.id)) {
+      const updated = [...readNotificationIds, item.id];
+      setReadNotificationIds(updated);
+      try {
+        localStorage.setItem('cp_read_notifications', JSON.stringify(updated));
+      } catch {}
+      setUnreadCount((prev) => Math.max(0, prev - 1));
+    }
+    setNotificationsOpen(false);
+    if (item.link) {
+      navigate(item.link);
+    }
+  };
+
+  const formatRelativeTime = (dateStr) => {
+    if (!dateStr) return 'Recently';
+    const diffMs = Date.now() - new Date(dateStr).getTime();
+    const mins = Math.floor(diffMs / 60000);
+    if (mins < 1) return 'Just now';
+    if (mins < 60) return `${mins}m ago`;
+    const hours = Math.floor(mins / 60);
+    if (hours < 24) return `${hours}h ago`;
+    return `${Math.floor(hours / 24)}d ago`;
+  };
+
+  const filteredNotifications = notifications.filter((item) => {
+    if (notificationTab === 'urgent') return item.priority === 'urgent' || item.type === 'COD_RISK' || item.type === 'NDR_ALERT';
+    if (notificationTab === 'inventory') return item.type === 'LOW_STOCK';
+    return true;
+  });
 
   // Close dropdowns on outside click
   useEffect(() => {
@@ -198,32 +279,131 @@ const WorkspaceLayout = () => {
             <div style={{ position: 'relative' }} ref={notificationsRef}>
               <button
                 className="topbar-btn"
-                onClick={() => setNotificationsOpen((prev) => !prev)}
+                onClick={() => {
+                  setNotificationsOpen((prev) => !prev);
+                  if (!notificationsOpen) fetchNotifications();
+                }}
                 aria-label="Notifications"
-                title="Active Alerts"
+                title="Active Store Alerts"
+                style={{ position: 'relative' }}
               >
                 <Bell size={17} />
-                <span className="notification-dot" />
+                {unreadCount > 0 && <span className="notification-dot" />}
               </button>
 
               {notificationsOpen && (
-                <div className="dropdown-panel" style={{ width: '300px' }}>
-                  <div style={{ padding: '8px 12px', borderBottom: '1px solid var(--border-subtle)', fontWeight: 600, fontSize: '13px', color: 'var(--color-text-primary)' }}>
-                    Operations Telemetry
-                  </div>
-                  <div style={{ padding: '10px 12px', display: 'flex', gap: '10px', alignItems: 'flex-start', borderBottom: '1px solid var(--border-subtle)' }}>
-                    <ShieldAlert size={16} style={{ color: '#F59E0B', flexShrink: 0, marginTop: '2px' }} />
-                    <div style={{ fontSize: '12px' }}>
-                      <div style={{ fontWeight: 600, color: 'var(--color-text-primary)' }}>High COD Risk Order</div>
-                      <div style={{ color: 'var(--color-text-faint)' }}>Customer address flagged for verification.</div>
+                <div className="notification-panel">
+                  {/* Header */}
+                  <div className="notification-header">
+                    <div className="notification-header-title">
+                      <Bell size={15} style={{ color: '#0284C7' }} />
+                      <span>Store Alerts</span>
+                      {unreadCount > 0 && (
+                        <span className="notification-badge-count">{unreadCount} new</span>
+                      )}
                     </div>
+                    {unreadCount > 0 && (
+                      <button
+                        type="button"
+                        onClick={handleMarkAllRead}
+                        className="notification-mark-all"
+                        title="Mark all as read"
+                      >
+                        Mark all read
+                      </button>
+                    )}
                   </div>
-                  <div style={{ padding: '10px 12px', display: 'flex', gap: '10px', alignItems: 'flex-start' }}>
-                    <CheckCircle2 size={16} style={{ color: '#10B981', flexShrink: 0, marginTop: '2px' }} />
-                    <div style={{ fontSize: '12px' }}>
-                      <div style={{ fontWeight: 600, color: 'var(--color-text-primary)' }}>Automations Active</div>
-                      <div style={{ color: 'var(--color-text-faint)' }}>Email verification and NDR recovery active.</div>
-                    </div>
+
+                  {/* Filter Tabs */}
+                  <div className="notification-tabs">
+                    <button
+                      type="button"
+                      className={`notification-tab-btn ${notificationTab === 'all' ? 'active' : ''}`}
+                      onClick={() => setNotificationTab('all')}
+                    >
+                      All ({notifications.length})
+                    </button>
+                    <button
+                      type="button"
+                      className={`notification-tab-btn ${notificationTab === 'urgent' ? 'active' : ''}`}
+                      onClick={() => setNotificationTab('urgent')}
+                    >
+                      Urgent ({notifications.filter((n) => n.priority === 'urgent').length})
+                    </button>
+                    <button
+                      type="button"
+                      className={`notification-tab-btn ${notificationTab === 'inventory' ? 'active' : ''}`}
+                      onClick={() => setNotificationTab('inventory')}
+                    >
+                      Stock ({notifications.filter((n) => n.type === 'LOW_STOCK').length})
+                    </button>
+                  </div>
+
+                  {/* Notification List */}
+                  <div className="notification-list">
+                    {filteredNotifications.length === 0 ? (
+                      <div className="notification-empty-state">
+                        <CheckCircle2 size={26} style={{ color: '#10B981' }} />
+                        <div style={{ fontWeight: 650, fontSize: '13px', color: '#0F172A' }}>
+                          All caught up!
+                        </div>
+                        <div style={{ fontSize: '11.5px', color: '#64748B' }}>
+                          No operational alerts or critical issues found.
+                        </div>
+                      </div>
+                    ) : (
+                      filteredNotifications.map((n) => {
+                        const isUnread = !readNotificationIds.includes(n.id);
+                        return (
+                          <div
+                            key={n.id}
+                            className={`notification-item ${isUnread ? 'unread' : ''}`}
+                            onClick={() => handleNotificationClick(n)}
+                          >
+                            <div className={`notification-item-icon ${n.priority === 'urgent' ? 'urgent' : n.priority === 'warning' ? 'warning' : 'info'}`}>
+                              {n.type === 'COD_RISK' ? (
+                                <ShieldAlert size={16} />
+                              ) : n.type === 'LOW_STOCK' ? (
+                                <Package size={16} />
+                              ) : n.type === 'NDR_ALERT' ? (
+                                <Truck size={16} />
+                              ) : (
+                                <Sparkles size={16} />
+                              )}
+                            </div>
+                            <div className="notification-item-body">
+                              <div className="notification-item-title">
+                                <span>{n.title}</span>
+                                <span className="notification-item-time">{formatRelativeTime(n.time)}</span>
+                              </div>
+                              <div className="notification-item-msg">{n.message}</div>
+                            </div>
+                            {isUnread && <span className="notification-unread-indicator" />}
+                          </div>
+                        );
+                      })
+                    )}
+                  </div>
+
+                  {/* Footer */}
+                  <div className="notification-footer">
+                    <Link
+                      to="/app/overview"
+                      className="notification-footer-link"
+                      onClick={() => setNotificationsOpen(false)}
+                    >
+                      Store Telemetry →
+                    </Link>
+                    <button
+                      type="button"
+                      className="notification-footer-link"
+                      onClick={fetchNotifications}
+                      disabled={loadingNotifications}
+                      title="Sync live store alerts"
+                    >
+                      <RefreshCw size={12} className={loadingNotifications ? 'spinning' : ''} style={{ display: 'inline', marginRight: '4px' }} />
+                      Sync
+                    </button>
                   </div>
                 </div>
               )}

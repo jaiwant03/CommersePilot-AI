@@ -6,6 +6,7 @@ const { authenticate } = require('../middleware/auth');
 router.use(authenticate);
 
 router.get('/', overviewController.getOverviewStats);
+router.get('/notifications', overviewController.getStoreNotifications);
 router.post('/seed-demo', overviewController.seedDemoData);
 
 module.exports = router;
