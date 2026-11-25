@@ -3298,11 +3298,15 @@
 
   @media (max-width: 360px) {
     .workspace-topbar {
-      padding: 0 8px;
+      padding: 0 6px;
     }
 
     .topbar-left {
       gap: 8px;
+    }
+
+    .breadcrumb-current {
+      font-size: 13px;
     }
 
     .topbar-right {
@@ -3315,8 +3319,8 @@
     }
 
     .store-name-text {
-      max-width: 42px;
-      font-size: 10.5px;
+      max-width: 60px;
+      font-size: 11px;
     }
   }
 
