@@ -139,7 +139,7 @@ const HomePage = () => {
       </div>
 
       {/* Section 2: Features (Capabilities & Bottleneck Solutions) */}
-      <div id="features" className="modelled-island-container" style={{ padding: '48px 40px' }}>
+      <div id="features" className="modelled-island-container">
         <FeaturesSection />
       </div>
 
@@ -149,12 +149,12 @@ const HomePage = () => {
       </div>
 
       {/* Section 4: Pricing (Plans & Transparent Investment) */}
-      <div id="pricing" className="modelled-island-container" style={{ padding: '48px 40px' }}>
+      <div id="pricing" className="modelled-island-container">
         <PricingSection />
       </div>
 
       {/* Section 5: Next (FAQ & Final Call To Action Banner) */}
-      <div id="next" className="modelled-island-container" style={{ padding: '48px 40px' }}>
+      <div id="next" className="modelled-island-container">
         <FaqSection />
         <div style={{ height: '48px', width: '100%' }} />
         <FinalCtaSection />

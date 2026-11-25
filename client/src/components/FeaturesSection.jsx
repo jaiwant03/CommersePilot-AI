@@ -42,8 +42,8 @@ const JumpingFeatureCard = ({ feature, index }) => {
         ref={cardRef}
         className={`feature-card feature-jumping-box ${isRight ? 'jump-from-right' : 'jump-from-left'} ${isVisible ? 'jump-visible' : 'jump-hidden'}`}
       >
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '16px' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+        <div className="feature-card-meta-row" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '16px' }}>
+          <div className="feature-card-meta-main" style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
             <div style={{ width: '46px', height: '46px', borderRadius: '14px', background: 'linear-gradient(135deg, #E0F2FE 0%, #BAE6FD 100%)', color: '#0284C7', border: '1px solid #7DD3FC', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 4px 12px rgba(2, 132, 199, 0.15)' }}>
               {feature.icon}
             </div>
@@ -52,7 +52,7 @@ const JumpingFeatureCard = ({ feature, index }) => {
             </span>
           </div>
 
-          <span style={{ fontSize: '11px', fontWeight: 700, padding: '4px 12px', borderRadius: '20px', background: 'rgba(14, 165, 233, 0.08)', color: '#0284C7', border: '1px solid rgba(14, 165, 233, 0.25)', letterSpacing: '0.02em' }}>
+          <span className="feature-card-tag" style={{ fontSize: '11px', fontWeight: 700, padding: '4px 12px', borderRadius: '20px', background: 'rgba(14, 165, 233, 0.08)', color: '#0284C7', border: '1px solid rgba(14, 165, 233, 0.25)', letterSpacing: '0.02em' }}>
             {feature.tag}
           </span>
         </div>

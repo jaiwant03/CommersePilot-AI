@@ -79,6 +79,7 @@ const Navbar = () => {
   };
 
   return (
+    <>
     <header className={`navbar ${scrolled ? 'scrolled' : ''}`}>
       <div className="container navbar-inner">
         {/* Brand Logo & Name */}
@@ -180,6 +181,7 @@ const Navbar = () => {
           </button>
         </div>
       </div>
+    </header>
 
       {/* Mobile Slide-Out Drawer */}
       <div className={`mobile-drawer ${mobileMenuOpen ? 'open' : ''}`} role="dialog" aria-modal="true">
@@ -244,7 +246,7 @@ const Navbar = () => {
           )}
         </div>
       </div>
-    </header>
+    </>
   );
 };
 
