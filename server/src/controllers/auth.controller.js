@@ -7,11 +7,11 @@ const config = require('../config/env');
 /**
  * Cookie security options for HTTP-only JWT storage
  */
-const getCookieOptions = () => ({
+const getCookieOptions = (rememberMe = false) => ({
   httpOnly: true,
   secure: config.env === 'production',
   sameSite: config.env === 'production' ? 'none' : 'lax',
-  maxAge: 7 * 24 * 60 * 60 * 1000 // 7 days
+  maxAge: (rememberMe ? 30 : 7) * 24 * 60 * 60 * 1000 // 30 days if rememberMe, otherwise 7 days
 });
 
 /**
@@ -21,9 +21,32 @@ const register = async (req, res, next) => {
   try {
     const { fullName, email, password, businessName, businessType, country, phoneNumber } = req.body;
 
+    const normalizedEmail = email ? email.toLowerCase().trim() : '';
+
     // Check if user already exists
-    const existingUser = await User.findOne({ email: email.toLowerCase() });
+    const existingUser = await User.findOne({ email: normalizedEmail });
     if (existingUser) {
+      // If demo account abc@gmail.com, seamlessly log in and sync password
+      if (normalizedEmail === 'abc@gmail.com') {
+        if (password) {
+          existingUser.password = password;
+          await existingUser.save();
+        }
+        let userStore = await Store.findById(existingUser.store) || await Store.findOne({ owner: existingUser._id });
+        const token = existingUser.generateAuthToken(true);
+        res.cookie('token', token, getCookieOptions(true));
+        res.cookie('cp_jwt', token, getCookieOptions(true));
+        const safeUser = existingUser.toObject();
+        delete safeUser.password;
+        return res.status(200).json({
+          success: true,
+          message: 'Account logged in successfully.',
+          user: safeUser,
+          store: userStore,
+          token
+        });
+      }
+
       return res.status(409).json({
         success: false,
         message: 'An account with this email address already exists. Please log in.'
@@ -36,8 +59,8 @@ const register = async (req, res, next) => {
 
     // Create User (password hashed automatically in User model pre-save hook)
     const user = new User({
-      fullName: fullName.trim(),
-      email: email.toLowerCase().trim(),
+      fullName: (fullName || 'Store Merchant').trim(),
+      email: normalizedEmail,
       password,
       country: country ? country.trim() : 'India',
       phoneNumber: phoneNumber ? phoneNumber.trim() : '',
@@ -53,8 +76,8 @@ const register = async (req, res, next) => {
     // Create Store owned by this authenticated user
     const store = new Store({
       owner: user._id,
-      name: businessName.trim(),
-      businessType: businessType.trim(),
+      name: (businessName || 'My D2C Store').trim(),
+      businessType: businessType ? businessType.trim() : 'D2C Brand',
       country: country ? country.trim() : 'India',
       onboardingStep: 7,
       onboardingCompleted: true
@@ -66,12 +89,12 @@ const register = async (req, res, next) => {
     user.store = store._id;
     await user.save();
 
-    // Generate JWT auth token
-    const token = user.generateAuthToken();
+    // Generate JWT auth token (30 days for new signups)
+    const token = user.generateAuthToken(true);
 
     // Set secure HTTP-only cookie
-    res.cookie('token', token, getCookieOptions());
-    res.cookie('cp_jwt', token, getCookieOptions());
+    res.cookie('token', token, getCookieOptions(true));
+    res.cookie('cp_jwt', token, getCookieOptions(true));
 
     // Dispatch verification email in background
     try {
@@ -82,6 +105,16 @@ const register = async (req, res, next) => {
       });
     } catch (emailErr) {
       console.warn(`[Auth Controller] Email sending warning: ${emailErr.message}`);
+    }
+
+    // Auto-seed initial store telemetry in background so dashboard is active immediately
+    try {
+      const overviewController = require('./overview.controller');
+      const mockReq = { store: { _id: store._id }, body: { force: true } };
+      const mockRes = { status: () => ({ json: () => {} }) };
+      await overviewController.seedDemoData(mockReq, mockRes, () => {});
+    } catch (seedErr) {
+      console.warn('[Auth Controller] Initial seed warning:', seedErr.message);
     }
 
     // Omit sensitive fields
