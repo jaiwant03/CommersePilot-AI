@@ -28,7 +28,7 @@ const OverviewPage = () => {
       setLoading(true);
       setError('');
       const res = await workspaceService.getOverview();
-      setData(res.data);
+      setData(res.data || res);
     } catch (err) {
       console.error('Failed to load overview metrics:', err);
       setError(err.message || 'Could not load store metrics.');
