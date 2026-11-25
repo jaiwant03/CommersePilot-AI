@@ -272,7 +272,6 @@ const runTrendyThreadsE2ETest = async () => {
     assert(delivery.ndrReason === 'Customer unavailable at delivery premises', 'NDR failure reason recorded correctly');
 
     // Verify WhatsApp template message text
-    const expectedTemplate = `Hello! Your Trendy Threads order TT10245 could not be delivered because you were unavailable. Would you like us to arrange another delivery attempt? Reply YES to request redelivery or contact our support team.`;
     assert(delivery.whatsappMessage === expectedTemplate, 'Exact WhatsApp customer notification template text verified');
 
     // Simulate customer reply: "YES"
