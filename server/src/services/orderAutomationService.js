@@ -6,6 +6,7 @@ const Customer = require('../models/Customer.model');
 const Product = require('../models/Product.model');
 const InventoryMovement = require('../models/InventoryMovement.model');
 const Store = require('../models/Store.model');
+const User = require('../models/User.model');
 const AutomationLog = require('../models/AutomationLog.model');
 const VerificationToken = require('../models/VerificationToken.model');
 const emailService = require('./emailService');
@@ -132,21 +133,30 @@ const orderAutomationService = {
   /**
    * Execute Order Risk Analysis & Verification Workflow
    */
-  analyzeOrder: async (orderId, storeId) => {
+  analyzeOrder: async (orderId, storeId, options = {}) => {
     const startTime = Date.now();
     const idempotencyKey = `ord-analysis-${orderId}-${Date.now()}`;
 
     // 1. Fetch Order and Store data
-    const order = await Order.findOne({ _id: orderId, store: storeId });
+    const [order, store] = await Promise.all([
+      Order.findOne({ _id: orderId, store: storeId }),
+      Store.findById(storeId).lean()
+    ]);
+
     if (!order) {
       throw new Error(`Order ${orderId} not found for store ${storeId}`);
     }
 
-    // 2. Fetch Customer History
+    // 2. Fetch Customer History & resolve effective recipient email
     const customerDoc = await Customer.findOne({
       store: storeId,
       phone: order.customer?.phone?.trim()
     });
+
+    const recipientEmail = (options.recipientEmail || order.customer?.email || customerDoc?.email || '').trim();
+    if (recipientEmail && !order.customer?.email) {
+      order.customer.email = recipientEmail;
+    }
 
     // 3. Compute Deterministic Risk
     const deterministic = calculateDeterministicCodRisk(order, customerDoc);
