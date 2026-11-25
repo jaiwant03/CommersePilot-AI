@@ -494,7 +494,7 @@
 }
 
 /* ========================================================
-   CommercePilot AI Centered Splash Loading Screen
+   CommercePilot AI Centered Spinning Logo Loading Screen
    ======================================================== */
 .cp-loading-container {
   position: fixed;
@@ -504,116 +504,45 @@
   bottom: 0;
   width: 100vw;
   height: 100vh;
-  background: #F8FAFC;
+  background: #FFFFFF;
   display: flex;
   align-items: center;
   justify-content: center;
   z-index: 99999;
-  font-family: var(--font-sans, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif);
 }
 
-.cp-loading-card {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-  padding: 36px 42px;
-  border-radius: 20px;
-  background: #FFFFFF;
-  border: 1px solid rgba(226, 232, 240, 0.9);
-  box-shadow: 0 20px 40px -15px rgba(15, 23, 42, 0.08), 0 0 1px 1px rgba(226, 232, 240, 0.6);
-  animation: cpFadeIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-  max-width: 360px;
-  width: 90%;
-}
-
-.cp-loading-logo-wrap {
-  position: relative;
-  width: 68px;
-  height: 68px;
+.cp-spinning-loader {
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-bottom: 18px;
+  animation: cpFadeIn 0.25s ease-out forwards;
 }
 
-.cp-loading-pulse-ring {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  border-radius: 20px;
-  background: linear-gradient(135deg, rgba(56, 189, 248, 0.35), rgba(99, 102, 241, 0.35));
-  animation: cpPulse 2s ease-in-out infinite;
-}
-
-.cp-loading-logo-box {
-  position: relative;
-  width: 56px;
-  height: 56px;
-  border-radius: 16px;
+.cp-spinning-logo {
+  width: 58px;
+  height: 58px;
+  border-radius: 17px;
   background: linear-gradient(135deg, #0284C7 0%, #2563EB 50%, #4F46E5 100%);
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 10px 20px -5px rgba(37, 99, 235, 0.45);
+  color: #FFFFFF;
+  box-shadow: 0 12px 32px -4px rgba(37, 99, 235, 0.45), 0 0 0 1px rgba(255, 255, 255, 0.2) inset;
+  transform-origin: center center;
+  animation: cpSpin 1.1s linear infinite;
+}
+
+.cp-spinning-icon {
   color: #FFFFFF;
 }
 
-.cp-loading-sparkle {
-  animation: cpSparkle 1.8s ease-in-out infinite;
-}
-
-.cp-loading-brand {
-  display: flex;
-  align-items: center;
-  gap: 7px;
-  margin-bottom: 16px;
-}
-
-.cp-loading-brand-name {
-  font-size: 20px;
-  font-weight: 700;
-  color: #0F172A;
-  letter-spacing: -0.02em;
-}
-
-.cp-loading-brand-badge {
-  font-size: 11px;
-  font-weight: 800;
-  padding: 2px 7px;
-  border-radius: 6px;
-  background: linear-gradient(135deg, #0284C7, #4F46E5);
-  color: #FFFFFF;
-  letter-spacing: 0.05em;
-}
-
-.cp-loading-track {
-  width: 140px;
-  height: 4px;
-  background: #E2E8F0;
-  border-radius: 99px;
-  overflow: hidden;
-  position: relative;
-  margin-bottom: 14px;
-}
-
-.cp-loading-bar {
-  position: absolute;
-  top: 0;
-  left: 0;
-  height: 100%;
-  width: 45%;
-  background: linear-gradient(90deg, #0284C7, #4F46E5);
-  border-radius: 99px;
-  animation: cpBarSlide 1.4s ease-in-out infinite;
-}
-
-.cp-loading-text {
-  font-size: 13px;
-  font-weight: 500;
-  color: #64748B;
-  margin: 0;
-  letter-spacing: -0.01em;
+@keyframes cpSpin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 @keyframes cpPulse {
@@ -653,10 +582,10 @@
 @keyframes cpFadeIn {
   from {
     opacity: 0;
-    transform: scale(0.96) translateY(6px);
+    transform: scale(0.92);
   }
   to {
     opacity: 1;
-    transform: scale(1) translateY(0);
+    transform: scale(1);
   }
 }
