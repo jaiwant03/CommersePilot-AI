@@ -2800,7 +2800,15 @@
   color: #0F172A;
   font-weight: 700;
   font-family: 'JetBrains Mono', monospace;
-  font-size: 11px;
+  font-size: 10px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 145px;
+  background: #FFFFFF;
+  padding: 2px 7px;
+  border-radius: 6px;
+  border: 1px solid rgba(226, 232, 240, 0.85);
 }
 
 .workflow-btn {
@@ -2850,6 +2858,17 @@
   background: rgba(16, 185, 129, 0.1);
   color: #059669;
   border: 1px solid rgba(16, 185, 129, 0.28);
+}
+
+.status-indicator-badge.native_active {
+  background: rgba(16, 185, 129, 0.08);
+  color: #059669;
+  border: 1px solid rgba(16, 185, 129, 0.28);
+}
+
+.status-indicator-badge.native_active .status-dot-pulse {
+  background: #10B981;
+  box-shadow: 0 0 6px #10B981;
 }
 
 .status-indicator-badge.not_configured {
@@ -2920,6 +2939,12 @@
   background: rgba(16, 185, 129, 0.12);
   color: #047857;
   border: 1px solid rgba(16, 185, 129, 0.25);
+}
+
+.mode-badge.native {
+  background: rgba(99, 102, 241, 0.12);
+  color: #4F46E5;
+  border: 1px solid rgba(99, 102, 241, 0.25);
 }
 
 .inspect-pill-btn {
