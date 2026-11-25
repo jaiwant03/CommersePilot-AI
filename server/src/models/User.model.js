@@ -105,7 +105,7 @@ userSchema.methods.comparePassword = async function (candidatePassword) {
 /**
  * Generate signed JWT authentication token
  */
-userSchema.methods.generateAuthToken = function () {
+userSchema.methods.generateAuthToken = function (rememberMe = false) {
   return jwt.sign(
     {
       id: this._id,
@@ -114,7 +114,7 @@ userSchema.methods.generateAuthToken = function () {
     },
     config.jwtSecret,
     {
-      expiresIn: '7d'
+      expiresIn: rememberMe ? '30d' : '7d'
     }
   );
 };
