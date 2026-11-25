@@ -17,7 +17,9 @@ import {
   FileText,
   Play,
   X,
-  Send
+  Send,
+  Sparkles,
+  Activity
 } from 'lucide-react';
 import workspaceService from '../../services/workspace.service';
 
@@ -617,17 +619,10 @@ const AutomationsPage = () => {
                     <td style={{ textAlign: 'right' }}>
                       <button
                         onClick={() => setSelectedLog(log)}
-                        style={{
-                          background: 'rgba(255, 255, 255, 0.04)',
-                          border: '1px solid var(--border-subtle)',
-                          borderRadius: 'var(--radius-sm)',
-                          padding: '4px 8px',
-                          color: 'var(--color-text-secondary)',
-                          fontSize: '11px',
-                          cursor: 'pointer'
-                        }}
+                        className="inspect-pill-btn"
                       >
-                        Inspect
+                        <span>Inspect</span>
+                        <ArrowRight size={11} />
                       </button>
                     </td>
                   </tr>
