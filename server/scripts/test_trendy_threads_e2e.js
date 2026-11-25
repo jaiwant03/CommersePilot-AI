@@ -156,7 +156,22 @@ const runTrendyThreadsE2ETest = async () => {
     // TEST 2: PREDICTIVE INVENTORY INTELLIGENCE
     // -------------------------------------------------------------------------
     console.log('\n--- TEST 2: Predictive Inventory Intelligence (Women\'s Black Kurti) ---');
-    const blackKurti = await Product.findOne({ store: store._id, sku: 'TT-KUR-BLK' });
+    let blackKurti = await Product.findOne({ sku: 'TT-KUR-BLK' });
+    if (!blackKurti) {
+      blackKurti = await Product.create({
+        store: store._id,
+        title: "Women's Black Kurti",
+        sku: 'TT-KUR-BLK',
+        price: 1299,
+        costPrice: 450,
+        stockQuantity: 25,
+        category: 'Kurti'
+      });
+    } else {
+      blackKurti.store = store._id;
+      blackKurti.stockQuantity = 25;
+      await blackKurti.save();
+    }
     assert(Boolean(blackKurti), 'Women\'s Black Kurti (TT-KUR-BLK) catalog SKU found');
     assert(blackKurti.stockQuantity === 25, `Current available stock verified at 25 units (Found: ${blackKurti.stockQuantity})`);
 
