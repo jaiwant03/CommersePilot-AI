@@ -2572,31 +2572,138 @@
 }
 
 /* ==========================================================================
-   Automation Engine & Workflows (Luxury Elevation)
+   Automation Engine & Workflows (Premium Luxury Modelled UI)
    ========================================================================== */
+.automation-banner {
+  background: linear-gradient(135deg, rgba(248, 250, 252, 0.98) 0%, rgba(241, 245, 249, 0.98) 100%);
+  border: 1px solid rgba(203, 213, 225, 0.7);
+  border-left: 4px solid #6366F1;
+  border-radius: 18px;
+  padding: 18px 24px;
+  margin-bottom: 24px;
+  box-shadow: 0 4px 16px -2px rgba(15, 23, 42, 0.04);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.automation-banner-left {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  flex: 1;
+  min-width: 320px;
+}
+
+.automation-banner-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #6366F1 0%, #4F46E5 100%);
+  color: #FFFFFF;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.35);
+}
+
+.automation-banner-title {
+  font-size: 15px;
+  font-weight: 750;
+  color: #0F172A;
+  letter-spacing: -0.015em;
+  margin-bottom: 3px;
+}
+
+.automation-banner-desc {
+  font-size: 13px;
+  color: #64748B;
+  line-height: 1.5;
+}
+
+.automation-banner-tags {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.automation-banner-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 11px;
+  border-radius: 999px;
+  background: #FFFFFF;
+  border: 1px solid rgba(203, 213, 225, 0.85);
+  font-size: 11.5px;
+  font-weight: 650;
+  color: #334155;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.03);
+}
+
+/* 4-Box Strict Horizontal Order Grid */
 .automation-workflows-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  grid-template-columns: repeat(4, 1fr);
   gap: 18px;
   margin-bottom: 28px;
 }
 
+@media (max-width: 1200px) {
+  .automation-workflows-grid {
+    grid-template-columns: repeat(4, minmax(250px, 1fr));
+    overflow-x: auto;
+    padding-bottom: 12px;
+    scroll-snap-type: x mandatory;
+  }
+}
+
 .workflow-card {
   background: #FFFFFF;
-  border: 1px solid var(--workspace-border);
-  border-radius: 18px;
+  border: 1px solid rgba(226, 232, 240, 0.9);
+  border-radius: 20px;
   padding: 22px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  transition: all 0.22s ease;
-  box-shadow: var(--workspace-shadow-card);
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.05), 0 1px 3px rgba(15, 23, 42, 0.03);
+  position: relative;
+  overflow: hidden;
+}
+
+.workflow-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3.5px;
+  background: transparent;
+  transition: background 0.25s ease;
 }
 
 .workflow-card:hover {
-  border-color: rgba(2, 132, 199, 0.3);
-  box-shadow: 0 14px 30px -4px rgba(15, 23, 42, 0.08);
-  transform: translateY(-2px);
+  transform: translateY(-3px);
+  box-shadow: 0 16px 36px -6px rgba(15, 23, 42, 0.1), 0 0 0 1px rgba(99, 102, 241, 0.2);
+  border-color: rgba(99, 102, 241, 0.3);
+}
+
+.workflow-card.cod-card:hover::before {
+  background: linear-gradient(90deg, #6366F1, #818CF8);
+}
+.workflow-card.inv-card:hover::before {
+  background: linear-gradient(90deg, #F59E0B, #FBBF24);
+}
+.workflow-card.ndr-card:hover::before {
+  background: linear-gradient(90deg, #0284C7, #38BDF8);
+}
+.workflow-card.rep-card:hover::before {
+  background: linear-gradient(90deg, #10B981, #34D399);
 }
 
 .workflow-card-top {
@@ -2604,7 +2711,7 @@
   align-items: flex-start;
   justify-content: space-between;
   gap: 12px;
-  margin-bottom: 12px;
+  margin-bottom: 14px;
 }
 
 .workflow-icon-box {
@@ -2615,36 +2722,42 @@
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  background: rgba(2, 132, 199, 0.08);
-  color: #0284C7;
-  border: 1px solid rgba(2, 132, 199, 0.15);
+  transition: transform 0.2s ease;
+}
+
+.workflow-card:hover .workflow-icon-box {
+  transform: scale(1.06);
 }
 
 .workflow-title {
   font-size: 15.5px;
   font-weight: 750;
   color: #0F172A;
-  margin-bottom: 4px;
-  letter-spacing: -0.01em;
+  margin-bottom: 6px;
+  letter-spacing: -0.015em;
 }
 
 .workflow-desc {
-  font-size: 12.5px;
+  font-size: 12px;
   color: #64748B;
   line-height: 1.5;
   margin-bottom: 16px;
-  flex-grow: 1;
+  min-height: 54px;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
 .workflow-meta-box {
   background: #F8FAFC;
-  border: 1px solid rgba(226, 232, 240, 0.85);
-  border-radius: 12px;
+  border: 1px solid rgba(226, 232, 240, 0.9);
+  border-radius: 14px;
   padding: 12px 14px;
   font-size: 11.5px;
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 7px;
   margin-bottom: 16px;
 }
 
@@ -2658,12 +2771,14 @@
 .workflow-meta-label {
   color: #64748B;
   font-weight: 550;
+  font-size: 11px;
 }
 
 .workflow-meta-value {
   color: #0F172A;
   font-weight: 700;
   font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
 }
 
 .workflow-btn {
@@ -2672,67 +2787,138 @@
   align-items: center;
   justify-content: center;
   gap: 8px;
-  padding: 9px 14px;
-  font-size: 13px;
-  font-weight: 600;
-  border-radius: 10px;
+  padding: 10px 14px;
+  font-size: 12.5px;
+  font-weight: 650;
+  border-radius: 12px;
   cursor: pointer;
   transition: all 0.2s ease;
-  border: 1px solid rgba(203, 213, 225, 0.9);
+  border: 1px solid rgba(203, 213, 225, 0.85);
   background: #FFFFFF;
   color: #0F172A;
-  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.03);
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
 }
 
 .workflow-btn:hover:not(:disabled) {
-  background: #F8FAFC;
-  border-color: rgba(2, 132, 199, 0.35);
-  color: #0284C7;
+  background: #0F172A;
+  border-color: #0F172A;
+  color: #FFFFFF;
+  box-shadow: 0 4px 14px rgba(15, 23, 42, 0.18);
+  transform: translateY(-1px);
 }
 
 .workflow-btn:disabled {
-  opacity: 0.6;
+  opacity: 0.65;
   cursor: not-allowed;
 }
 
 .status-indicator-badge {
   display: inline-flex;
   align-items: center;
-  gap: 5px;
-  padding: 2.5px 8px;
-  border-radius: 20px;
-  font-size: 11px;
+  gap: 6px;
+  padding: 3px 9px;
+  border-radius: 999px;
+  font-size: 10.5px;
   font-weight: 750;
   text-transform: uppercase;
   letter-spacing: 0.04em;
 }
 
 .status-indicator-badge.connected {
-  background: rgba(16, 185, 129, 0.09);
-  color: #047857;
-  border: 1px solid rgba(16, 185, 129, 0.25);
+  background: rgba(16, 185, 129, 0.1);
+  color: #059669;
+  border: 1px solid rgba(16, 185, 129, 0.28);
 }
 
 .status-indicator-badge.not_configured {
-  background: rgba(245, 158, 11, 0.09);
-  color: #B45309;
-  border: 1px solid rgba(245, 158, 11, 0.25);
+  background: rgba(245, 158, 11, 0.1);
+  color: #D97706;
+  border: 1px solid rgba(245, 158, 11, 0.28);
 }
 
 .status-indicator-badge.failed {
-  background: rgba(239, 68, 68, 0.09);
-  color: #B91C1C;
-  border: 1px solid rgba(239, 68, 68, 0.25);
+  background: rgba(239, 68, 68, 0.1);
+  color: #DC2626;
+  border: 1px solid rgba(239, 68, 68, 0.28);
 }
 
 .status-indicator-badge.running {
-  background: rgba(2, 132, 199, 0.09);
+  background: rgba(2, 132, 199, 0.1);
   color: #0284C7;
-  border: 1px solid rgba(2, 132, 199, 0.25);
+  border: 1px solid rgba(2, 132, 199, 0.28);
+}
+
+.status-dot-pulse {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.status-indicator-badge.connected .status-dot-pulse {
+  background: #10B981;
+  box-shadow: 0 0 6px #10B981;
+}
+
+.status-indicator-badge.not_configured .status-dot-pulse {
+  background: #F59E0B;
+  box-shadow: 0 0 6px #F59E0B;
+}
+
+.status-indicator-badge.failed .status-dot-pulse {
+  background: #EF4444;
+  box-shadow: 0 0 6px #EF4444;
+}
+
+.status-indicator-badge.running .status-dot-pulse {
+  background: #0284C7;
+  box-shadow: 0 0 6px #0284C7;
 }
 
 .mode-badge {
   display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2.5px 8px;
+  border-radius: 6px;
+  font-size: 10.5px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.mode-badge.demo {
+  background: rgba(245, 158, 11, 0.12);
+  color: #B45309;
+  border: 1px solid rgba(245, 158, 11, 0.25);
+}
+
+.mode-badge.live {
+  background: rgba(16, 185, 129, 0.12);
+  color: #047857;
+  border: 1px solid rgba(16, 185, 129, 0.25);
+}
+
+.inspect-pill-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 10px;
+  border-radius: 8px;
+  font-size: 11px;
+  font-weight: 600;
+  background: #F8FAFC;
+  border: 1px solid rgba(203, 213, 225, 0.8);
+  color: #334155;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.inspect-pill-btn:hover {
+  background: #0F172A;
+  border-color: #0F172A;
+  color: #FFFFFF;
+}
   align-items: center;
   gap: 4px;
   padding: 2px 7px;

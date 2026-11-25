@@ -108,16 +108,43 @@ const AutomationsPage = () => {
   };
 
   const getWorkflowBadge = (wf) => {
-    if (!wf) return <span className="status-indicator-badge not_configured">Checking...</span>;
+    if (!wf) {
+      return (
+        <span className="status-indicator-badge not_configured">
+          <span className="status-dot-pulse" />
+          <span>Checking...</span>
+        </span>
+      );
+    }
     switch (wf.status) {
       case 'CONNECTED':
-        return <span className="status-indicator-badge connected"><CheckCircle2 size={11} /> Connected</span>;
+        return (
+          <span className="status-indicator-badge connected">
+            <span className="status-dot-pulse" />
+            <span>Connected</span>
+          </span>
+        );
       case 'RUNNING':
-        return <span className="status-indicator-badge running"><RefreshCw size={11} className="spinning" /> Running</span>;
+        return (
+          <span className="status-indicator-badge running">
+            <RefreshCw size={11} className="spinning" />
+            <span>Running</span>
+          </span>
+        );
       case 'FAILED':
-        return <span className="status-indicator-badge failed"><AlertTriangle size={11} /> Failed</span>;
+        return (
+          <span className="status-indicator-badge failed">
+            <span className="status-dot-pulse" />
+            <span>Failed</span>
+          </span>
+        );
       default:
-        return <span className="status-indicator-badge not_configured"><Clock size={11} /> Not Configured</span>;
+        return (
+          <span className="status-indicator-badge not_configured">
+            <span className="status-dot-pulse" />
+            <span>Not Configured</span>
+          </span>
+        );
     }
   };
 
@@ -192,30 +219,51 @@ const AutomationsPage = () => {
         </div>
       )}
 
-      {/* Hybrid Architecture Notice */}
-      <div className="demo-banner" style={{ background: 'rgba(99, 102, 241, 0.08)', borderColor: 'rgba(99, 102, 241, 0.2)', marginBottom: 'var(--space-6)' }}>
-        <div className="demo-banner-left">
-          <div className="demo-badge-icon" style={{ background: 'var(--gradient-primary)' }}>
+      {/* Dual-Engine Architecture Notice */}
+      <div className="automation-banner">
+        <div className="automation-banner-left">
+          <div className="automation-banner-icon">
             <Zap size={22} />
           </div>
           <div>
-            <div style={{ fontWeight: 700, fontSize: '15px', color: 'var(--color-text-primary)' }}>
+            <div className="automation-banner-title">
               Dual-Engine Automation Support
             </div>
-            <div style={{ fontSize: '13px', color: 'var(--color-text-muted)', marginTop: '2px' }}>
+            <div className="automation-banner-desc">
               When n8n webhooks are configured in your environment, events stream live to your n8n instance. When offline, CommercePilot AI seamlessly executes the exact same deterministic rules, Groq AI risk scoring, and verified email actions in <strong>Simulated Demo Mode</strong>.
             </div>
           </div>
         </div>
+        <div className="automation-banner-tags">
+          <div className="automation-banner-chip">
+            <Cpu size={13} style={{ color: '#6366F1' }} />
+            <span>n8n Webhook Stream</span>
+          </div>
+          <div className="automation-banner-chip">
+            <ShieldCheck size={13} style={{ color: '#059669' }} />
+            <span>Deterministic Rules</span>
+          </div>
+          <div className="automation-banner-chip">
+            <Sparkles size={13} style={{ color: '#D97706' }} />
+            <span>Groq AI Fallback</span>
+          </div>
+        </div>
       </div>
 
-      {/* 4 Core Workflow Cards Grid */}
+      {/* 4 Core Workflow Cards Grid (Strict Horizontal Row) */}
       <div className="automation-workflows-grid">
         {/* Workflow 1: COD Verification */}
-        <div className="workflow-card">
+        <div className="workflow-card cod-card">
           <div>
             <div className="workflow-card-top">
-              <div className="workflow-icon-box" style={{ background: 'rgba(99, 102, 241, 0.15)', color: '#818CF8' }}>
+              <div
+                className="workflow-icon-box"
+                style={{
+                  background: 'linear-gradient(135deg, rgba(99, 102, 241, 0.16) 0%, rgba(99, 102, 241, 0.05) 100%)',
+                  color: '#6366F1',
+                  border: '1px solid rgba(99, 102, 241, 0.25)'
+                }}
+              >
                 <ShieldCheck size={22} />
               </div>
               {getWorkflowBadge(statuses?.orderVerification)}
@@ -239,7 +287,7 @@ const AutomationsPage = () => {
               </div>
               <div className="workflow-meta-row">
                 <span className="workflow-meta-label">Channel:</span>
-                <span className="workflow-meta-value" style={{ color: '#A5B4FC' }}>Buyer Email</span>
+                <span className="workflow-meta-value" style={{ color: '#6366F1' }}>Buyer Email</span>
               </div>
             </div>
             <button
@@ -263,10 +311,17 @@ const AutomationsPage = () => {
         </div>
 
         {/* Workflow 2: Inventory Intelligence */}
-        <div className="workflow-card">
+        <div className="workflow-card inv-card">
           <div>
             <div className="workflow-card-top">
-              <div className="workflow-icon-box" style={{ background: 'rgba(245, 158, 11, 0.15)', color: '#F59E0B' }}>
+              <div
+                className="workflow-icon-box"
+                style={{
+                  background: 'linear-gradient(135deg, rgba(245, 158, 11, 0.16) 0%, rgba(245, 158, 11, 0.05) 100%)',
+                  color: '#D97706',
+                  border: '1px solid rgba(245, 158, 11, 0.25)'
+                }}
+              >
                 <Package size={22} />
               </div>
               {getWorkflowBadge(statuses?.inventoryIntelligence)}
@@ -290,7 +345,7 @@ const AutomationsPage = () => {
               </div>
               <div className="workflow-meta-row">
                 <span className="workflow-meta-label">Channel:</span>
-                <span className="workflow-meta-value" style={{ color: '#FBBF24' }}>Merchant Approval</span>
+                <span className="workflow-meta-value" style={{ color: '#D97706' }}>Merchant Approval</span>
               </div>
             </div>
             <button
@@ -314,10 +369,17 @@ const AutomationsPage = () => {
         </div>
 
         {/* Workflow 3: Delivery Recovery */}
-        <div className="workflow-card">
+        <div className="workflow-card ndr-card">
           <div>
             <div className="workflow-card-top">
-              <div className="workflow-icon-box" style={{ background: 'rgba(56, 189, 248, 0.15)', color: '#38BDF8' }}>
+              <div
+                className="workflow-icon-box"
+                style={{
+                  background: 'linear-gradient(135deg, rgba(2, 132, 199, 0.16) 0%, rgba(2, 132, 199, 0.05) 100%)',
+                  color: '#0284C7',
+                  border: '1px solid rgba(2, 132, 199, 0.25)'
+                }}
+              >
                 <Truck size={22} />
               </div>
               {getWorkflowBadge(statuses?.deliveryRecovery)}
@@ -341,7 +403,7 @@ const AutomationsPage = () => {
               </div>
               <div className="workflow-meta-row">
                 <span className="workflow-meta-label">Channel:</span>
-                <span className="workflow-meta-value" style={{ color: '#38BDF8' }}>Interactive Email</span>
+                <span className="workflow-meta-value" style={{ color: '#0284C7' }}>Interactive Email</span>
               </div>
             </div>
             <button
@@ -365,10 +427,17 @@ const AutomationsPage = () => {
         </div>
 
         {/* Workflow 4: Daily AI Business Report */}
-        <div className="workflow-card">
+        <div className="workflow-card rep-card">
           <div>
             <div className="workflow-card-top">
-              <div className="workflow-icon-box" style={{ background: 'rgba(16, 185, 129, 0.15)', color: '#10B981' }}>
+              <div
+                className="workflow-icon-box"
+                style={{
+                  background: 'linear-gradient(135deg, rgba(16, 185, 129, 0.16) 0%, rgba(16, 185, 129, 0.05) 100%)',
+                  color: '#059669',
+                  border: '1px solid rgba(16, 185, 129, 0.25)'
+                }}
+              >
                 <FileText size={22} />
               </div>
               {getWorkflowBadge(statuses?.dailyReport)}
@@ -392,7 +461,7 @@ const AutomationsPage = () => {
               </div>
               <div className="workflow-meta-row">
                 <span className="workflow-meta-label">Channel:</span>
-                <span className="workflow-meta-value" style={{ color: '#34D399' }}>Owner Email</span>
+                <span className="workflow-meta-value" style={{ color: '#059669' }}>Owner Email</span>
               </div>
             </div>
             <button
