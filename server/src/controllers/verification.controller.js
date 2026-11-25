@@ -5,6 +5,8 @@ const InventoryMovement = require('../models/InventoryMovement.model');
 const Delivery = require('../models/Delivery.model');
 const PurchaseOrder = require('../models/PurchaseOrder.model');
 const Store = require('../models/Store.model');
+const User = require('../models/User.model');
+const config = require('../config/env');
 const inventoryAutomationService = require('../services/inventoryAutomationService');
 const deliveryAutomationService = require('../services/deliveryAutomationService');
 const emailService = require('../services/emailService');
@@ -75,6 +77,8 @@ const confirmOrder = async (req, res, next) => {
     }
 
     const store = await Store.findById(tokenDoc.store);
+    const ownerUser = store?.owner ? await User.findById(store.owner).select('email').lean() : null;
+    const sellerEmail = store?.settings?.alertEmail || store?.details?.supportEmail || ownerUser?.email || config.smtp.user;
 
     if (action === 'cancel') {
       order.orderStatus = 'CANCELLED';
@@ -125,12 +129,12 @@ const confirmOrder = async (req, res, next) => {
       await tokenDoc.save();
 
       // Notify seller
-      const sellerEmail = store?.settings?.alertEmail || store?.details?.supportEmail;
       if (sellerEmail) {
         await emailService.dispatchEmail({
           to: sellerEmail,
           subject: `Order #${order.orderNumber} Cancelled by Customer via Verification Link`,
           html: `<p>Customer <strong>${order.customer?.fullName}</strong> cancelled COD Order #${order.orderNumber}. Inventory hold released.</p>`,
+          senderName: store?.name || 'CommercePilot AI',
           eventId: `order-cancel-${order._id}`
         });
       }
@@ -157,8 +161,16 @@ const confirmOrder = async (req, res, next) => {
     tokenDoc.responseValue = 'CONFIRMED_BY_CUSTOMER';
     await tokenDoc.save();
 
+    // Send confirmation receipt to buyer if email exists
+    if (order.customer?.email) {
+      await emailService.sendOrderConfirmationEmail({
+        order,
+        customer: order.customer,
+        store: store || { name: 'CommercePilot Store' }
+      });
+    }
+
     // Notify seller
-    const sellerEmail = store?.settings?.alertEmail || store?.details?.supportEmail;
     if (sellerEmail) {
       await emailService.dispatchEmail({
         to: sellerEmail,
@@ -170,6 +182,7 @@ const confirmOrder = async (req, res, next) => {
             <p>Verification status cleared. The parcel is now ready for packaging and courier pickup.</p>
           </div>
         `,
+        senderName: store?.name || 'CommercePilot AI',
         eventId: `order-confirm-seller-${order._id}`
       });
     }

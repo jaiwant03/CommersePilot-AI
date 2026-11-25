@@ -79,6 +79,13 @@ const register = async (req, res, next) => {
       name: (businessName || 'My D2C Store').trim(),
       businessType: businessType ? businessType.trim() : 'D2C Brand',
       country: country ? country.trim() : 'India',
+      details: {
+        supportEmail: normalizedEmail,
+        supportPhone: phoneNumber ? phoneNumber.trim() : ''
+      },
+      settings: {
+        alertEmail: normalizedEmail
+      },
       onboardingStep: 7,
       onboardingCompleted: true
     });

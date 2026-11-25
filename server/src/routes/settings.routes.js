@@ -8,5 +8,6 @@ router.use(authenticate);
 router.get('/', settingsController.getSettings);
 router.put('/', settingsController.updateSettings);
 router.post('/import-data', settingsController.importStoreData);
+router.post('/test-email', settingsController.sendTestEmail);
 
 module.exports = router;

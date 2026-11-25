@@ -3,14 +3,16 @@ const Product = require('../models/Product.model');
 const Order = require('../models/Order.model');
 const Customer = require('../models/Customer.model');
 const InventoryMovement = require('../models/InventoryMovement.model');
+const emailService = require('../services/emailService');
 
 /**
- * Get store settings
+ * Get store settings & live SMTP health
  */
 const getSettings = async (req, res, next) => {
   try {
-    const store = await Store.findOne({ owner: req.user._id });
-    return res.status(200).json({ success: true, store });
+    const store = (req.store?._id ? await Store.findById(req.store._id) : null) || await Store.findOne({ owner: req.user._id });
+    const smtpStatus = await emailService.verifySmtpConnection();
+    return res.status(200).json({ success: true, store, smtpStatus });
   } catch (error) {
     next(error);
   }
@@ -244,8 +246,49 @@ const importStoreData = async (req, res, next) => {
   }
 };
 
+/**
+ * Send live SMTP test email to verify delivery for any entered email address
+ */
+const sendTestEmail = async (req, res, next) => {
+  try {
+    const store = (req.store?._id ? await Store.findById(req.store._id) : null) || await Store.findOne({ owner: req.user._id });
+    const targetEmail = (req.body?.email || store?.settings?.alertEmail || req.user?.email || '').trim();
+
+    if (!targetEmail || !targetEmail.includes('@')) {
+      return res.status(400).json({
+        success: false,
+        message: 'Please provide a valid email address to send a test email.'
+      });
+    }
+
+    const result = await emailService.sendTestEmail({
+      to: targetEmail,
+      storeName: store?.name || 'CommercePilot AI Store'
+    });
+
+    if (!result.success) {
+      return res.status(502).json({
+        success: false,
+        message: `SMTP dispatch failed for ${targetEmail}: ${result.error || result.reason || 'Unknown error'}`,
+        result
+      });
+    }
+
+    return res.status(200).json({
+      success: true,
+      message: result.isDemoMode
+        ? `Simulated test email logged for ${targetEmail} (SMTP credentials not configured).`
+        : `Live test email successfully dispatched to ${targetEmail}!`,
+      result
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
 module.exports = {
   getSettings,
   updateSettings,
-  importStoreData
+  importStoreData,
+  sendTestEmail
 };
