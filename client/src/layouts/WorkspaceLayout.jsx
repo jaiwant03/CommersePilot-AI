@@ -261,7 +261,7 @@ const WorkspaceLayout = () => {
             </button>
 
             <div className="breadcrumbs">
-              <span>CommercePilot</span>
+              <span className="breadcrumb-prefix">CommercePilot</span>
               <span className="breadcrumb-sep">/</span>
               <span className="breadcrumb-current">{pageTitle}</span>
             </div>
@@ -270,8 +270,8 @@ const WorkspaceLayout = () => {
           <div className="topbar-right">
             {/* Store Switcher Pill */}
             <div className="store-switcher-pill" title={`Connected Channel: ${storeChannel}`}>
-              <Store size={14} style={{ color: '#818CF8' }} />
-              <span>{storeName}</span>
+              <Store size={14} style={{ color: '#818CF8', flexShrink: 0 }} />
+              <span className="store-name-text">{storeName}</span>
               <span className="store-badge">{storeChannel}</span>
             </div>
 

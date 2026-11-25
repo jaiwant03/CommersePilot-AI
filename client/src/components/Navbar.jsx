@@ -138,7 +138,7 @@ const Navbar = () => {
         {/* Action CTAs */}
         <div className="nav-actions">
           {isAuthenticated ? (
-            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+            <div className="nav-auth-desktop">
               <Link to="/app/overview" className="nav-btn-open-app">
                 <span>Open App</span>
                 <ArrowRight size={13} />
@@ -157,7 +157,7 @@ const Navbar = () => {
               </button>
             </div>
           ) : (
-            <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+            <div className="nav-auth-desktop">
               <Link to="/login" className="modelled-nav-btn-white">
                 Login
               </Link>

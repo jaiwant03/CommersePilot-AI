@@ -269,6 +269,12 @@ body {
   gap: var(--space-3);
 }
 
+.nav-auth-desktop {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
 .mobile-toggle {
   display: none;
   width: 38px;
@@ -288,19 +294,21 @@ body {
   left: 0;
   right: 0;
   bottom: 0;
-  background: var(--color-bg-secondary);
-  padding: var(--space-6);
+  background: rgba(255, 255, 255, 0.98);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  padding: 24px 20px;
   display: flex;
   flex-direction: column;
-  gap: var(--space-6);
+  gap: 20px;
   transform: translateY(-100%);
   opacity: 0;
   pointer-events: none;
-  transition: transform var(--transition-smooth), opacity var(--transition-smooth);
-  z-index: var(--z-drawer);
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.25s ease;
+  z-index: 9999;
   overflow-y: auto;
   border-bottom: 1px solid var(--border-light);
-  box-shadow: var(--shadow-lg);
+  box-shadow: 0 20px 40px rgba(15, 23, 42, 0.12);
 }
 
 .mobile-drawer.open {
@@ -312,31 +320,34 @@ body {
 .mobile-nav-links {
   display: flex;
   flex-direction: column;
-  gap: var(--space-1);
+  gap: 6px;
 }
 
 .mobile-nav-link {
-  font-size: var(--font-size-md);
-  font-weight: var(--font-weight-medium);
-  color: var(--color-text-secondary);
-  padding: var(--space-3) var(--space-4);
-  border-radius: var(--radius-md);
-  transition: background var(--transition-fast);
+  font-size: 16px;
+  font-weight: 600;
+  color: #334155;
+  padding: 12px 16px;
+  border-radius: 12px;
+  transition: all 0.2s ease;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
 }
 
 .mobile-nav-link:hover,
 .mobile-nav-link.active {
-  background: var(--color-bg-secondary);
-  color: var(--color-primary);
+  background: rgba(2, 132, 199, 0.08);
+  color: #0284C7;
 }
 
 .mobile-nav-actions {
   display: flex;
   flex-direction: column;
-  gap: var(--space-3);
+  gap: 10px;
   margin-top: auto;
-  padding-top: var(--space-6);
-  border-top: 1px solid var(--border-subtle);
+  padding-top: 20px;
+  border-top: 1px solid rgba(226, 232, 240, 0.9);
 }
 
 /* ==========================================================================
@@ -2450,12 +2461,18 @@ body {
 
 @media (max-width: 768px) {
   .nav-menu,
+  .nav-auth-desktop {
+    display: none !important;
+  }
+
   .nav-actions {
-    display: none;
+    display: flex !important;
+    align-items: center;
+    gap: 8px;
   }
 
   .mobile-toggle {
-    display: flex;
+    display: flex !important;
   }
 
   .problem-grid,
