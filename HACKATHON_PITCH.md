@@ -89,48 +89,6 @@ The project includes a React client and an Express API backed by MongoDB. AI, n8
 - **Practical AI:** the copilot is grounded in store records and calculations, with guardrails around its responses.
 - **Demo-friendly architecture:** optional n8n and email configuration lets the prototype demonstrate workflows without requiring every external integration to be live.
 
-## 8. Technology overview
-
-| Layer | Technology | Role |
-|---|---|---|
-| Web application | React 19, Vite, React Router | Public product site and authenticated merchant workspace |
-| UI and charts | Normal CSS, Lucide React, Recharts | Responsive navigation, operational views, and visual analytics |
-| API | Node.js, Express | Authentication and ecommerce operations endpoints |
-| Data | MongoDB, Mongoose | Stores users, stores, products, orders, deliveries, and workflow records |
-| AI | Groq SDK, when configured | Generates explanations for data-grounded operational questions |
-| Workflow orchestration | n8n webhooks, optional | Connects operational events to external automation flows |
-| Customer actions | Email / SMTP, when configured | Delivers verification, approval, or rescheduling links |
-
-The backend uses authenticated requests and store-scoped data access. Production deployments should configure secrets and external services securely; never put API keys in the frontend.
-
-## 9. Running the project for a demo
-
-### Requirements
-
-- Node.js and npm.
-- A MongoDB instance, local or hosted.
-- Optional: a Groq API key, n8n webhook URLs, and SMTP credentials for live AI, workflow, and email integrations.
-
-### Start locally
-
-1. Install dependencies from the repository root:
-
-   ```bash
-   npm run install:all
-   ```
-
-2. Configure `server/.env` with the MongoDB URI, JWT secret, and client URL. Add Groq, n8n, and SMTP settings only if the demo needs those live integrations.
-3. Configure `client/.env` with the API base URL, normally `http://localhost:5000/api`.
-4. Start both applications:
-
-   ```bash
-   npm run dev
-   ```
-
-5. Open the Vite client at `http://localhost:5173`. The Express API normally runs at `http://localhost:5000`.
-6. Register or sign in with a demo account. From **Overview**, use the demo-data action only with an isolated demo database.
-
-Keep all real credentials out of recordings and screenshots. If a third-party service is not configured, present its workflow as a simulation rather than a live integration.
 
 ## 10. Business model and go-to-market
 
@@ -162,26 +120,6 @@ Do not claim results until measured. Track:
 - Check that the selected demo route works before presenting.
 - Use simulation mode for workflow triggers unless live n8n and email have been deliberately configured for the demo.
 - Avoid showing real customer personal information or sending real customer emails.
-
-### Timed walkthrough and spoken script
-
-| Time | Screen / action | Presenter narration |
-|---|---|---|
-| **0:00–0:25** | **Home:** open the landing page and introduce the merchant problem. | “Growing an ecommerce brand is not just about getting orders. Teams also need to catch risky COD orders, replenish stock in time, and respond when delivery fails. CommercePilot AI brings those operational decisions into one place.” |
-| **0:25–0:45** | **Product:** move to the product walkthrough. | “The product brings order review, inventory planning, delivery recovery, and operational intelligence together. The goal is to move from seeing a problem to knowing what to do next.” |
-| **0:45–1:05** | **Features:** highlight the main capability groups. | “The platform checks COD risk, estimates stock runway, supports delivery follow-up, and gives merchants analytics and a data-grounded copilot. Each feature focuses on a practical operational bottleneck.” |
-| **1:05–1:25** | **How It Works:** summarize the data-to-action flow. | “Store data is evaluated with explainable rules and calculations. The merchant gets a clear signal and can review the next action; email or n8n automation can be used when configured.” |
-| **1:25–1:40** | **Pricing:** show the proposed plans, then transition to the workspace. | “The public site presents Starter, Growth, and Professional plans for different operating needs. Now let’s move from the product story into the merchant workspace.” |
-| **1:40–2:05** | Sign in and open **Overview**. | “The Overview gives the merchant a starting point: order and revenue indicators, verification needs, low-stock signals, delivery issues, recent orders, and inventory alerts. The team can start with the exceptions that need attention.” |
-| **2:05–2:35** | Open **Orders** and select a representative COD order. | “For COD, CommercePilot applies explainable checks such as basket value, address completeness, phone format, and available customer history. It helps identify orders that may deserve confirmation before dispatch.” |
-| **2:35–3:05** | Open **Inventory** and show stock or forecast details. | “Using recent sales and current stock, the system estimates daily demand, stock runway, and reorder points. The merchant can see which products need attention and review replenishment actions.” |
-| **3:05–3:25** | Open **Deliveries** and show an exception or recovery view. | “When a delivery exception is recorded, the recovery workflow can prompt timely follow-up and a customer rescheduling action. It can run through configured webhooks or in simulation mode.” |
-| **3:25–3:50** | Open **Analytics** and show the revenue, orders, payment, or delivery charts. | “Analytics connect daily operations to business performance: order trends, payment mix, delivery outcomes, and product economics. This helps the merchant see where attention is needed.” |
-| **3:50–4:25** | Open **AI Assistant** and ask: “Which products should I reorder?” | “The copilot answers a natural-language question using the authenticated store’s data and platform calculations. It is designed to explain operational context—not fabricate numbers—and turn a question into a practical next step.” |
-| **4:25–4:45** | Briefly open **Automations** and identify the remaining sidebar destinations in screenshot 2. | “Automations exposes workflow triggers and execution history. The sidebar keeps core operations—Overview, Orders, Inventory, Deliveries—separate from intelligence tools—Analytics, AI Assistant, Automations—and Store Settings.” |
-| **4:45–5:00** | Return to Overview or the product Home page. | “CommercePilot AI helps a lean ecommerce team see risk earlier and act with more context. Our next step is to pilot with merchants and measure fewer preventable failures, faster recovery, and less manual operational work. Thank you.” |
-
-**Total: 5:00.** To keep the requested public-site order and stay within time, give each of the five sections one concise explanation, then move directly into the workspace.
 
 ## 12. Suggested judge questions
 
