@@ -269,7 +269,11 @@ const WorkspaceLayout = () => {
 
           <div className="topbar-right">
             {/* Store Switcher Pill */}
-            <div className="store-switcher-pill" title={`Connected Channel: ${storeChannel}`}>
+            <div
+              className="store-switcher-pill"
+              title={`Store: ${storeName} • Connected Channel: ${storeChannel}`}
+              aria-label={`Store: ${storeName}, connected channel: ${storeChannel}`}
+            >
               <Store size={14} style={{ color: '#818CF8', flexShrink: 0 }} />
               <span className="store-name-text">{storeName}</span>
               <span className="store-badge">{storeChannel}</span>

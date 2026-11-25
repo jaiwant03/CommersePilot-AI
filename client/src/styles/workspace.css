@@ -3296,6 +3296,29 @@
     gap: 6px;
   }
 
+  @media (max-width: 360px) {
+    .workspace-topbar {
+      padding: 0 6px;
+    }
+
+    .topbar-left {
+      gap: 8px;
+    }
+
+    .topbar-right {
+      gap: 4px;
+    }
+
+    .store-switcher-pill {
+      padding: 4px 6px;
+      gap: 4px;
+    }
+
+    .store-name-text {
+      display: none;
+    }
+  }
+
   .automation-banner {
     padding: 14px;
   }
