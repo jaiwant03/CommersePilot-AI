@@ -126,26 +126,36 @@ const sendOrderConfirmationEmail = async ({ order, customer, store }) => {
   const storeName = store?.name || 'CommercePilot Store';
   const orderNumber = order.orderNumber;
   const total = (order.totalAmount || 0).toLocaleString('en-IN');
+  const itemsHtml = (order.items || []).map(it => `
+    <tr>
+      <td style="padding: 6px 0; color: #E2E8F0; border-bottom: 1px solid #334155;">${it.title || 'Product'} (x${it.quantity || 1})</td>
+      <td style="padding: 6px 0; color: #10B981; text-align: right; border-bottom: 1px solid #334155;">₹${(it.totalPrice || (it.unitPrice || 0) * (it.quantity || 1)).toLocaleString('en-IN')}</td>
+    </tr>
+  `).join('');
 
   const subject = `Order Confirmed: #${orderNumber} from ${storeName}`;
   const html = `
     <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; max-width: 600px; margin: 0 auto; padding: 24px; background: #0F172A; color: #E2E8F0; border-radius: 12px; border: 1px solid #334155;">
-      <h2 style="color: #6366F1; margin-top: 0;">Order Confirmed!</h2>
-      <p style="font-size: 15px; color: #CBD5E1;">Hi ${customer.fullName || 'Customer'},</p>
+      <div style="display: inline-block; padding: 4px 10px; background: rgba(16, 185, 129, 0.18); border-radius: 20px; color: #34D399; font-size: 12px; font-weight: 600; margin-bottom: 12px;">
+        Order Confirmed
+      </div>
+      <h2 style="color: #F8FAFC; margin-top: 0;">Thank You for Your Order!</h2>
+      <p style="font-size: 15px; color: #CBD5E1;">Hi ${customer?.fullName || customer?.name || order.customer?.fullName || 'Customer'},</p>
       <p style="font-size: 14px; color: #94A3B8; line-height: 1.6;">
-        Thank you for shopping with <strong>${storeName}</strong>. Your order <strong>#${orderNumber}</strong> has been received and confirmed.
+        Thank you for shopping with <strong>${storeName}</strong>. Your order <strong>#${orderNumber}</strong> has been confirmed and is being prepared for dispatch.
       </p>
       <div style="background: #1E293B; padding: 16px; border-radius: 8px; margin: 20px 0; border: 1px solid #334155;">
+        ${itemsHtml ? `<table style="width: 100%; border-collapse: collapse; margin-bottom: 12px; font-size: 13px;">${itemsHtml}</table>` : ''}
         <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
           <span style="color: #94A3B8;">Total Amount:</span>
           <strong style="color: #10B981;">₹${total} (${order.paymentMethod})</strong>
         </div>
         <div style="display: flex; justify-content: space-between;">
           <span style="color: #94A3B8;">Shipping To:</span>
-          <span style="color: #E2E8F0;">${order.customer?.address?.city || 'India'}</span>
+          <span style="color: #E2E8F0;">${order.customer?.address?.street || ''}, ${order.customer?.address?.city || 'India'} ${order.customer?.address?.pincode || ''}</span>
         </div>
       </div>
-      <p style="font-size: 12px; color: #64748B;">This is an automated notification from CommercePilot AI.</p>
+      <p style="font-size: 12px; color: #64748B;">This is an automated confirmation from ${storeName} powered by CommercePilot AI.</p>
     </div>
   `;
 
@@ -153,6 +163,7 @@ const sendOrderConfirmationEmail = async ({ order, customer, store }) => {
     to: customerEmail,
     subject,
     html,
+    senderName: storeName,
     eventId: `order-conf-${order._id}`
   });
 };
@@ -424,16 +435,100 @@ const sendDailyBusinessReportEmail = async ({ store, sellerEmail, reportData, ai
     to: sellerEmail,
     subject,
     html,
+    senderName: storeName,
     eventId: `daily-report-${store._id}-${new Date().toISOString().split('T')[0]}`
+  });
+};
+
+/**
+ * 7. Order Lifecycle Status Update Email
+ */
+const sendOrderStatusEmail = async ({ order, customer, store, status, note }) => {
+  const customerEmail = customer?.email || order.customer?.email;
+  if (!customerEmail) return { success: false, reason: 'No customer email provided' };
+
+  const storeName = store?.name || 'CommercePilot Store';
+  const orderNumber = order.orderNumber;
+  const statusLabels = {
+    CONFIRMED: { label: 'Order Confirmed', color: '#10B981', desc: 'Your order is confirmed and being packed for dispatch.' },
+    PROCESSING: { label: 'Preparing Shipment', color: '#6366F1', desc: 'Your items are packed and awaiting courier pickup.' },
+    DISPATCHED: { label: 'Order Dispatched', color: '#38BDF8', desc: 'Great news! Your order has been handed over to our courier partner.' },
+    SHIPPED: { label: 'Order Shipped', color: '#38BDF8', desc: 'Your parcel is on the way to your city hub.' },
+    OUT_FOR_DELIVERY: { label: 'Out for Delivery', color: '#F59E0B', desc: 'Our delivery partner is out for doorstep delivery today.' },
+    DELIVERED: { label: 'Order Delivered', color: '#10B981', desc: 'Your parcel has been delivered. Thank you for shopping with us!' },
+    CANCELLED: { label: 'Order Cancelled', color: '#EF4444', desc: 'Your order has been cancelled as updated.' }
+  };
+
+  const info = statusLabels[status] || {
+    label: `Order Update: ${status}`,
+    color: '#6366F1',
+    desc: note || `Your order status is now ${status}.`
+  };
+
+  const subject = `${info.label}: #${orderNumber} (${storeName})`;
+  const html = `
+    <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; max-width: 600px; margin: 0 auto; padding: 24px; background: #0F172A; color: #E2E8F0; border-radius: 12px; border: 1px solid #334155;">
+      <div style="display: inline-block; padding: 4px 10px; background: rgba(99, 102, 241, 0.2); border-radius: 20px; color: ${info.color}; font-size: 12px; font-weight: 600; margin-bottom: 12px;">
+        ${info.label}
+      </div>
+      <h2 style="color: #F8FAFC; margin-top: 0;">Order #${orderNumber} Update</h2>
+      <p style="font-size: 14px; color: #CBD5E1;">Hi ${customer?.fullName || customer?.name || order.customer?.fullName || 'Customer'},</p>
+      <p style="font-size: 14px; color: #94A3B8; line-height: 1.6;">${info.desc}</p>
+      ${note ? `<p style="font-size: 13px; color: #CBD5E1; background: #1E293B; padding: 12px; border-radius: 8px; border: 1px solid #334155;"><strong>Note:</strong> ${note}</p>` : ''}
+      <p style="font-size: 12px; color: #64748B; margin-top: 20px;">Total Amount: ₹${(order.totalAmount || 0).toLocaleString('en-IN')} (${order.paymentMethod}) • ${storeName}</p>
+    </div>
+  `;
+
+  return dispatchEmail({
+    to: customerEmail,
+    subject,
+    html,
+    senderName: storeName,
+    eventId: `order-status-${order._id}-${status}`
+  });
+};
+
+/**
+ * 8. SMTP Test & Verification Email
+ */
+const sendTestEmail = async ({ to, storeName = 'CommercePilot AI Store' }) => {
+  const smtpHealth = await verifySmtpConnection();
+  const subject = `✓ SMTP Email Automation Active — ${storeName}`;
+  const html = `
+    <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; max-width: 600px; margin: 0 auto; padding: 24px; background: #0F172A; color: #E2E8F0; border-radius: 12px; border: 1px solid #334155;">
+      <div style="display: inline-block; padding: 4px 10px; background: rgba(16, 185, 129, 0.2); border-radius: 20px; color: #34D399; font-size: 12px; font-weight: 600; margin-bottom: 12px;">
+        Live SMTP Verified
+      </div>
+      <h2 style="color: #F8FAFC; margin-top: 0;">Email Automation Connected!</h2>
+      <p style="font-size: 14px; color: #CBD5E1; line-height: 1.6;">
+        This is a live test email from <strong>${storeName}</strong> via CommercePilot AI. Your SMTP server (${config.smtp.host || 'Configured Relay'}) is working cleanly.
+      </p>
+      <div style="background: #1E293B; padding: 14px; border-radius: 8px; border: 1px solid #334155; font-size: 12px; color: #94A3B8;">
+        <div><strong>Active Mode:</strong> ${smtpHealth.mode}</div>
+        <div><strong>Timestamp:</strong> ${new Date().toLocaleString('en-IN')}</div>
+      </div>
+      <p style="font-size: 11px; color: #64748B; margin-top: 20px;">Automated COD verifications, order confirmations, NDR delivery links, and daily AI briefings are active.</p>
+    </div>
+  `;
+
+  return dispatchEmail({
+    to,
+    subject,
+    html,
+    senderName: storeName,
+    eventId: `smtp-test-${Date.now()}`
   });
 };
 
 module.exports = {
   dispatchEmail,
+  verifySmtpConnection,
   sendOrderConfirmationEmail,
   sendCodVerificationEmail,
   sendDeliveryRecoveryEmail,
   sendSupplierPurchaseOrderApprovalEmail,
   sendSupplierPurchaseOrderEmail,
-  sendDailyBusinessReportEmail
+  sendDailyBusinessReportEmail,
+  sendOrderStatusEmail,
+  sendTestEmail
 };
