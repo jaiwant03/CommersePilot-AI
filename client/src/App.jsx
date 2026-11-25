@@ -41,7 +41,7 @@ function AppContent() {
   const { isLoading } = useAuth();
 
   if (isLoading) {
-    return <LoadingScreen message="Launching CommercePilot AI operations..." />;
+    return <LoadingScreen />;
   }
 
   return (

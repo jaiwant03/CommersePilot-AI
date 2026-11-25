@@ -11,7 +11,7 @@ export const ProtectedRoute = ({ children, requireOnboarded = false }) => {
   const location = useLocation();
 
   if (isLoading) {
-    return <LoadingScreen message="Accessing autonomous operations console..." />;
+    return <LoadingScreen />;
   }
 
   // Not logged in -> redirect to login
@@ -34,7 +34,7 @@ export const PublicOnlyRoute = ({ children }) => {
   const { isAuthenticated, isLoading } = useAuth();
 
   if (isLoading) {
-    return <LoadingScreen message="Checking session credentials..." />;
+    return <LoadingScreen />;
   }
 
   if (isAuthenticated) {
