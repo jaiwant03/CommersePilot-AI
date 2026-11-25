@@ -1,42 +1,22 @@
-const nodemailer = require('nodemailer');
+const emailService = require('./emailService');
 const config = require('../config/env');
 
-let transporter = null;
-
-if (config.smtp.host && config.smtp.user) {
-  transporter = nodemailer.createTransport({
-    host: config.smtp.host,
-    port: config.smtp.port,
-    secure: config.smtp.port === 465,
-    auth: {
-      user: config.smtp.user,
-      pass: config.smtp.password
-    }
-  });
-}
-
 /**
- * Send transactional email notifications
+ * Send transactional email notifications using unified hardened SMTP dispatcher
  */
 const sendEmail = async ({ to, subject, html, text }) => {
-  if (!transporter) {
-    console.log(`\n📧 [Email Mock Service] Simulating Email Send:`);
-    console.log(`   To: ${to}`);
-    console.log(`   Subject: ${subject}`);
-    console.log(`   Text: ${text || 'N/A'}\n`);
-    return { skipped: true, reason: 'SMTP_SIMULATED_DEV' };
-  }
-
-  const mailOptions = {
-    from: config.smtp.from,
+  const res = await emailService.dispatchEmail({
     to,
     subject,
+    html,
     text,
-    html
-  };
+    senderName: 'CommercePilot AI'
+  });
 
-  const info = await transporter.sendMail(mailOptions);
-  return { success: true, messageId: info.messageId };
+  if (!res.success && !config.smtp.host) {
+    return { skipped: true, reason: 'SMTP_SIMULATED_DEV' };
+  }
+  return res;
 };
 
 /**
@@ -86,7 +66,6 @@ const sendPasswordResetEmail = async ({ to, token, name }) => {
 };
 
 module.exports = {
-  transporter,
   sendEmail,
   sendVerificationEmail,
   sendPasswordResetEmail

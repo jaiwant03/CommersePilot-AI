@@ -44,12 +44,34 @@ const getTransporter = () => {
 /**
  * Base email dispatcher with idempotency / deduplication tracking
  */
-const dispatchEmail = async ({ to, subject, html, text, eventId }) => {
+const dispatchEmail = async ({ to, subject, html, text, eventId, senderName = 'CommercePilot AI' }) => {
+  if (!to || !String(to).trim() || !String(to).includes('@')) {
+    return {
+      success: false,
+      reason: 'No valid recipient email address provided',
+      isDemoMode: false
+    };
+  }
+
+  const recipient = String(to).trim();
+
   try {
     const client = getTransporter();
+    const smtpUser = config.smtp.user;
+    const configuredFrom = config.smtp.from || 'no-reply@commercepilot.ai';
+
+    // Use authenticated SMTP user address in From header for Gmail/SMTP compliance
+    // (avoids SPF/DMARC drops when EMAIL_FROM uses an unverified domain)
+    const smtpUserIsEmail = smtpUser && smtpUser.includes('@');
+    const isGmail = (config.smtp.host || '').toLowerCase().includes('gmail');
+    const fromEmail = (smtpUserIsEmail && (isGmail || configuredFrom.includes('commercepilot.ai')))
+      ? smtpUser
+      : configuredFrom;
+
     const mailOptions = {
-      from: `"${config.smtp.from.split('@')[0]}" <${config.smtp.from}>`,
-      to,
+      from: `"${senderName}" <${fromEmail}>`,
+      replyTo: configuredFrom !== fromEmail ? configuredFrom : undefined,
+      to: recipient,
       subject,
       html,
       text: text || html.replace(/<[^>]*>?/gm, ''),
@@ -57,18 +79,40 @@ const dispatchEmail = async ({ to, subject, html, text, eventId }) => {
     };
 
     const result = await client.sendMail(mailOptions);
+    console.log(`[Email Service] Dispatched "${subject}" -> ${recipient} (MessageId: ${result.messageId})`);
     return {
       success: true,
       messageId: result.messageId,
+      recipient,
       isDemoMode: Boolean(result.isDemoMode)
     };
   } catch (error) {
-    console.error(`[Email Service Error] Failed to send email to ${to}:`, error.message);
+    console.error(`[Email Service Error] Failed to send email to ${recipient}:`, error.message);
     return {
       success: false,
+      recipient,
       error: error.message,
       isDemoMode: false
     };
+  }
+};
+
+/**
+ * Verify active SMTP connection health
+ */
+const verifySmtpConnection = async () => {
+  const { host, user, password } = config.smtp;
+  if (!host || !user || !password) {
+    return { configured: false, verified: false, mode: 'DEMO_SIMULATION' };
+  }
+  try {
+    const client = getTransporter();
+    if (typeof client.verify === 'function') {
+      await client.verify();
+    }
+    return { configured: true, verified: true, host, user, mode: 'LIVE_SMTP' };
+  } catch (err) {
+    return { configured: true, verified: false, host, user, error: err.message, mode: 'SMTP_ERROR' };
   }
 };
 
