@@ -3298,7 +3298,7 @@
 
   @media (max-width: 360px) {
     .workspace-topbar {
-      padding: 0 6px;
+      padding: 0 8px;
     }
 
     .topbar-left {
@@ -3314,6 +3314,13 @@
       gap: 4px;
     }
 
+    .store-name-text {
+      max-width: 42px;
+      font-size: 10.5px;
+    }
+  }
+
+  @media (max-width: 340px) {
     .store-name-text {
       display: none;
     }
