@@ -76,37 +76,6 @@ const LoginPage = () => {
           </p>
         </div>
 
-        {/* Quick One-Click Demo Credentials Pills */}
-        <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', marginBottom: '16px' }}>
-          <button
-            type="button"
-            className="auth-demo-pill"
-            onClick={handleFillDemo}
-            style={{ flex: 1, minWidth: '180px', marginBottom: 0 }}
-            title="Instant autofill for Trendy Threads demo store"
-          >
-            <Sparkles size={13} className="sparkle-pulse" />
-            <span>Demo: <strong>Meena (Trendy Threads)</strong></span>
-          </button>
-          <button
-            type="button"
-            className="auth-demo-pill"
-            onClick={() => {
-              setFormData({
-                email: 'abc@gmail.com',
-                password: 'Password123!',
-                rememberMe: true
-              });
-              setErrorMessage('');
-            }}
-            style={{ flex: 1, minWidth: '180px', marginBottom: 0 }}
-            title="Instant autofill for ABC Store"
-          >
-            <Sparkles size={13} className="sparkle-pulse" />
-            <span>Demo: <strong>ABC Store (abc@gmail.com)</strong></span>
-          </button>
-        </div>
-
         {errorMessage && (
           <div className="auth-alert-error" role="alert">
             <AlertCircle size={16} />
